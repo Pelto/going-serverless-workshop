@@ -1,0 +1,6 @@
+<h1>{{title}}</h1>
+<ul class="games">
+  <li *ngFor="let game of games">
+    <span class="badge">{{game.id}}</span> {{game.player1}} vs {{game.player2}}
+  </li>
+</ul>
