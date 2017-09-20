@@ -1,6 +1,20 @@
 <h1>{{title}}</h1>
 <ul class="games">
-  <li *ngFor="let game of games">
+  <li *ngFor="let game of games"
+    [class.selected]="game === selectedGame"
+   (click)="this.onSelect(game)">
     <span class="badge">{{game.id}}</span> {{game.player1}} vs {{game.player2}}
   </li>
 </ul>
+
+<div *ngIf="selectedGame">
+  <h2>Game {{selectedGame.id}} {{selectedGame.player1}} vs {{selectedGame.player2}}</h2>
+  <div>
+    <label>{{selectedGame.player1}} move: </label>
+    <input (ngModel)="selectedGame.player1Move" placeholder="rock|paper|scissor" />
+  </div>
+  <div>
+    <label>{{selectedGame.player2}} move: </label>
+    <input (ngModel)="selectedGame.player2Move" placeholder="rock|paper|scissor" />
+  </div>
+</div>

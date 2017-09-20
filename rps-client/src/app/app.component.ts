@@ -14,7 +14,9 @@ import { GameService } from './game.service'
 export class AppComponent implements OnInit {
 
   title = 'Rock Paper Scissor';
+
   games: Game[];
+  selectedGame: Game
 
   constructor(private gameService: GameService) {}
 
@@ -26,5 +28,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGames();
+  }
+
+  onSelect(game: Game) {
+    this.selectedGame = game;
   }
 }
