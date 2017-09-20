@@ -1,22 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Game } from './game'
 
-export class Game {
-  id: number;
-  player1: string;
-  player2: string
-}
+import { GameService } from './game.service'
 
-const GAMES: Game[] = [
-  { id: 1, player1: 'Alice', player2: 'Bob' },
-  { id: 2, player1: 'Carol', player2: 'Dan' }
-]
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [GameService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'Rock Paper Scissor';
-  games = GAMES
+  games: Game[];
+
+  constructor(private gameService: GameService) {}
+
+  getGames(): void {
+    this.gameService.getGames().then(games => {
+      this.games = games;
+    });
+  }
+
+  ngOnInit(): void {
+    this.getGames();
+  }
 }
