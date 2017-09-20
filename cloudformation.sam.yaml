@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A Rock Paper Scissors stack.
+Resources:
+  GetGamesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: .
+      Events:
+        GetGame:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /games/{gameId}
+
+
+  CreateGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: .
+      Events:
+        CreateGame:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /games
+
+
+  MakeMoveFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: .
+      Events:
+        MakeMove:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /moves
+
+
+  GetLeaderboardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: .
+      Events:
+        Leaderboard:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /leaderboard
+
+
+  GamesTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "GameId"
+          AttributeType: "N"
+      KeySchema:
+        - AttributeName: "GameId"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      StreamSpecification:
+        StreamViewType: "NEW_IMAGE"
+      TimeToLiveSpecification:
+        AttributeName: "TimeToLive"
+        Enabled: true
+
+
+  ScoreTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "UserId"
+          AttributeType: "S"
+        - AttributeName: "Score"
+          AttributeType: "N"
+      KeySchema:
+        - AttributeName: "UserId"
+          KeyType: "HASH"
+        - AttributeName: "Score"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+
+  WebBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt [WebBucket, WebsiteURL]
+    Description: URL for website hosted on S3
+  S3BucketSecureURL:
+    Value: !Join ['', ['https://', !GetAtt [WebBucket, DomainName]]]
+    Description: Name of S3 bucket to hold website content

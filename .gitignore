@@ -62,3 +62,5 @@ typings/
 *.ipr
 *.iws
 .idea/
+
+cloudformation.sam.output.yaml
