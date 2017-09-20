@@ -8,6 +8,8 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: .
+      Policies:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Events:
         GetGame:
           Type: Api
@@ -22,6 +24,9 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: .
+      Policies:
+       - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+       - Ref: ReadGamesPolicy
       Events:
         CreateGame:
           Type: Api
@@ -36,6 +41,10 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: .
+      Policies:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: ReadGamesPolicy
+        - Ref: WriteGamesPolicy
       Events:
         MakeMove:
           Type: Api
@@ -50,12 +59,33 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: .
+      Policies:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: ReadScorePolicy
       Events:
         Leaderboard:
           Type: Api
           Properties:
-            Method: post
+            Method: get
             Path: /leaderboard
+
+
+  UpdateLeaderboardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: .
+      Policies:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: ReadGameStreamPolicy
+        - Ref: WriteScorePolicy
+      Events:
+        GameEvent:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt GamesTable.StreamArn
+            StartingPosition: LATEST
 
 
   GamesTable:
@@ -103,10 +133,81 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: error.html
 
+
+  ReadGamesPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Provide read access to the Games table
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "dynamodb:GetItem"
+            Resource: !GetAtt GamesTable.Arn
+
+
+  WriteGamesPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Provide write access to the Games table
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "dynamodb:PutItem"
+              - "dynamodb:UpdateItem"
+            Resource: !GetAtt GamesTable.Arn
+
+
+  ReadGameStreamPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Provide read access to the Score table stream
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "dynamodb:DescribeStream"
+              - "dynamodb:GetRecords"
+              - "dynamodb:GetShardIterator"
+              - "dynamodb:ListStreams"
+            Resource: !GetAtt GamesTable.Arn
+
+
+  ReadScorePolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Provide read access to the Score table
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "dynamodb:BatchGetItem"
+              - "dynamodb:GetItem"
+            Resource: !GetAtt ScoreTable.Arn
+
+
+  WriteScorePolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: Provide read access to the Score table
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "dynamodb:PutItem"
+              - "dynamodb:UpdateItem"
+            Resource: !GetAtt ScoreTable.Arn
+
+
 Outputs:
   WebsiteURL:
-    Value: !GetAtt [WebBucket, WebsiteURL]
+    Value: !GetAtt WebBucket.WebsiteURL
     Description: URL for website hosted on S3
-  S3BucketSecureURL:
-    Value: !Join ['', ['https://', !GetAtt [WebBucket, DomainName]]]
-    Description: Name of S3 bucket to hold website content
+  WebsiteSecureURL:
+    Value: !Sub "https://${WebBucket.DomainName}"
+    Description: Secure URL for the website
