@@ -20,3 +20,19 @@ Example:
 | 27        | [{playerId: "abc", move: "PAPER"}]                                        | {state: "IN_PROGRESS"}            |
 | 42        | [{playerId: "mno", move: "ROCK"}, {playerId: "pqr", move: "SCISSORS"}]    | {state: "WINNER", winner: "mno"}  |
 | 63        | [{playerId: "abc", move: "ROCK"}, {playerId: "pqr", move: "ROCK"}]        | {state: "DRAW"}                   |
+
+
+## ScoreTable
+
+| Property  | Type  | Description                   |
+|-----------|-------|------------------------------ |
+| PlayerId  | S     | A player id                   |
+| Score     | N     | The accumulated player score  |
+
+
+Example:
+
+| PlayerId  | Score     |
+|-----------|---------- |
+| "abc"     | 12        |
+| "mno"     | 33        |

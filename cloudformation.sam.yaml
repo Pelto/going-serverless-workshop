@@ -75,11 +75,14 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: .
+      CodeUri: lambdas/update-leaderboard/
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - Ref: ReadGameStreamPolicy
         - Ref: WriteScorePolicy
+      Environment:
+        Variables:
+          SCORE_TABLE: !Ref ScoreTable
       Events:
         GameEvent:
           Type: DynamoDB
@@ -111,12 +114,12 @@ Resources:
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
-        - AttributeName: "UserId"
+        - AttributeName: "PlayerId"
           AttributeType: "S"
         - AttributeName: "Score"
           AttributeType: "N"
       KeySchema:
-        - AttributeName: "UserId"
+        - AttributeName: "PlayerId"
           KeyType: "HASH"
         - AttributeName: "Score"
           KeyType: "RANGE"
