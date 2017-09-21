@@ -21,6 +21,4 @@ function parse(event) {
         .map(extractGameData);
 }
 
-module.exports = {
-    parse
-};
+module.exports = parse;

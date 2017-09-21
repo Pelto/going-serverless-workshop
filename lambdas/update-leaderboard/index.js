@@ -1,10 +1,11 @@
 'use strict';
 
 
-const eventParser = require('./event-parser');
-
+const parseEvents = require('./parse-event');
+const calculateScore = require('./calculate-score');
 
 exports.myHandler = function(event, context) {
-    const gameData = eventParser.parse(event);
+    const scores = parseEvents(event)
+        .map(calculateScore);
 
 };
