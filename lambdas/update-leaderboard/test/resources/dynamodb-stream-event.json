@@ -1,0 +1,103 @@
+{
+  "Records": [
+    {
+      "eventID": "1",
+      "eventVersion": "1.0",
+      "dynamodb": {
+        "Keys": {
+          "GameId": {
+            "N": "27"
+          }
+        },
+        "NewImage": {
+          "Players": {
+            "L": [{"playerId": "abc", "move": "PAPER"}]
+          },
+          "State": {
+            "state": "IN_PROGRESS"
+          },
+          "GameId": {
+            "N": "27"
+          }
+        },
+        "StreamViewType": "NEW_AND_OLD_IMAGES",
+        "SequenceNumber": "111",
+        "SizeBytes": 26
+      },
+      "awsRegion": "us-west-2",
+      "eventName": "INSERT",
+      "eventSourceARN": "arn:aws:dynamodb:us-west-2:account-id:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899",
+      "eventSource": "aws:dynamodb"
+    },
+    {
+      "eventID": "2",
+      "eventVersion": "1.0",
+      "dynamodb": {
+        "OldImage": {
+          "Players": {
+            "L": [{"playerId": "abc", "move": "ROCK"}]
+          },
+          "State": {
+            "state": "IN_PROGRESS"
+          },
+          "GameId": {
+            "N": "42"
+          }
+        },
+        "SequenceNumber": "222",
+        "Keys": {
+          "GameId": {
+            "N": "42"
+          }
+        },
+        "SizeBytes": 59,
+        "NewImage": {
+          "Players": {
+            "L": [{"playerId": "mno", "move": "ROCK"}, {"playerId": "pqr", "move": "SCISSORS"}]
+          },
+          "State": {
+            "state": "WINNER",
+            "winner": "mno"
+          },
+          "GameId": {
+            "N": "42"
+          }
+        },
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "awsRegion": "us-west-2",
+      "eventName": "MODIFY",
+      "eventSourceARN": "arn:aws:dynamodb:us-west-2:account-id:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899",
+      "eventSource": "aws:dynamodb"
+    },
+    {
+      "eventID": "3",
+      "eventVersion": "1.0",
+      "dynamodb": {
+        "Keys": {
+          "GameId": {
+            "N": "2"
+          }
+        },
+        "SizeBytes": 38,
+        "SequenceNumber": "333",
+        "OldImage": {
+          "Players": {
+            "L": [{"playerId": "abc", "move": "ROCK"}, {"playerId": "pqr", "move": "ROCK"}]
+          },
+          "State": {
+            "state": "DRAW"
+          },
+          "GameId": {
+            "N": "2"
+          }
+        },
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "awsRegion": "us-west-2",
+      "eventName": "REMOVE",
+      "eventSourceARN": "arn:aws:dynamodb:us-west-2:account-id:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899",
+      "eventSource": "aws:dynamodb"
+    }
+  ]
+}
