@@ -17,6 +17,7 @@ Example:
 
 | GameId    | Players                                                                   | State                             |
 |-----------|-------------------------------------------------------------------------- | --------------------------------- |
+| 13        |                                                                           | {state: "CREATED"}                |
 | 27        | [{playerId: "abc", move: "PAPER"}]                                        | {state: "IN_PROGRESS"}            |
 | 42        | [{playerId: "mno", move: "ROCK"}, {playerId: "pqr", move: "SCISSORS"}]    | {state: "WINNER", winner: "mno"}  |
 | 63        | [{playerId: "abc", move: "ROCK"}, {playerId: "pqr", move: "ROCK"}]        | {state: "DRAW"}                   |

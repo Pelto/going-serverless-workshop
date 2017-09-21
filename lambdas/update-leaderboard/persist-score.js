@@ -23,7 +23,10 @@ function persistScore(scores) {
                 }
             }
         })
-        .forEach(params => documentClient.update(params).promise());
+        .forEach(params => documentClient
+            .update(params)
+            .promise()
+        );
     return Promise.all(promises);
 }
 

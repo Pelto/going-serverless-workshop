@@ -2,7 +2,7 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A Rock Paper Scissors stack.
 Resources:
-  GetGamesFunction:
+  GetGameFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
@@ -10,6 +10,10 @@ Resources:
       CodeUri: .
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: ReadGamePolicy
+      Environment:
+        Variables:
+          GAME_TABLE: !Ref GameTable
       Events:
         GetGame:
           Type: Api
@@ -23,10 +27,13 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: .
+      CodeUri: lambdas/create-game/
       Policies:
        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-       - Ref: ReadGamesPolicy
+       - Ref: ReadGamePolicy
+      Environment:
+        Variables:
+          GAME_TABLE: !Ref GameTable
       Events:
         CreateGame:
           Type: Api
@@ -43,8 +50,10 @@ Resources:
       CodeUri: .
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - Ref: ReadGamesPolicy
-        - Ref: WriteGamesPolicy
+        - Ref: WriteGamePolicy
+      Environment:
+        Variables:
+          GAMES_TABLE: !Ref GameTable
       Events:
         MakeMove:
           Type: Api
@@ -62,6 +71,9 @@ Resources:
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - Ref: ReadScorePolicy
+      Environment:
+        Variables:
+          SCORE_TABLE: !Ref ScoreTable
       Events:
         Leaderboard:
           Type: Api
@@ -87,11 +99,11 @@ Resources:
         GameEvent:
           Type: DynamoDB
           Properties:
-            Stream: !GetAtt GamesTable.StreamArn
+            Stream: !GetAtt GameTable.StreamArn
             StartingPosition: LATEST
 
 
-  GamesTable:
+  GameTable:
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
@@ -137,22 +149,22 @@ Resources:
         ErrorDocument: error.html
 
 
-  ReadGamesPolicy:
+  ReadGamePolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      Description: Provide read access to the Games table
+      Description: Provide read access to the Game table
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Effect: "Allow"
             Action: "dynamodb:GetItem"
-            Resource: !GetAtt GamesTable.Arn
+            Resource: !GetAtt GameTable.Arn
 
 
-  WriteGamesPolicy:
+  WriteGamePolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      Description: Provide write access to the Games table
+      Description: Provide write access to the Game table
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -160,7 +172,7 @@ Resources:
             Action:
               - "dynamodb:PutItem"
               - "dynamodb:UpdateItem"
-            Resource: !GetAtt GamesTable.Arn
+            Resource: !GetAtt GameTable.Arn
 
 
   ReadGameStreamPolicy:
@@ -176,7 +188,7 @@ Resources:
               - "dynamodb:GetRecords"
               - "dynamodb:GetShardIterator"
               - "dynamodb:ListStreams"
-            Resource: !GetAtt GamesTable.Arn
+            Resource: !GetAtt GameTable.Arn
 
 
   ReadScorePolicy:
