@@ -1,12 +1,21 @@
-<h1>{{title}}</h1>
-<ul class="games">
-  <li *ngFor="let game of games"
-    [class.selected]="game === selectedGame"
-   (click)="this.onSelect(game)">
-    <span class="badge">{{game.id}}</span>
-  </li>
-</ul>
 
-<div *ngIf="selectedGame">
-  <h2>Game {{selectedGame.id}}</h2>
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Rock Paper Scissor</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" routerLink="/play">Play <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/leaderboard">Leaderboards</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<router-outlet></router-outlet>
