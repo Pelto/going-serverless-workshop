@@ -21,10 +21,8 @@ function createGame(gameId) {
     const expirationTime = generateExpirationTime();
     const params = {
         TableName : GAME_TABLE,
-        Key: {
-            GameId: gameId
-        },
         Item: {
+            GameId: gameId,
             State: 'CREATED',
             ExpirationTime: expirationTime
         },

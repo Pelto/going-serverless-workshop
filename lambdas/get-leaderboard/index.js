@@ -1,9 +1,6 @@
 'use strict';
 
-
-const parseEvent = require('./parse-event');
-const getGame = require('./get-game');
-
+const getLeaderboard = require('./get-leaderboard');
 
 function success(body) {
     return {
@@ -17,15 +14,13 @@ const error = {
 };
 
 exports.handler = function(event, context, callback) {
-    const {gameId} = parseEvent(event);
-    getGame(gameId)
-        .then(data => {
-            console.info('response:', JSON.stringify(data));
-            const response = success(data);
+    getLeaderboard()
+        .then(leaderboard => {
+            const response = success(leaderboard);
             callback(null, response);
         })
         .catch(err => {
             console.error(JSON.stringify(err));
             callback(null, error);
-        });
+        })
 };

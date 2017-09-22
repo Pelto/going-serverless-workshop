@@ -8,7 +8,7 @@ const gameEngine = require('./game-engine');
 function success(body) {
     return {
         statusCode: 200,
-        body
+        body: JSON.stringify(body)
     }
 }
 

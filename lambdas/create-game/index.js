@@ -7,6 +7,7 @@ const createGame = require('./create-game');
 
 function success({gameId, host, path}) {
     const location = url.format({
+        protocol: 'https:',
         host,
         pathname: `${path}/${gameId}`
     });
@@ -31,6 +32,6 @@ exports.handler = function(event, context, callback) {
         })
         .catch(err => {
             console.error(JSON.stringify(err));
-            callback(null, error)
+            callback(null, error);
         });
 };
