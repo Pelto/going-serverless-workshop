@@ -11,12 +11,17 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/get-game/
-      Policies:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - Ref: ReadGamePolicy
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:BatchGetItem
+                - dynamodb:GetItem
+              Resource: !GetAtt GameTable.Arn
       Events:
         GetGame:
           Type: Api
@@ -32,12 +37,17 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/create-game/
-      Policies:
-       - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-       - Ref: WriteGamePolicy
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+            Resource: !GetAtt GameTable.Arn
       Events:
         CreateGame:
           Type: Api
@@ -53,12 +63,17 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/make-move/
-      Policies:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - Ref: WriteGamePolicy
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+              Resource: !GetAtt GameTable.Arn
       Events:
         MakeMove:
           Type: Api
@@ -74,12 +89,17 @@ Resources:
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/get-leaderboard/
-      Policies:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - Ref: ReadScorePolicy
       Environment:
         Variables:
           SCORE_TABLE: !Ref ScoreTable
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:BatchGetItem
+                - dynamodb:GetItem
+              Resource: !GetAtt ScoreTable.Arn
       Events:
         Leaderboard:
           Type: Api
@@ -96,11 +116,16 @@ Resources:
       Runtime: nodejs6.10
       CodeUri: lambdas/update-leaderboard/
       Policies:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - Ref: ReadGameStreamPolicy
-        - Ref: WriteScorePolicy
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+              Resource: !GetAtt ScoreTable.Arn
       Environment:
         Variables:
+          GAME_TABLE: !Ref GameTable
           SCORE_TABLE: !Ref ScoreTable
       Events:
         GameEvent:
@@ -154,78 +179,6 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
-
-
-  ReadGamePolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Description: Provide read access to the Game table
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Action:
-              - dynamodb:BatchGetItem
-              - dynamodb:GetItem
-            Resource: !GetAtt GameTable.Arn
-
-
-  WriteGamePolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Description: Provide write access to the Game table
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Action:
-              - dynamodb:PutItem
-              - dynamodb:UpdateItem
-            Resource: !GetAtt GameTable.Arn
-
-
-  ReadGameStreamPolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Description: Provide read access to the Score table stream
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Action:
-              - dynamodb:DescribeStream
-              - dynamodb:GetRecords
-              - dynamodb:GetShardIterator
-              - dynamodb:ListStreams
-            Resource: !GetAtt GameTable.Arn
-
-
-  ReadScorePolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Description: Provide read access to the Score table
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Action:
-              - dynamodb:BatchGetItem
-              - dynamodb:GetItem
-            Resource: !GetAtt ScoreTable.Arn
-
-
-  WriteScorePolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Description: Provide read access to the Score table
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Action:
-              - dynamodb:PutItem
-              - dynamodb:UpdateItem
-            Resource: !GetAtt ScoreTable.Arn
 
 
 Outputs:
