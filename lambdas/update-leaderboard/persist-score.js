@@ -13,13 +13,12 @@ function persistScore(scores) {
         .map(playerId => {
             return {
                 TableName: SCORE_TABLE,
-                Key: {PlayerId: playerId},
-                UpdateExpression: "SET #score = #score + :playerScore",
-                ExpressionAttributeNames:{
-                    "#score":"Score"
+                Key: {
+                    playerId: playerId
                 },
-                ExpressionAttributeValues:{
-                    ":playerScore": scores[playerId]
+                UpdateExpression: "ADD score :score",
+                ExpressionAttributeValues: {
+                    ":score": scores[playerId]
                 }
             }
         })

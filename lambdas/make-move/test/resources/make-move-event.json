@@ -1,6 +1,6 @@
 {
-  "resource": "/games",
-  "path": "/games",
+  "resource": "/moves",
+  "path": "/moves",
   "httpMethod": "POST",
   "headers": {
     "Accept": "application/json",
@@ -28,7 +28,7 @@
   "pathParameters": null,
   "stageVariables": null,
   "requestContext": {
-    "path": "/Prod/games",
+    "path": "/Prod/moves",
     "accountId": "123456789012",
     "resourceId": "qsavsg",
     "stage": "Prod",
@@ -47,10 +47,10 @@
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
       "user": null
     },
-    "resourcePath": "/games",
+    "resourcePath": "/moves",
     "httpMethod": "POST",
     "apiId": "ig6t2avux2"
   },
-  "body": "{\n    \"gameId\":\"123\",\n    \"playerId\":\"abc\",\n    \"move\":\"ROCK\"\n}",
+  "body": "{\n  \"gameId\":\"123\",\n  \"playerId\":\"abc\",\n  \"move\": \"ROCK\"\n}",
   "isBase64Encoded": false
 }

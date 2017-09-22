@@ -9,107 +9,107 @@ describe('Game Engine', () => {
 
     it('can make first move', () => {
         const gameState = {
-            GameId: '42',
-            State: 'CREATED'
+            gameId: '42',
+            state: 'CREATED'
         };
 
         const newGameState = gameEngine.makeMove(gameState, 'abc', 'ROCK');
         expect(newGameState).to.eql({
-            GameId: '42',
-            Players: [{playerId: 'abc', move: 'ROCK'}],
-            State: 'FIRST_MOVE'
+            gameId: '42',
+            players: [{playerId: 'abc', move: 'ROCK'}],
+            state: 'FIRST_MOVE'
         })
     });
 
 
     it('can make second move and decide ROCK winner', () => {
         const gameState = {
-            GameId: '42',
-            Players: [{playerId: 'abc', move: 'ROCK'}],
-            State: 'FIRST_MOVE'
+            gameId: '42',
+            players: [{playerId: 'abc', move: 'ROCK'}],
+            state: 'FIRST_MOVE'
         };
 
         const newGameState = gameEngine.makeMove(gameState, 'xyz', 'SCISSORS');
         expect(newGameState).to.eql({
-            GameId: '42',
-            Players: [
+            gameId: '42',
+            players: [
                 {playerId: 'abc', move: 'ROCK'},
                 {playerId: 'xyz', move: 'SCISSORS'}
             ],
-            State: 'WINNER',
-            Winner: 'abc'
+            state: 'WINNER',
+            winner: 'abc'
         })
     });
 
 
     it('can make second move and decide PAPER winner', () => {
         const gameState = {
-            GameId: '42',
-            Players: [{playerId: 'abc', move: 'ROCK'}],
-            State: 'FIRST_MOVE'
+            gameId: '42',
+            players: [{playerId: 'abc', move: 'ROCK'}],
+            state: 'FIRST_MOVE'
         };
 
         const newGameState = gameEngine.makeMove(gameState, 'xyz', 'PAPER');
         expect(newGameState).to.eql({
-            GameId: '42',
-            Players: [
+            gameId: '42',
+            players: [
                 {playerId: 'abc', move: 'ROCK'},
                 {playerId: 'xyz', move: 'PAPER'}
             ],
-            State: 'WINNER',
-            Winner: 'xyz'
+            state: 'WINNER',
+            winner: 'xyz'
         })
     });
 
 
     it('can make second move and decide SCISSORS winner', () => {
         const gameState = {
-            GameId: '42',
-            Players: [{playerId: 'abc', move: 'ROCK'}],
-            State: 'FIRST_MOVE'
+            gameId: '42',
+            players: [{playerId: 'abc', move: 'ROCK'}],
+            state: 'FIRST_MOVE'
         };
 
         const newGameState = gameEngine.makeMove(gameState, 'xyz', 'PAPER');
         expect(newGameState).to.eql({
-            GameId: '42',
-            Players: [
+            gameId: '42',
+            players: [
                 {playerId: 'abc', move: 'ROCK'},
                 {playerId: 'xyz', move: 'PAPER'}
             ],
-            State: 'WINNER',
-            Winner: 'xyz'
+            state: 'WINNER',
+            winner: 'xyz'
         })
     });
 
 
     it('can make second move and decide draw', () => {
         const gameState = {
-            GameId: '42',
-            Players: [{playerId: 'abc', move: 'ROCK'}],
-            State: 'FIRST_MOVE'
+            gameId: '42',
+            players: [{playerId: 'abc', move: 'ROCK'}],
+            state: 'FIRST_MOVE'
         };
 
         const newGameState = gameEngine.makeMove(gameState, 'xyz', 'ROCK');
         expect(newGameState).to.eql({
-            GameId: '42',
-            Players: [
+            gameId: '42',
+            players: [
                 {playerId: 'abc', move: 'ROCK'},
                 {playerId: 'xyz', move: 'ROCK'}
             ],
-            State: 'DRAW'
+            state: 'DRAW'
         })
     });
 
 
     it('throws error after second move', () => {
         const gameState = {
-            GameId: '42',
-            Players: [
+            gameId: '42',
+            players: [
                 {playerId: 'abc', move: 'ROCK'},
                 {playerId: 'xyz', move: 'SCISSORS'}
             ],
-            State: 'WINNER',
-            Winner: 'abc'
+            state: 'WINNER',
+            winner: 'abc'
         };
 
         expect(() => gameEngine.makeMove(gameState, 'xyz', 'ROCK')).to.throw('illegal state WINNER');

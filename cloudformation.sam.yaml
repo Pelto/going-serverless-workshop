@@ -71,7 +71,7 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - dynamodb:PutItem
+                - dynamodb:GetItem
                 - dynamodb:UpdateItem
               Resource: !GetAtt GameTable.Arn
       Events:
@@ -139,10 +139,10 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: GameId
+        - AttributeName: gameId
           AttributeType: S
       KeySchema:
-        - AttributeName: GameId
+        - AttributeName: gameId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
@@ -150,7 +150,7 @@ Resources:
       StreamSpecification:
         StreamViewType: NEW_IMAGE
       TimeToLiveSpecification:
-        AttributeName: ExpirationTime
+        AttributeName: expirationTime
         Enabled: true
 
 
@@ -158,14 +158,14 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: PlayerId
+        - AttributeName: playerId
           AttributeType: S
-        - AttributeName: Score
+        - AttributeName: score
           AttributeType: N
       KeySchema:
-        - AttributeName: PlayerId
+        - AttributeName: playerId
           KeyType: HASH
-        - AttributeName: Score
+        - AttributeName: score
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1

@@ -22,9 +22,9 @@ function createGame(gameId) {
     const params = {
         TableName : GAME_TABLE,
         Item: {
-            GameId: gameId,
-            State: 'CREATED',
-            ExpirationTime: expirationTime
+            gameId: gameId,
+            state: 'CREATED',
+            expirationTime: expirationTime
         },
         ConditionExpression: 'attribute_not_exists(GameId)',
     };

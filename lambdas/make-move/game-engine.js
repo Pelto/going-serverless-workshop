@@ -10,7 +10,7 @@ function playGame(Players) {
     const [playerA, playerB] = Players;
     if (playerA.move === playerB.move) {
         return {
-            State: 'DRAW'
+            state: 'DRAW'
         };
     }
     else {
@@ -22,40 +22,40 @@ function playGame(Players) {
             winner = playerB.playerId;
         }
         return {
-            State: 'WINNER',
-            Winner: winner
+            state: 'WINNER',
+            winner: winner
         };
     }
 }
 
-function firstMove({GameId, playerId, move}) {
+function firstMove({gameId, playerId, move}) {
     return {
-        GameId,
-        Players: [{
+        gameId,
+        players: [{
             playerId,
             move
         }],
-        State: "FIRST_MOVE"
+        state: "FIRST_MOVE"
     }
 }
 
-function secondMove({GameId, Players, playerId, move}) {
-    Players.push({playerId, move});
-    const result = playGame(Players);
-    const newGameState = Object.assign({}, {GameId, Players}, result);
+function secondMove({gameId, players, playerId, move}) {
+    players.push({playerId, move});
+    const result = playGame(players);
+    const newGameState = Object.assign({}, {gameId, players}, result);
     return newGameState;
 }
 
 
 function makeMove(gameState, playerId, move) {
-    const {GameId, Players, State} = gameState;
-    switch (State) {
+    const {gameId, players, state} = gameState;
+    switch (state) {
         case 'CREATED':
-            return firstMove({GameId, playerId, move});
+            return firstMove({gameId, playerId, move});
         case 'FIRST_MOVE':
-            return secondMove({GameId, Players, playerId, move});
+            return secondMove({gameId, players, playerId, move});
         default:
-            throw new Error(`illegal state ${State}`);
+            throw new Error(`illegal state ${state}`);
     }
 }
 

@@ -9,28 +9,18 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 const GAME_TABLE = process.env.GAME_TABLE;
 
 function pruneDate(data) {
-    const {Item: {Players, State, Winner}} = data;
-    let players;
+    const {Item: {players, state, winner, expirationTime}} = data;
 
-    switch (State) {
-        case 'FIRST_MOVE':
-            // do not reveal first player's move
-            players = Players.map(player => {
-                const {playerId} = player;
-                return playerId
-            });
-            break;
-
-        case 'DRAW':
-        case 'WINNER':
-            players = Players;
-            break;
+    if (state === 'FIRST_MOVE') {
+        // do not reveal first player's move
+        delete players[0].move;
     }
 
     return {
-        state: State,
-        winner: Winner,
-        players
+        state,
+        winner,
+        players,
+        expirationTime
     }
 }
 
@@ -38,7 +28,7 @@ function getGame(gameId) {
     const params = {
         TableName : GAME_TABLE,
         Key: {
-            GameId: gameId
+            gameId: gameId
         }
     };
     return documentClient

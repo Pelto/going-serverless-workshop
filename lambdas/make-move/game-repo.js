@@ -9,30 +9,48 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 const GAME_TABLE = process.env.GAME_TABLE;
 
 function getGame(gameId) {
-    throw new Error('not yet implemented');
     const params = {
         TableName: GAME_TABLE,
         Key: {
-            GameId: gameId
+            gameId: gameId
         }
     };
     return documentClient
         .get(params)
-        .promise();
+        .promise()
+        .then(data => data.Item);
 }
 
 function saveGame(gameState) {
-    throw new Error('not yet implemented');
+    const {gameId, players, state, winner} = gameState;
+
+    let updateExpression = 'SET #state = :state, #players = :players';
+    const attributeNames = {
+        '#state': 'state',
+        '#players': 'players',
+    };
+    const attributeValues = {
+        ':players': players,
+        ':state': state,
+    };
+    if (winner) {
+        updateExpression += ', #winner = :winner';
+        attributeNames['#winner'] = 'winner';
+        attributeValues[':winner'] = winner;
+    }
+
     const params = {
         TableName: GAME_TABLE,
-        Key: {
-            GameId: gameId
-        }
+        Key: {gameId: gameId},
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: attributeNames,
+        ExpressionAttributeValues: attributeValues,
+        ReturnValues: 'ALL_NEW'
     };
     return documentClient
         .update(params)
         .promise()
-        .then(() => gameState);
+        .then(data => data.Attributes);
 }
 
 module.exports = {

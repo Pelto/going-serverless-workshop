@@ -6,12 +6,12 @@ function filterModifiedEvents(record) {
 }
 
 function extractGameData(record) {
-    const {dynamodb: {NewImage: {Players: {L}, State, Winner}}} = record;
+    const {dynamodb: {NewImage: {players: {L}, state, winner}}} = record;
     const playerIds = L.map(player => player.playerId);
     return {
         playerIds,
-        state: State.S,
-        winner: Winner.S
+        state: state.S,
+        winner: winner.S
     };
 }
 
@@ -21,7 +21,7 @@ function filterCompletedGames(gameData) {
 }
 
 function parse(event) {
-    const { Records} = event;
+    const {Records} = event;
     return Records
         .filter(filterModifiedEvents)
         .map(extractGameData)

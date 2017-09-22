@@ -19,9 +19,8 @@ const error = {
 exports.handler = function(event, context, callback) {
     const {gameId} = parseEvent(event);
     getGame(gameId)
-        .then(data => {
-            console.info('response:', JSON.stringify(data));
-            const response = success(data);
+        .then(gameState => {
+            const response = success(gameState);
             callback(null, response);
         })
         .catch(err => {

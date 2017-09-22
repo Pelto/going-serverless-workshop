@@ -5,18 +5,18 @@
       "eventVersion": "1.0",
       "dynamodb": {
         "Keys": {
-          "GameId": {
+          "gameId": {
             "S": "27"
           }
         },
         "NewImage": {
-          "Players": {
+          "players": {
             "L": [{"playerId": "abc", "move": "PAPER"}]
           },
-          "State": {
+          "state": {
             "S": "FIRST_MOVE"
           },
-          "GameId": {
+          "gameId": {
             "S": "27"
           }
         },
@@ -34,34 +34,34 @@
       "eventVersion": "1.0",
       "dynamodb": {
         "OldImage": {
-          "Players": {
+          "players": {
             "L": [{"playerId": "abc", "move": "ROCK"}]
           },
-          "State": {
+          "state": {
             "S": "FIRST_MOVE"
           },
-          "GameId": {
+          "gameId": {
             "S": "42"
           }
         },
         "SequenceNumber": "222",
         "Keys": {
-          "GameId": {
+          "gameId": {
             "S": "42"
           }
         },
         "SizeBytes": 59,
         "NewImage": {
-          "Players": {
+          "players": {
             "L": [{"playerId": "mno", "move": "ROCK"}, {"playerId": "pqr", "move": "SCISSORS"}]
           },
-          "State": {
+          "state": {
             "S": "WINNER"
           },
-          "Winner": {
+          "winner": {
             "S": "mno"
           },
-          "GameId": {
+          "gameId": {
             "S": "42"
           }
         },
@@ -77,20 +77,20 @@
       "eventVersion": "1.0",
       "dynamodb": {
         "Keys": {
-          "GameId": {
+          "gameId": {
             "S": "2"
           }
         },
         "SizeBytes": 38,
         "SequenceNumber": "333",
         "OldImage": {
-          "Players": {
+          "players": {
             "L": [{"playerId": "abc", "move": "ROCK"}, {"playerId": "pqr", "move": "ROCK"}]
           },
-          "State": {
+          "state": {
             "S": "DRAW"
           },
-          "GameId": {
+          "gameId": {
             "S": "2"
           }
         },

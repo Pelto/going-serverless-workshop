@@ -2,21 +2,109 @@
 A workshop on how to construct serverless applications on AWS
 
 
-# DynamoDB Tables
+## REST API
 
-## GamesTable
+### Constants
+
+| Moves         |
+|---------------|
+| `ROCK`         |
+| `PAPER`       |
+| `SCISSORS`    |
+
+
+| State         | Description                                       |
+|---------------|-------------------------------------------------- |
+| `CREATED`     | Game has been created, no moves yet               |
+| `FIRST_MOVE`  | The first player has made a move                  |
+| `WINNER`      | Both players have played, there is a winner       |
+| `DRAW`        | Both players have played and made the same move   |
+
+### Create Game
+Request
+```
+POST [server]/games
+{
+  "gameId": "42"
+}
+```
+Response
+```
+HTTP/1.1 201 Created
+Location: [server]/games/42
+```
+
+
+### Get Game
+
+Request
+```
+GET [server]/games/42
+```
+Response
+```
+HTTP/1.1 200 OK
+{
+    "players": [
+        {
+            "playerId": "abc"
+            "move": "ROCK",
+        },
+        {
+            "playerId": "xyz"
+            "move": "PAPER",
+        }
+    ],
+    "state": "WINNER",
+    "winner": "xyz",
+    "expirationTime": 1506195639
+}
+```
+
+
+### Make Move
+
+Request
+```
+POST [server]/move
+{
+    "gameId": "13",
+    "playerId": "pqr",
+    "move": "ROCK"
+}
+```
+Response
+```
+HTTP/1.1 200 OK
+{
+    "players": [
+        {
+            "playerId": "pqr"
+            "move": "ROCK",
+        }
+    ],
+    "gameId": "3",
+    "state": "FIRST_MOVE"
+    "expirationTime": 1506197262,
+}
+```
+
+
+## DynamoDB Tables
+
+### GameTable
 
 | Property  | Type              | Description                               |
-|-----------|------------------ |------------------------------------------ |
-| GameId    | S (String)        | The id of a game                          |
-| Players   | L (List)          | The participating players and their moves |
-| State     | S (String)        | The current state of the game             |
-| Winner    | S (String)        | The id of the winning player (if any)     |
+|-----------|------------------ | ----------------------------------------- |
+| gameId    | S (String)        | The id of a game                          |
+| players   | L (List)          | The participating players and their moves |
+| state     | S (String)        | The current state of the game             |
+| winner    | S (String)        | The id of the winning player (if any)     |
 
 
 Example:
 
-| GameId    | Players                                                                   | State         | Winner    |
+| gameId    | players                                                                   | state         | winner    |
 |-----------|-------------------------------------------------------------------------- | ------------- | --------- |
 | 13        |                                                                           | "CREATED"     |           |
 | 27        | [{playerId: "abc", move: "PAPER"}]                                        | "FIRST_MOVE"  |           |
@@ -24,17 +112,17 @@ Example:
 | 63        | [{playerId: "abc", move: "ROCK"}, {playerId: "pqr", move: "ROCK"}]        | "DRAW"        |           |
 
 
-## ScoreTable
+### ScoreTable
 
 | Property  | Type  | Description                   |
 |-----------|-------|------------------------------ |
-| PlayerId  | S     | A player id                   |
-| Score     | N     | The accumulated player score  |
+| playerId  | S     | The id of the player          |
+| score     | N     | The accumulated player score  |
 
 
 Example:
 
-| PlayerId  | Score     |
+| playerId  | score     |
 |-----------|---------- |
 | "abc"     | 12        |
 | "mno"     | 33        |
