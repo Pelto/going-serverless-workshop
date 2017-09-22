@@ -1,13 +1,16 @@
 AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A Rock Paper Scissors stack.
+
 Resources:
+
   GetGameFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Lambda function for getting RPS games
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: .
+      CodeUri: lambdas/get-game/
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - Ref: ReadGamePolicy
@@ -25,12 +28,13 @@ Resources:
   CreateGameFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Lambda function for creating RPS games
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/create-game/
       Policies:
        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-       - Ref: ReadGamePolicy
+       - Ref: WriteGamePolicy
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
@@ -45,15 +49,16 @@ Resources:
   MakeMoveFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Lambda function for making RPS moves
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: .
+      CodeUri: lambdas/make-move/
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - Ref: WriteGamePolicy
       Environment:
         Variables:
-          GAMES_TABLE: !Ref GameTable
+          GAME_TABLE: !Ref GameTable
       Events:
         MakeMove:
           Type: Api
@@ -65,9 +70,10 @@ Resources:
   GetLeaderboardFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Lambda function for getting the RPS leaderboard
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: .
+      CodeUri: lambdas/get-leaderboard/
       Policies:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - Ref: ReadScorePolicy
@@ -85,6 +91,7 @@ Resources:
   UpdateLeaderboardFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Lambda function for updating the RPS leaderboard
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/update-leaderboard/
@@ -104,37 +111,37 @@ Resources:
 
 
   GameTable:
-    Type: "AWS::DynamoDB::Table"
+    Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: "GameId"
-          AttributeType: "N"
+        - AttributeName: GameId
+          AttributeType: S
       KeySchema:
-        - AttributeName: "GameId"
-          KeyType: "HASH"
+        - AttributeName: GameId
+          KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       StreamSpecification:
-        StreamViewType: "NEW_IMAGE"
+        StreamViewType: NEW_IMAGE
       TimeToLiveSpecification:
-        AttributeName: "TimeToLive"
+        AttributeName: ExpirationTime
         Enabled: true
 
 
   ScoreTable:
-    Type: "AWS::DynamoDB::Table"
+    Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: "PlayerId"
-          AttributeType: "S"
-        - AttributeName: "Score"
-          AttributeType: "N"
+        - AttributeName: PlayerId
+          AttributeType: S
+        - AttributeName: Score
+          AttributeType: N
       KeySchema:
-        - AttributeName: "PlayerId"
-          KeyType: "HASH"
-        - AttributeName: "Score"
-          KeyType: "RANGE"
+        - AttributeName: PlayerId
+          KeyType: HASH
+        - AttributeName: Score
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
@@ -150,72 +157,74 @@ Resources:
 
 
   ReadGamePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Provide read access to the Game table
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
-            Action: "dynamodb:GetItem"
+          - Effect: Allow
+            Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetItem
             Resource: !GetAtt GameTable.Arn
 
 
   WriteGamePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Provide write access to the Game table
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
+          - Effect: Allow
             Action:
-              - "dynamodb:PutItem"
-              - "dynamodb:UpdateItem"
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
             Resource: !GetAtt GameTable.Arn
 
 
   ReadGameStreamPolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Provide read access to the Score table stream
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
+          - Effect: Allow
             Action:
-              - "dynamodb:DescribeStream"
-              - "dynamodb:GetRecords"
-              - "dynamodb:GetShardIterator"
-              - "dynamodb:ListStreams"
+              - dynamodb:DescribeStream
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:ListStreams
             Resource: !GetAtt GameTable.Arn
 
 
   ReadScorePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Provide read access to the Score table
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
+          - Effect: Allow
             Action:
-              - "dynamodb:BatchGetItem"
-              - "dynamodb:GetItem"
+              - dynamodb:BatchGetItem
+              - dynamodb:GetItem
             Resource: !GetAtt ScoreTable.Arn
 
 
   WriteScorePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: Provide read access to the Score table
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
+          - Effect: Allow
             Action:
-              - "dynamodb:PutItem"
-              - "dynamodb:UpdateItem"
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
             Resource: !GetAtt ScoreTable.Arn
 
 
@@ -224,5 +233,5 @@ Outputs:
     Value: !GetAtt WebBucket.WebsiteURL
     Description: URL for website hosted on S3
   WebsiteSecureURL:
-    Value: !Sub "https://${WebBucket.DomainName}"
+    Value: !Sub 'https://${WebBucket.DomainName}'
     Description: Secure URL for the website

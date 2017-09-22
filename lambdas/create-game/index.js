@@ -1,13 +1,19 @@
 'use strict';
 
+const url = require('url');
 const parseEvent = require('./parse-event');
 const createGame = require('./create-game');
 
-function success(host, gameId) {
+
+function success({gameId, host, path}) {
+    const location = url.format({
+        host,
+        pathname: `${path}/${gameId}`
+    });
     return {
         statusCode: 201,
         headers: {
-            Location: `https://${host}/games/${gameId}`
+            Location: location
         }
     }
 }
@@ -17,10 +23,10 @@ const error = {
 };
 
 exports.handler = function(event, context, callback) {
-    const {gameId, host} = parseEvent(event);
+    const {gameId, host, path} = parseEvent(event);
     createGame(gameId)
         .then(() => {
-            const response = success(host, gameId);
+            const response = success({gameId, host, path});
             callback(null, response);
         })
         .catch(err => {

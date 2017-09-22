@@ -9,8 +9,7 @@ rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
 stackName="Rock-Paper-Scissors"
 
-usage="usage: $script [-b|-h|-r|-s]
-    -b| --bucket        the name of the S3 bucket used for SAM resources
+usage="usage: $script [-h|-r|-s]
     -h| --help          this help
     -r| --region        AWS region (defaults to '$region')
     -s| --stack-name    stack name"

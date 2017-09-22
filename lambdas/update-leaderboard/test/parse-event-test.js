@@ -17,6 +17,7 @@ describe('DynamoDB Stream Event Parser', () => {
                     "mno",
                     "pqr",
                 ],
+                state: 'WINNER',
                 winner: "mno"
             }
         ])

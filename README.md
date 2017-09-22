@@ -8,19 +8,20 @@ A workshop on how to construct serverless applications on AWS
 
 | Property  | Type              | Description                               |
 |-----------|------------------ |------------------------------------------ |
-| GameId    | N (Number)        | The id of a game                          |
+| GameId    | S (String)        | The id of a game                          |
 | Players   | L (List)          | The participating players and their moves |
-| State     | M (Map)           | The current state of the game             |
+| State     | S (String)        | The current state of the game             |
+| Winner    | S (String)        | The id of the winning player (if any)     |
 
 
 Example:
 
-| GameId    | Players                                                                   | State                             |
-|-----------|-------------------------------------------------------------------------- | --------------------------------- |
-| 13        |                                                                           | {state: "CREATED"}                |
-| 27        | [{playerId: "abc", move: "PAPER"}]                                        | {state: "IN_PROGRESS"}            |
-| 42        | [{playerId: "mno", move: "ROCK"}, {playerId: "pqr", move: "SCISSORS"}]    | {state: "WINNER", winner: "mno"}  |
-| 63        | [{playerId: "abc", move: "ROCK"}, {playerId: "pqr", move: "ROCK"}]        | {state: "DRAW"}                   |
+| GameId    | Players                                                                   | State         | Winner    |
+|-----------|-------------------------------------------------------------------------- | ------------- | --------- |
+| 13        |                                                                           | "CREATED"     |           |
+| 27        | [{playerId: "abc", move: "PAPER"}]                                        | "FIRST_MOVE"  |           |
+| 42        | [{playerId: "mno", move: "ROCK"}, {playerId: "pqr", move: "SCISSORS"}]    | "WINNER"      | "mno"     |
+| 63        | [{playerId: "abc", move: "ROCK"}, {playerId: "pqr", move: "ROCK"}]        | "DRAW"        |           |
 
 
 ## ScoreTable

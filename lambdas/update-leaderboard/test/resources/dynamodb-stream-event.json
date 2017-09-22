@@ -6,7 +6,7 @@
       "dynamodb": {
         "Keys": {
           "GameId": {
-            "N": "27"
+            "S": "27"
           }
         },
         "NewImage": {
@@ -14,10 +14,10 @@
             "L": [{"playerId": "abc", "move": "PAPER"}]
           },
           "State": {
-            "state": "IN_PROGRESS"
+            "S": "FIRST_MOVE"
           },
           "GameId": {
-            "N": "27"
+            "S": "27"
           }
         },
         "StreamViewType": "NEW_AND_OLD_IMAGES",
@@ -38,16 +38,16 @@
             "L": [{"playerId": "abc", "move": "ROCK"}]
           },
           "State": {
-            "state": "IN_PROGRESS"
+            "S": "FIRST_MOVE"
           },
           "GameId": {
-            "N": "42"
+            "S": "42"
           }
         },
         "SequenceNumber": "222",
         "Keys": {
           "GameId": {
-            "N": "42"
+            "S": "42"
           }
         },
         "SizeBytes": 59,
@@ -56,11 +56,13 @@
             "L": [{"playerId": "mno", "move": "ROCK"}, {"playerId": "pqr", "move": "SCISSORS"}]
           },
           "State": {
-            "state": "WINNER",
-            "winner": "mno"
+            "S": "WINNER"
+          },
+          "Winner": {
+            "S": "mno"
           },
           "GameId": {
-            "N": "42"
+            "S": "42"
           }
         },
         "StreamViewType": "NEW_AND_OLD_IMAGES"
@@ -76,7 +78,7 @@
       "dynamodb": {
         "Keys": {
           "GameId": {
-            "N": "2"
+            "S": "2"
           }
         },
         "SizeBytes": 38,
@@ -86,10 +88,10 @@
             "L": [{"playerId": "abc", "move": "ROCK"}, {"playerId": "pqr", "move": "ROCK"}]
           },
           "State": {
-            "state": "DRAW"
+            "S": "DRAW"
           },
           "GameId": {
-            "N": "2"
+            "S": "2"
           }
         },
         "StreamViewType": "NEW_AND_OLD_IMAGES"
