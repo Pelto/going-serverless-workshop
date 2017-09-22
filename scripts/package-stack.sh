@@ -7,7 +7,7 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
-samBucket=
+samBucket="going-serverless"
 stackName="Rock-Paper-Scissors"
 
 usage="usage: $script [-b|-h|-r|-s]
