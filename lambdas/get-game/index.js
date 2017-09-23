@@ -9,7 +9,7 @@ function success(body) {
     return {
         statusCode: 200,
         body: JSON.stringify(body)
-    }
+    };
 }
 
 const error = {

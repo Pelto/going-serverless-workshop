@@ -97,9 +97,9 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - dynamodb:BatchGetItem
-                - dynamodb:GetItem
-              Resource: !GetAtt ScoreTable.Arn
+                - dynamodb:Query
+                - dynamodb:Scan
+              Resource: !Sub ${ScoreTable.Arn}
       Events:
         Leaderboard:
           Type: Api
@@ -160,26 +160,12 @@ Resources:
       AttributeDefinitions:
         - AttributeName: playerId
           AttributeType: S
-        - AttributeName: score
-          AttributeType: N
       KeySchema:
         - AttributeName: playerId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      GlobalSecondaryIndexes:
-        - IndexName: scoreIndex
-          KeySchema:
-            - AttributeName: playerId
-              KeyType: HASH
-            - AttributeName: score
-              KeyType: RANGE
-          Projection:
-            ProjectionType: KEYS_ONLY
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
 
 
   WebBucket:
@@ -196,5 +182,5 @@ Outputs:
     Value: !GetAtt WebBucket.WebsiteURL
     Description: URL for website hosted on S3
   WebsiteSecureURL:
-    Value: !Sub 'https://${WebBucket.DomainName}'
+    Value: !Sub https://${WebBucket.DomainName}
     Description: Secure URL for the website

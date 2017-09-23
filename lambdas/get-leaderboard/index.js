@@ -6,7 +6,7 @@ function success(body) {
     return {
         statusCode: 200,
         body: JSON.stringify(body)
-    }
+    };
 }
 
 const error = {
@@ -22,5 +22,5 @@ exports.handler = function(event, context, callback) {
         .catch(err => {
             console.error(JSON.stringify(err));
             callback(null, error);
-        })
+        });
 };
