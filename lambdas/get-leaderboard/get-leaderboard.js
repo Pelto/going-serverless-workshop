@@ -12,9 +12,18 @@ const SCORE_TABLE = process.env.SCORE_TABLE;
 function getLeaderboard() {
     const params = {
         TableName: SCORE_TABLE,
+        IndexName: 'scoreIndex',
+        AttributesToGet: ['playerId', 'score'],
+        KeyConditions: {
+            dummy: {
+                ComparisonOperator: "EQ",
+                AttributeValueList: ["a"]
+            }
+        },
+        ScanIndexForward: false
     };
     return documentClient
-        .scan(params)
+        .query(params)
         .promise()
         .then(data => data.Items);
 }

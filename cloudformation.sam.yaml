@@ -99,7 +99,7 @@ Resources:
               Action:
                 - dynamodb:Query
                 - dynamodb:Scan
-              Resource: !Sub ${ScoreTable.Arn}
+              Resource: !Sub ${ScoreTable.Arn}/index/scoreIndex
       Events:
         Leaderboard:
           Type: Api
@@ -160,12 +160,30 @@ Resources:
       AttributeDefinitions:
         - AttributeName: playerId
           AttributeType: S
+        - AttributeName: score
+          AttributeType: N
+        - AttributeName: dummy
+          AttributeType: S
       KeySchema:
         - AttributeName: playerId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: scoreIndex
+          KeySchema:
+            - AttributeName: dummy
+              KeyType: HASH
+            - AttributeName: score
+              KeyType: RANGE
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - playerId
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
 
   WebBucket:
