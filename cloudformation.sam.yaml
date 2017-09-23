@@ -148,7 +148,7 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       StreamSpecification:
-        StreamViewType: NEW_IMAGE
+        StreamViewType: NEW_AND_OLD_IMAGES
       TimeToLiveSpecification:
         AttributeName: expirationTime
         Enabled: true
@@ -165,11 +165,21 @@ Resources:
       KeySchema:
         - AttributeName: playerId
           KeyType: HASH
-        - AttributeName: score
-          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: scoreIndex
+          KeySchema:
+            - AttributeName: playerId
+              KeyType: HASH
+            - AttributeName: score
+              KeyType: RANGE
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
 
   WebBucket:

@@ -11,7 +11,12 @@
         },
         "NewImage": {
           "players": {
-            "L": [{"playerId": "abc", "move": "PAPER"}]
+            "L": [{
+              "M": {
+                "playerId": {"S": "aaa"},
+                "move": {"S": "PAPER"}
+              }
+            }]
           },
           "state": {
             "S": "FIRST_MOVE"
@@ -35,7 +40,14 @@
       "dynamodb": {
         "OldImage": {
           "players": {
-            "L": [{"playerId": "abc", "move": "ROCK"}]
+            "L": [
+              {
+                "M": {
+                  "playerId": {"S": "bbb"},
+                  "move": {"S": "ROCK"}
+                }
+              }
+            ]
           },
           "state": {
             "S": "FIRST_MOVE"
@@ -53,7 +65,19 @@
         "SizeBytes": 59,
         "NewImage": {
           "players": {
-            "L": [{"playerId": "mno", "move": "ROCK"}, {"playerId": "pqr", "move": "SCISSORS"}]
+            "L": [
+              {
+                "M": {
+                  "playerId": {"S": "ccc"},
+                  "move": {"S": "ROCK"}}
+                },
+              {
+                "M": {
+                  "playerId": {"S": "ddd"},
+                  "move": {"S": "SCISSORS"}
+                }
+              }
+            ]
           },
           "state": {
             "S": "WINNER"
@@ -85,7 +109,62 @@
         "SequenceNumber": "333",
         "OldImage": {
           "players": {
-            "L": [{"playerId": "abc", "move": "ROCK"}, {"playerId": "pqr", "move": "ROCK"}]
+            "L": [
+              {
+                "M": {
+                  "playerId": {"S": "eee"},
+                  "move": {"S": "ROCK"}
+                }
+              },
+              {
+                "M": {
+                  "playerId": {"S": "fff"},
+                  "move": {"S": "ROCK"}
+                }
+              }
+            ]
+          },
+          "State": {
+            "S": "DRAW"
+          },
+          "GameId": {
+            "S": "2"
+          }
+        },
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "awsRegion": "us-west-2",
+      "eventName": "REMOVE",
+      "eventSourceARN": "arn:aws:dynamodb:us-west-2:account-id:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899",
+      "eventSource": "aws:dynamodb"
+    },
+    {
+      "eventID": "4",
+      "eventVersion": "1.0",
+      "dynamodb": {
+        "Keys": {
+          "gameId": {
+            "S": "2"
+          }
+        },
+        "SizeBytes": 38,
+        "SequenceNumber": "333",
+        "NewImage": {
+          "players": {
+            "L": [
+              {
+                "M": {
+                  "playerId": {"S": "ggg"},
+                  "move": {"S": "ROCK"}
+                }
+              },
+              {
+                "M": {
+                  "playerId": {"S": "hhh"},
+                  "move": {"S": "ROCK"}
+                }
+              }
+            ]
           },
           "state": {
             "S": "DRAW"
@@ -94,10 +173,26 @@
             "S": "2"
           }
         },
+        "OldImage": {
+          "players": {
+            "L": [{
+              "M": {
+                "playerId": {"S": "abc"},
+                "move": {"S": "PAPER"}
+              }
+            }]
+          },
+          "state": {
+            "S": "FIRST_MOVE"
+          },
+          "gameId": {
+            "S": "27"
+          }
+        },
         "StreamViewType": "NEW_AND_OLD_IMAGES"
       },
       "awsRegion": "us-west-2",
-      "eventName": "REMOVE",
+      "eventName": "MODIFY",
       "eventSourceARN": "arn:aws:dynamodb:us-west-2:account-id:table/ExampleTableWithStream/stream/2015-06-27T00:48:05.899",
       "eventSource": "aws:dynamodb"
     }

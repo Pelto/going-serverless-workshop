@@ -8,25 +8,25 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 const SCORE_TABLE = process.env.SCORE_TABLE;
 
-function persistScore(scores) {
-    const promises = Object.keys(scores)
-        .map(playerId => {
-            return {
-                TableName: SCORE_TABLE,
-                Key: {
-                    playerId: playerId
-                },
-                UpdateExpression: "ADD score :score",
-                ExpressionAttributeValues: {
-                    ":score": scores[playerId]
-                }
-            }
-        })
-        .forEach(params => documentClient
-            .update(params)
-            .promise()
-        );
-    return Promise.all(promises);
+
+function persistScore(playerScore) {
+    const {playerId, score} = playerScore;
+    const params = {
+        TableName: SCORE_TABLE,
+        Key: {
+            playerId: playerId
+        },
+        UpdateExpression: "ADD #score :score",
+        ExpressionAttributeNames: {
+            "#score": 'score'
+        },
+        ExpressionAttributeValues: {
+            ":score": score
+        }
+    };
+    return documentClient
+        .update(params)
+        .promise();
 }
 
 module.exports = persistScore;

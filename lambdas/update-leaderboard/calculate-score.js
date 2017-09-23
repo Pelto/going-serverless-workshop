@@ -1,31 +1,28 @@
 'use strict';
 
-function calculateGameScore(game) {
-    const scores = {};
-    if (game.winner) {
-        scores[game.winner] = 2;
+function calculateScore(gameData) {
+    const scores = [];
+
+    function addScore(playerId, score) {
+        scores.push({
+            playerId: playerId,
+            score: score
+        })
     }
-    else {
-        scores[game.playerIds[0]] = 1;
-        scores[game.playerIds[1]] = 1;
+
+    switch (gameData.state) {
+        case 'WINNER':
+            // game winner gets 2 points
+            addScore(gameData.winner, 2);
+            break;
+
+        case 'DRAW':
+            // each player gets 1 point if it is a draw
+            gameData.players
+                .forEach(player => addScore(player.playerId, 1));
+            break;
     }
     return scores;
-}
-
-function calculateSumOfAllGames(totalScore, gameScore) {
-    Object.keys(gameScore)
-        .forEach(playerId => {
-            totalScore[playerId] = totalScore[playerId]
-                ? totalScore[playerId] += gameScore[playerId]
-                : gameScore[playerId];
-        });
-    return totalScore;
-}
-
-function calculateScore(gameData) {
-    return gameData
-        .map(calculateGameScore)
-        .reduce(calculateSumOfAllGames, {});
 }
 
 module.exports = calculateScore;

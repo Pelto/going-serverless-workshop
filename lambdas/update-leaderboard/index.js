@@ -1,17 +1,27 @@
 'use strict';
 
 
-const parseEvents = require('./parse-event');
+const parseAndFilter = require('./parse-and_filter-event');
 const calculateScore = require('./calculate-score');
 const persistScore = require('./persist-score');
 
+
+function flatten(acc, curr) {
+    return acc.concat(curr);
+}
+
+
 exports.handler = function(event, context, callback) {
-    parseEvents(event)
+
+    const promises = parseAndFilter(event)
         .map(calculateScore)
-        .map(persistScore)
+        .reduce(flatten, [])
+        .map(persistScore);
+
+    Promise.all(promises)
         .then(res => callback(null, res))
         .catch(err => {
             console.error(JSON.stringify(err));
-            callback(error);
+            callback(err);
         });
 };

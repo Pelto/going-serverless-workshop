@@ -9,66 +9,102 @@ describe('Score Calculator', () => {
 
     it('game winner gets 2 points', () => {
         const gameData = [{
-            playerIds: [
-                "mno",
-                "pqr",
+            players: [
+                {
+                    playerId: "mno",
+                    move: "ROCK"
+                },
+                {
+                    playerId: "pqr",
+                    move: "SCISSORS"
+                }
             ],
+            state: 'WINNER',
             winner: "mno"
         }];
 
         const score = calculateScore(gameData);
-        expect(score).to.eql({
-            mno: 2,
-        })
+        expect(score).to.eql([{
+            playerId: 'mno',
+            score: 2
+        }])
     });
 
 
     it('players get 1 point each in draw', () => {
         const gameData = [{
-            playerIds: [
-                "mno",
-                "pqr",
-            ]
+            players: [
+                {
+                    playerId: "mno",
+                    move: "ROCK"
+                },
+                {
+                    playerId: "pqr",
+                    move: "ROCK"
+                }
+            ],
+            state: 'DRAW'
         }];
 
         const score = calculateScore(gameData);
-        expect(score).to.eql({
-            mno: 1,
-            pqr: 1,
-        })
+        expect(score).to.deep.include(
+            {playerId: 'mno', score: 1},
+            {playerId: 'pqr', score: 1}
+        )
     });
 
 
     it('calculates the score of multiple games', () => {
         const gameData = [
             {
-                playerIds: [
-                    "mno",
-                    "pqr",
-                ]
+                players: [
+                    {
+                        playerId: "mno",
+                        move: "ROCK"
+                    },
+                    {
+                        playerId: "pqr",
+                        move: "ROCK"
+                    }
+                ],
+                state: 'DRAW'
             },
             {
-                playerIds: [
-                    "abc",
-                    "pqr",
+                players: [
+                    {
+                        playerId: "abc",
+                        move: "ROCK"
+                    },
+                    {
+                        playerId: "xyz",
+                        move: "SCISSORS"
+                    }
                 ],
+                state: 'WINNER',
                 winner: "abc"
             },
             {
-                playerIds: [
-                    "mno",
-                    "pqr",
+                players: [
+                    {
+                        playerId: "abc",
+                        move: "ROCK"
+                    },
+                    {
+                        playerId: "pqr",
+                        move: "PAPER"
+                    }
                 ],
+                state: 'WINNER',
                 winner: "pqr"
             }
         ];
 
         const score = calculateScore(gameData);
-        expect(score).to.eql({
-            abc: 2,
-            mno: 1,
-            pqr: 3,
-        })
+        expect(score).to.deep.include(
+            {playerId: 'mno', score: 1},
+            {playerId: 'pqr', score: 1},
+            {playerId: 'abc', score: 2},
+            {playerId: 'pqr', score: 2}
+        )
     })
-
 });
