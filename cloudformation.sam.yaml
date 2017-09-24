@@ -49,6 +49,11 @@ Resources:
               - dynamodb:UpdateItem
             Resource: !GetAtt GameTable.Arn
       Events:
+        Options:
+          Type: Api
+          Properties:
+            Method: options
+            Path: /games
         CreateGame:
           Type: Api
           Properties:

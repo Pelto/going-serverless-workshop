@@ -14,7 +14,11 @@ function success({gameId, host, path}) {
     return {
         statusCode: 201,
         headers: {
-            Location: location
+            Location: location,
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': 86400
         }
     }
 }
@@ -24,6 +28,21 @@ const error = {
 };
 
 exports.handler = function(event, context, callback) {
+
+    console.info(event);
+
+    if (event.httpMethod === 'OPTIONS') {
+        return callback(null, {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': 86400
+            }
+        });
+    }
+
     const {gameId, host, path} = parseEvent(event);
     createGame(gameId)
         .then(() => {
