@@ -3,54 +3,43 @@
 const url = require('url');
 const parseEvent = require('./parse-event');
 const createGame = require('./create-game');
+const response = require('./response');
 
 
-function success({gameId, host, path}) {
-    const location = url.format({
+function createLocation({gameId, host, path}) {
+    return url.format({
         protocol: 'https:',
         host,
         pathname: `${path}/${gameId}`
     });
-    return {
-        statusCode: 201,
-        headers: {
-            Location: location,
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': 86400
-        }
-    }
 }
 
-const error = {
-    statusCode: 500
-};
 
 exports.handler = function(event, context, callback) {
 
-    console.info(event);
+    switch (event.httpMethod) {
 
-    if (event.httpMethod === 'OPTIONS') {
-        return callback(null, {
-            statusCode: 200,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Max-Age': 86400
-            }
-        });
+        case 'POST': {
+            const {gameId, host, path} = parseEvent(event);
+            return createGame(gameId)
+                .then(() => createLocation({gameId, host, path}))
+                .then(location => response.createLocationResponse(response.CREATED, location))
+                .then(resp => callback(null, resp))
+                .catch(err => {
+                    console.error(JSON.stringify(err));
+                    const resp = response.createResponse(response.INTERNAL_SERVER_ERROR);
+                    return callback(null, resp);
+                });
+        }
+
+        case 'OPTIONS': {
+            const resp = response.createResponse(response.OK);
+            return callback(null, resp);
+        }
+
+        default: {
+            const resp = response.createResponse(response.METHOD_NOT_ALLOWED);
+            return callback(null, resp);
+        }
     }
-
-    const {gameId, host, path} = parseEvent(event);
-    createGame(gameId)
-        .then(() => {
-            const response = success({gameId, host, path});
-            callback(null, response);
-        })
-        .catch(err => {
-            console.error(JSON.stringify(err));
-            callback(null, error);
-        });
 };
