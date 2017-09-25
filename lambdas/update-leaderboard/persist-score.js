@@ -16,14 +16,14 @@ function persistScore(playerScore) {
         Key: {
             playerId: playerId
         },
-        UpdateExpression: 'ADD #score :score SET #dummy = :dummy',
+        UpdateExpression: 'ADD #score :score SET #game = :game',
         ExpressionAttributeNames: {
             '#score': 'score',
-            '#dummy': 'dummy'
+            '#game': 'game'
         },
         ExpressionAttributeValues: {
             ':score': score,
-            ':dummy': 'a'
+            ':game': 'Rock Paper Scissors'
         }
     };
     return documentClient
