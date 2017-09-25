@@ -17,7 +17,7 @@ function generateExpirationTime() {
     return Math.floor(epochSeconds);
 }
 
-function createGame(gameId) {
+function persistGame(gameId) {
     const expirationTime = generateExpirationTime();
     const params = {
         TableName : GAME_TABLE,
@@ -33,4 +33,4 @@ function createGame(gameId) {
         .promise();
 }
 
-module.exports = createGame;
+module.exports = persistGame;

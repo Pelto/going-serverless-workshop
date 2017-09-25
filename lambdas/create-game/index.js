@@ -2,7 +2,7 @@
 
 const url = require('url');
 const parseEvent = require('./parse-event');
-const createGame = require('./create-game');
+const persistGame = require('./persist-game');
 const response = require('./response');
 
 
@@ -21,7 +21,7 @@ exports.handler = function(event, context, callback) {
 
         case 'POST': {
             const {gameId, host, path} = parseEvent(event);
-            return createGame(gameId)
+            return persistGame(gameId)
                 .then(() => createLocation({gameId, host, path}))
                 .then(location => response.createLocationResponse(response.CREATED, location))
                 .then(resp => callback(null, resp))
