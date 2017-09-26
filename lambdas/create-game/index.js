@@ -1,18 +1,9 @@
 'use strict';
 
-const url = require('url');
 const parseEvent = require('./parse-event');
+const createLocation = require('./create-location');
 const persistGame = require('./persist-game');
 const response = require('./response');
-
-
-function createLocation({gameId, host, path}) {
-    return url.format({
-        protocol: 'https:',
-        host,
-        pathname: `${path}/${gameId}`
-    });
-}
 
 
 exports.handler = function(event, context, callback) {
