@@ -8,6 +8,13 @@ const CORS_HEADERS = {
     'Access-Control-Max-Age': 86400
 };
 
+const HTTP_STATUS = {
+    OK: 200,
+    CREATED: 201,
+    METHOD_NOT_ALLOWED: 405,
+    INTERNAL_SERVER_ERROR: 500
+};
+
 function createResponse(httpStatus) {
     return {
         statusCode: httpStatus,
@@ -15,18 +22,32 @@ function createResponse(httpStatus) {
     };
 }
 
-function createLocationResponse(httpStatus, location) {
-    const response = createResponse(httpStatus);
-    response.headers.Location = location;
+function ok(body) {
+    const response = createResponse(HTTP_STATUS.OK);
+    if (body) {
+        response.body = JSON.stringify(body);
+    }
     return response;
-
 }
 
+function created(location) {
+    const response = createResponse(HTTP_STATUS.CREATED);
+    response.headers.Location = location;
+    return response;
+}
+
+function methodNotAllowed() {
+    return createResponse(HTTP_STATUS.METHOD_NOT_ALLOWED);
+}
+
+function internalServerError() {
+    return createResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR);
+}
+
+
 module.exports = {
-    createResponse,
-    createLocationResponse,
-    OK: 200,
-    CREATED: 201,
-    METHOD_NOT_ALLOWED: 405,
-    INTERNAL_SERVER_ERROR: 500
+    ok,
+    created,
+    methodNotAllowed,
+    internalServerError
 };

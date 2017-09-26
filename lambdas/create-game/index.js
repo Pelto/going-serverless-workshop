@@ -14,22 +14,23 @@ exports.handler = function(event, context, callback) {
             const {gameId, host, path} = parseEvent(event);
             return persistGame(gameId)
                 .then(() => createLocation({gameId, host, path}))
-                .then(location => response.createLocationResponse(response.CREATED, location))
+                .then(location => response.created(location))
                 .then(resp => callback(null, resp))
                 .catch(err => {
                     console.error(JSON.stringify(err));
-                    const resp = response.createResponse(response.INTERNAL_SERVER_ERROR);
+                    const resp = response.internalServerError();
                     return callback(null, resp);
                 });
         }
 
         case 'OPTIONS': {
-            const resp = response.createResponse(response.OK);
+            const resp = response.ok();
             return callback(null, resp);
         }
 
         default: {
-            const resp = response.createResponse(response.METHOD_NOT_ALLOWED);
+            console.error(`Method not allowed: ${event.httpMethod}`);
+            const resp = response.methodNotAllowed();
             return callback(null, resp);
         }
     }
