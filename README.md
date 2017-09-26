@@ -21,6 +21,9 @@ A workshop on how to construct serverless applications on AWS
 | `DRAW`        | Both players have played and made the same move   |
 
 ### Create Game
+
+Creates a new Rock Paper Scissors game. 
+
 Request
 ```
 POST [server]/games
@@ -36,6 +39,7 @@ Location: [server]/games/42
 
 
 ### Get Game
+
 
 Request
 ```
@@ -87,6 +91,32 @@ HTTP/1.1 200 OK
     "state": "FIRST_MOVE"
     "expirationTime": 1506197262,
 }
+```
+
+
+### Get Leaderboard
+
+Request
+```
+GET [server]/leaderboard
+```
+Response
+```
+HTTP/1.1 200 OK
+[
+    {
+        "playerId": "abc"
+        "score": 10,
+    },
+    {
+        "playerId": "qpr"
+        "score": 5,
+    },
+    {
+        "playerId": "xyz"
+        "score": 1,
+    }
+]
 ```
 
 

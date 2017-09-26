@@ -7,7 +7,7 @@ Resources:
   GetGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Lambda function for getting RPS games
+      Description: Getting game status
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/get-game/
@@ -33,7 +33,7 @@ Resources:
   CreateGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Lambda function for creating RPS games
+      Description: Create a game
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/create-game/
@@ -60,7 +60,7 @@ Resources:
   MakeMoveFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Lambda function for making RPS moves
+      Description: Make a move
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/make-move/
@@ -86,7 +86,7 @@ Resources:
   GetLeaderboardFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Lambda function for getting the RPS leaderboard
+      Description: Get leaderboard
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/get-leaderboard/
@@ -109,10 +109,10 @@ Resources:
             Path: /leaderboard
 
 
-  UpdateLeaderboardFunction:
+  UpdateScoreFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Lambda function for updating the RPS leaderboard
+      Description: Update the score
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/update-leaderboard/
