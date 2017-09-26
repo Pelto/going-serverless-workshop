@@ -94,6 +94,7 @@ Resources:
       Environment:
         Variables:
           SCORE_TABLE: !Ref ScoreTable
+          STATIC_WEBSITE_URL: !Sub https://${WebBucket.DomainName}
       Policies:
         - Version: '2012-10-17'
           Statement:

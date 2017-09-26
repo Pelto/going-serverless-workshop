@@ -1,26 +1,33 @@
 'use strict';
 
 const getLeaderboard = require('./get-leaderboard');
+const response = require('./response');
 
-function success(body) {
-    return {
-        statusCode: 200,
-        body: JSON.stringify(body)
-    };
-}
-
-const error = {
-    statusCode: 500
-};
 
 exports.handler = function(event, context, callback) {
-    getLeaderboard()
-        .then(leaderboard => {
-            const response = success(leaderboard);
-            callback(null, response);
-        })
-        .catch(err => {
-            console.error(JSON.stringify(err));
-            callback(null, error);
-        });
+
+    switch (event.httpMethod) {
+
+        case 'GET': {
+            return getLeaderboard()
+                .then(leaderboard => response.ok(leaderboard))
+                .then(resp => callback(null, resp))
+                .catch(err => {
+                    console.error(JSON.stringify(err));
+                    const resp = response.internalServerError();
+                    callback(null, resp);
+                });
+        }
+
+        case 'OPTIONS': {
+            const resp = response.ok();
+            return callback(null, resp);
+        }
+
+        default: {
+            console.error(`Method not allowed: ${event.httpMethod}`);
+            const resp = response.methodNotAllowed();
+            return callback(null, resp);
+        }
+    }
 };
