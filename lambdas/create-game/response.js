@@ -18,7 +18,7 @@ const HTTP_STATUS = {
 function createResponse(httpStatus) {
     return {
         statusCode: httpStatus,
-        headers: CORS_HEADERS
+        headers: Object.assign({}, CORS_HEADERS)
     };
 }
 

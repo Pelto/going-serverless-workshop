@@ -10,10 +10,10 @@ describe('Create Location', () => {
     it('creates a location based on gameId, host and path', () => {
         const location = createLocation({
             gameId: 42,
-            host: 'www.example.com',
+            host: 'api.example.com',
             path: '/games'
         });
 
-        expect(location).to.eql('https://www.example.com/games/42');
+        expect(location).to.eql('https://api.example.com/games/42');
     })
 });
