@@ -7,7 +7,7 @@ Resources:
   GetGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Getting game status
+      Description: Gets game status
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/get-game/
@@ -34,7 +34,7 @@ Resources:
   CreateGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Create a game
+      Description: Creates a game
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/create-game/
@@ -61,13 +61,14 @@ Resources:
   MakeMoveFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Make a move
+      Description: Makes a move
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/make-move/
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
+          STATIC_WEBSITE_URL: !Sub https://${WebBucket.DomainName}
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -87,7 +88,7 @@ Resources:
   GetLeaderboardFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Get leaderboard
+      Description: Gets leaderboard
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/get-leaderboard/
@@ -114,7 +115,7 @@ Resources:
   UpdateScoreFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Update the score
+      Description: Updates the score
       Handler: index.handler
       Runtime: nodejs6.10
       CodeUri: lambdas/update-score/
