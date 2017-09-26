@@ -14,6 +14,7 @@ Resources:
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
+          STATIC_WEBSITE_URL: !Sub https://${WebBucket.DomainName}
       Policies:
         - Version: '2012-10-17'
           Statement:
