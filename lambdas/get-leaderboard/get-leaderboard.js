@@ -15,7 +15,7 @@ function getLeaderboard() {
         IndexName: 'scoreIndex',
         AttributesToGet: ['playerId', 'score'],
         KeyConditions: {
-            game: {
+            gameTitle: {
                 ComparisonOperator: "EQ",
                 AttributeValueList: ["Rock Paper Scissors"]
             }
