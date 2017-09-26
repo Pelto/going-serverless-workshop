@@ -4,15 +4,16 @@ let lambda;
 const chai = require('chai');
 const { expect } = chai;
 
-const ORIGIN = 'https://s3.example.com';
+const ORIGIN = 'https://api.example.com';
 
 
-describe('CORS', () => {
+describe('Create Game CORS', () => {
 
     before(() => {
         process.env.STATIC_WEBSITE_URL = ORIGIN;
         lambda = require('../');
     });
+
 
     it('Allows CORS when http method is OPTIONS', done => {
 

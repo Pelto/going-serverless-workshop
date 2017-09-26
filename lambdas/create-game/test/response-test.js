@@ -1,13 +1,17 @@
 'use strict';
 
-process.env.STATIC_WEBSITE_URL = 'https://api.example.com';
-
-const response = require('../response');
 const chai = require('chai');
 const { expect } = chai;
 
+let response;
 
 describe('Create Game Responses', () => {
+
+    before(() => {
+        process.env.STATIC_WEBSITE_URL = 'https://api.example.com';
+        response = require('../response');
+    });
+
 
     it('200 OK', () => {
         const responseBody = {key: 'value'};

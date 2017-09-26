@@ -1,13 +1,17 @@
 'use strict';
 
-process.env.STATIC_WEBSITE_URL = 'https://api.example.com';
-
-const response = require('../response');
 const chai = require('chai');
 const { expect } = chai;
 
+let response;
 
 describe('Get Game Responses', () => {
+
+    before(() => {
+        process.env.STATIC_WEBSITE_URL = 'https://api.example.com';
+        response = require('../response');
+    });
+
 
     it('200 OK', () => {
         const responseBody = {key: 'value'};
@@ -37,7 +41,7 @@ describe('Get Game Responses', () => {
 
         expect(headers).to.eql({
             'Access-Control-Allow-Origin': 'https://api.example.com',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Methods': 'GET, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': 86400
         });
