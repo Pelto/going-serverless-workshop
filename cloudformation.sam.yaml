@@ -115,7 +115,7 @@ Resources:
       Description: Update the score
       Handler: index.handler
       Runtime: nodejs6.10
-      CodeUri: lambdas/update-leaderboard/
+      CodeUri: lambdas/update-score/
       Policies:
         - Version: '2012-10-17'
           Statement:

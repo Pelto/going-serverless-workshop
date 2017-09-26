@@ -1,6 +1,6 @@
 'use strict';
 
-const parseAndFilterEvent = require('../parse-and_filter-event');
+const parseAndFilterEvent = require('../parse-and-filter-event');
 const event = require('./resources/dynamodb-stream-event.json');
 const chai = require('chai');
 const { expect } = chai;

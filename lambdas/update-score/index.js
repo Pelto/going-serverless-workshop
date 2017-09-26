@@ -1,7 +1,7 @@
 'use strict';
 
 
-const parseAndFilter = require('./parse-and_filter-event');
+const parseAndFilter = require('./parse-and-filter-event');
 const calculateScore = require('./calculate-score');
 const persistScore = require('./persist-score');
 
