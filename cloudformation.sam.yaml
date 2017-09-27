@@ -200,6 +200,9 @@ Resources:
 
 
 Outputs:
+  WebBucketName:
+    Value: !Ref WebBucket
+    Description: The name of the S3 bucket where the static webiste is hosted
   WebsiteURL:
     Value: !GetAtt WebBucket.WebsiteURL
     Description: URL for website hosted on S3
