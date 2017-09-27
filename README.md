@@ -124,6 +124,8 @@ HTTP/1.1 200 OK
 
 ### GameTable
 
+#### Properties
+
 | Property  | Type              | Description                               |
 |-----------|------------------ | ----------------------------------------- |
 | gameId    | S (String)        | The id of a game                          |
@@ -131,6 +133,13 @@ HTTP/1.1 200 OK
 | state     | S (String)        | The current state of the game             |
 | winner    | S (String)        | The id of the winning player (if any)     |
 
+
+
+#### Primary Key 
+
+| Index     | Type      |
+| --------- | --------- |
+| gameId    | partition |
 
 Example:
 
@@ -148,11 +157,28 @@ Example:
 |-----------|-------|------------------------------ |
 | playerId  | S     | The id of the player          |
 | score     | N     | The accumulated player score  |
+| gameTitle | S     | The title of the game         |
 
+
+#### Primary Key
+
+| Index     | Type      |
+| --------- | --------- |
+| playerId  | partition |
+
+
+#### Global Secondary Index
+
+GSI name: `scoreIndex`
+
+| Index     | Type              |
+| --------- | ----------------- | 
+| gameTitle | partition (hash)  |
+| score     | sort (range)      |
 
 Example:
 
-| playerId  | score     |
-|-----------|---------- |
-| "abc"     | 12        |
-| "mno"     | 33        |
+| playerId  | score     | gameTitle             |
+|-----------|---------- | --------------------- |
+| "abc"     | 12        | "Rock Paper Scissors" |
+| "mno"     | 33        | "Rock Paper Scissors" |
