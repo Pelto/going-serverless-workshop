@@ -8,7 +8,7 @@ let response;
 describe('Create Game Responses', () => {
 
     before(() => {
-        process.env.STATIC_WEBSITE_URL = 'https://api.example.com';
+        process.env.CORS_ORIGIN = 'https://api.example.com';
         response = require('../response');
     });
 

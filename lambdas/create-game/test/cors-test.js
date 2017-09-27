@@ -4,13 +4,11 @@ let lambda;
 const chai = require('chai');
 const { expect } = chai;
 
-const ORIGIN = 'https://api.example.com';
-
 
 describe('Create Game CORS', () => {
 
     before(() => {
-        process.env.STATIC_WEBSITE_URL = ORIGIN;
+        process.env.CORS_ORIGIN = 'https://api.example.com';
         lambda = require('../');
     });
 
@@ -25,7 +23,7 @@ describe('Create Game CORS', () => {
             expect(result).to.eql({
                 statusCode: 200,
                 headers: {
-                    'Access-Control-Allow-Origin': ORIGIN,
+                    'Access-Control-Allow-Origin': 'https://api.example.com',
                     'Access-Control-Allow-Methods': 'POST, OPTIONS',
                     'Access-Control-Allow-Headers': 'Content-Type',
                     'Access-Control-Max-Age': 86400
