@@ -47,3 +47,12 @@ aws cloudformation deploy \
     --region ${region} \
     --stack-name ${stackName} \
     --capabilities CAPABILITY_NAMED_IAM
+
+apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
+    --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
+    --region $region \
+    --output text`)
+
+apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
+
+echo "Deployed API to $apiUrl"
