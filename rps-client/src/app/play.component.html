@@ -4,11 +4,49 @@
             <label class="form-control-label" for="formGroupGameIdInput">Game id</label>
             <input type="text" class="form-control" id="formGroupGameIdInput" placeholder="id" #gameIdInput>
         </div>
+        <button class="btn btn-primary" (click)="createNewGame(gameIdInput.value)">Create and join</button>
+        <button class="btn btn-success">Join</button>
+    </form>
+</div>
+
+<div *ngIf="game">
+
+    <form>
         <div class="form-group">
             <label class="form-control-label" for="formGroupPlayerInput">Player</label>
             <input type="text" class="form-control" id="formGroupPlayerInput" placeHolder="player" #player>
         </div>
-        <button class="btn btn-primary" (click)="createNewGame(gameIdInput.value)">Create and join</button>
-        <button class="btn btn-success">Join</button>
+
+        <div class="form-row">
+
+            <div class="col">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="moveType" id="exampleRadiosRock" value="rock" #moveType>
+                        Rock
+                    </label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="moveType" id="exampleRadiosPoper" value="paper" #moveType>
+                        Paper
+                    </label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="moveType" id="exampleRadiosScissor" value="scissor" #moveType>
+                        Scissor
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary">Make Move</button>
     </form>
 </div>

@@ -20,4 +20,23 @@ export class GameService {
             .toPromise()
             .then(response => ({ id: id }));
     }
+
+    makeMove(gameId: string, player: string, move: string): Promise<Game> {
+
+        const url = `${this.gameUrl}/moves`;
+        const payload = JSON.stringify({
+            gameId,
+            player,
+            move
+        });
+
+        return this.http
+            .post(url, payload, { headers: this.headers })
+            .toPromise()
+            .then(response => ({id: gameId}));
+    }
+
+    getGame(gameId: string): Promise<Game> {
+        return this.http.get(`${this.gameUrl}/games/gameId`).toPromise().then(response => response.json() as Game);
+    }
 }
