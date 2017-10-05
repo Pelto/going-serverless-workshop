@@ -27,7 +27,7 @@ Resources:
         GetGame:
           Type: Api
           Properties:
-            Method: get
+            Method: any
             Path: /games/{gameId}
 
 
@@ -81,7 +81,7 @@ Resources:
         MakeMove:
           Type: Api
           Properties:
-            Method: post
+            Method: any
             Path: /moves
 
 
@@ -108,7 +108,7 @@ Resources:
         Leaderboard:
           Type: Api
           Properties:
-            Method: get
+            Method: any
             Path: /leaderboard
 
 
