@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Game } from './game';
+import { Game, Player } from './game';
 import { GameService } from './game.service';
 
 @Component({
@@ -12,27 +12,38 @@ export class PlayComponent {
 
     game: Game;
 
+    error: Error;
+
     constructor(private gameService: GameService) {}
 
-    createNewGame(gameId): void {
+    createNewGame(gameId: string): void {
+
+        this.error = null;
+
         if (!gameId) {
-            alert('No game id specified');
+            this.error = new Error('No game id specified');
+            return;
         }
 
         this.gameService.newGame(gameId)
             .then(game => this.game = game)
-            .catch(error => alert(error.message));
+            .catch(error => this.error = error);
     }
 
-    getGame(gameId): void {
+    getGame(gameId: string): void {
+
+        this.error = null;
+
         this.gameService.getGame(gameId)
             .then(game => this.game = game)
-            .catch(error => alert(error.message));
+            .catch(error => this.error = error);
     }
 
-    makeMove(moveType: string, player: string): void {
-        this.gameService.makeMove(this.game.id, player, moveType)
-            .then(result => {})
-            .catch(error => alert(error.message));
+    makeMove(move: string, playerId: string): void {
+        this.error = null;
+
+        this.gameService.makeMove(this.game, {playerId, move})
+            .then(game => this.game = game)
+            .catch(error => this.error = error);
     }
 }

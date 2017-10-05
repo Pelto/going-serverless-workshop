@@ -5,11 +5,12 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Game } from './game';
+import { Player } from './game';
 
 @Injectable()
 export class GameService {
 
-    private gameUrl = 'https://64slyd54w0.execute-api.eu-west-1.amazonaws.com/Prod';
+    private gameUrl = 'https://vsydwusjt0.execute-api.eu-west-1.amazonaws.com/Prod';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
     constructor(private http: Http) { }
@@ -23,23 +24,23 @@ export class GameService {
         return this.http
             .post(`${this.gameUrl}/games`, body, { headers: this.headers })
             .toPromise()
-            .then(result => this.getGame(id))
-            .then(response => ({ id: id }));
+            .then(result => this.getGame(id));
     }
 
-    makeMove(gameId: string, playerId: string, move: string): Promise<Game> {
+    makeMove(game: Game, player: Player): Promise<Game> {
 
         const url = `${this.gameUrl}/moves`;
+
         const payload = JSON.stringify({
-            gameId,
-            playerId,
-            move
+            gameId: game.gameId,
+            playerId: player.playerId,
+            move: player.move
         });
 
         return this.http
             .post(url, payload, { headers: this.headers })
             .toPromise()
-            .then(response => ({id: gameId}));
+            .then(response => this.getGame(game.gameId));
     }
 
     getGame(gameId: string): Promise<Game> {

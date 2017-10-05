@@ -5,11 +5,25 @@
             <input type="text" class="form-control" id="formGroupGameIdInput" placeholder="id" #gameIdInput>
         </div>
         <button class="btn btn-primary" (click)="createNewGame(gameIdInput.value)">Create and join</button>
-        <button class="btn btn-success">Join</button>
+        <button class="btn btn-success" (click)="getGame(gameIdInput.value)">Join</button>
     </form>
 </div>
 
 <div *ngIf="game">
+
+    {{game.gameId}} <br> {{game.state}}
+
+    <table class="table" *ngIf="game.players">
+        <tr>
+            <th>Player</th>
+            <th>Move</th>
+        </tr>
+
+        <tr *ngFor="let player of game.players">
+            <td>{{player.playerId}}</td>
+            <td>{{player.move}}</td>
+        </tr>
+    </table>
 
     <form>
         <div class="form-group">
@@ -22,7 +36,7 @@
             <div class="col">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="moveType" id="exampleRadiosRock" value="rock" #moveType>
+                        <input class="form-check-input" type="radio" name="moveType" id="moveType" value="rock" #moveType>
                         Rock
                     </label>
                 </div>
@@ -31,7 +45,7 @@
             <div class="col">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="moveType" id="exampleRadiosPoper" value="paper" #moveType>
+                        <input class="form-check-input" type="radio" name="moveType" id="moveType" value="paper" #moveType>
                         Paper
                     </label>
                 </div>
@@ -40,7 +54,7 @@
             <div class="col">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="moveType" id="exampleRadiosScissor" value="scissor" #moveType>
+                        <input class="form-check-input" type="radio" name="moveType" id="moveType" value="scissor" #moveType>
                         Scissor
                     </label>
                 </div>

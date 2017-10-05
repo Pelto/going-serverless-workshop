@@ -8,7 +8,7 @@ import { LeaderboardEntry } from './leaderboard-entry';
 @Injectable()
 export class LeaderboardService {
 
-    private url = 'https://64slyd54w0.execute-api.eu-west-1.amazonaws.com/Prod';
+    private url = 'https://vsydwusjt0.execute-api.eu-west-1.amazonaws.com/Prod';
 
     constructor(private http: Http) {}
 

@@ -12,6 +12,7 @@ exports.handler = function(event, context, callback) {
         case 'GET': {
             const {gameId} = parseEvent(event);
             return getGame(gameId)
+                .then(gameState => Object.assign({ gameId }, gameState))
                 .then(gameState => response.ok(gameState))
                 .then(resp => callback(null, resp))
                 .catch(err => {

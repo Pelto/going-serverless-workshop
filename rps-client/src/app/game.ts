@@ -1,3 +1,10 @@
+export class Player {
+    playerId: string;
+    move: string;
+}
+
 export class Game {
-    id: string;
+    gameId: string;
+    players: Player[];
+    state: string;
 }
