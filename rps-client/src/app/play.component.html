@@ -25,7 +25,7 @@
         </tr>
     </table>
 
-    <form>
+    <form *ngIf="canMakeMove()">
         <div class="form-group">
             <label class="form-control-label" for="formGroupPlayerInput">Player</label>
             <input type="text" class="form-control" id="formGroupPlayerInput" placeHolder="player" #player>
@@ -36,7 +36,7 @@
             <div class="col">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="moveType" id="moveType" value="rock" #moveType>
+                        <input class="form-check-input" type="radio" name="moveType" id="moveType" (click)="setNextMove('rock')">
                         Rock
                     </label>
                 </div>
@@ -45,7 +45,7 @@
             <div class="col">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="moveType" id="moveType" value="paper" #moveType>
+                        <input class="form-check-input" type="radio" name="moveType" id="moveType" (click)="setNextMove('paper')">
                         Paper
                     </label>
                 </div>
@@ -54,13 +54,13 @@
             <div class="col">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="moveType" id="moveType" value="scissor" #moveType>
+                        <input class="form-check-input" type="radio" name="moveType" id="moveType" (click)="setNextMove('scissor')">
                         Scissor
                     </label>
                 </div>
             </div>
         </div>
 
-        <button class="btn btn-primary" (click)="makeMove(moveType.value, player.value)">Make Move</button>
+        <button class="btn btn-primary" (click)="makeMove(player.value)">Make Move</button>
     </form>
 </div>

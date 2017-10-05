@@ -14,7 +14,9 @@ export class PlayComponent {
 
     error: Error;
 
-    constructor(private gameService: GameService) {}
+    nextMove: string;
+
+    constructor(private gameService: GameService) { }
 
     createNewGame(gameId: string): void {
 
@@ -39,11 +41,28 @@ export class PlayComponent {
             .catch(error => this.error = error);
     }
 
-    makeMove(move: string, playerId: string): void {
+    makeMove(playerId: string): void {
         this.error = null;
 
-        this.gameService.makeMove(this.game, {playerId, move})
+        const player = new Player();
+
+        player.playerId = playerId;
+        player.move = this.nextMove;
+
+        this.gameService.makeMove(this.game, player)
             .then(game => this.game = game)
             .catch(error => this.error = error);
+    }
+
+    setNextMove(next: string): void {
+        this.nextMove = next;
+    }
+
+    canMakeMove(): boolean {
+        if (!this.game) {
+            return false;
+        }
+
+        return this.game.state === 'CREATED' || this.game.state === 'FIRST_MOVE';
     }
 }
