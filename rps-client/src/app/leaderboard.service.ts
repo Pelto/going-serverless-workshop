@@ -1,13 +1,21 @@
+import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
+
+import 'rxjs/add/operator/toPromise';
 
 import { LeaderboardEntry } from './leaderboard-entry';
 
 @Injectable()
 export class LeaderboardService {
 
+    private url = 'https://64slyd54w0.execute-api.eu-west-1.amazonaws.com/Prod';
+
+    constructor(private http: Http) {}
+
     getAll(): Promise<LeaderboardEntry[]> {
-        return Promise.resolve([
-            {position: '#1', playerId: 'alice@example.com', score: 42 }
-        ]);
+
+        return this.http.get(`${this.url}/leaderboard`)
+            .toPromise()
+            .then(response => response.json() as LeaderboardEntry[]);
     }
 }
