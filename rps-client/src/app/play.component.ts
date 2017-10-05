@@ -16,12 +16,23 @@ export class PlayComponent {
 
     createNewGame(gameId): void {
         if (!gameId) {
-            alert("No game id specified");
+            alert('No game id specified');
         }
 
         this.gameService.newGame(gameId)
             .then(game => this.game = game)
             .catch(error => alert(error.message));
     }
-}
 
+    getGame(gameId): void {
+        this.gameService.getGame(gameId)
+            .then(game => this.game = game)
+            .catch(error => alert(error.message));
+    }
+
+    makeMove(moveType: string, player: string): void {
+        this.gameService.makeMove(this.game.id, player, moveType)
+            .then(result => {})
+            .catch(error => alert(error.message));
+    }
+}

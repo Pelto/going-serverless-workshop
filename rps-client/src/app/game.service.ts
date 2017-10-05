@@ -9,24 +9,30 @@ import { Game } from './game';
 @Injectable()
 export class GameService {
 
-    private gameUrl = 'https://eian6whjpb.execute-api.eu-west-1.amazonaws.com/Prod';
+    private gameUrl = 'https://64slyd54w0.execute-api.eu-west-1.amazonaws.com/Prod';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
     constructor(private http: Http) { }
 
     newGame(id: string): Promise<Game> {
+
+        const body = JSON.stringify({
+            gameId: id
+        });
+
         return this.http
-            .post(`${this.gameUrl}/games`, JSON.stringify({ gameId: id }), { headers: this.headers })
+            .post(`${this.gameUrl}/games`, body, { headers: this.headers })
             .toPromise()
+            .then(result => this.getGame(id))
             .then(response => ({ id: id }));
     }
 
-    makeMove(gameId: string, player: string, move: string): Promise<Game> {
+    makeMove(gameId: string, playerId: string, move: string): Promise<Game> {
 
         const url = `${this.gameUrl}/moves`;
         const payload = JSON.stringify({
             gameId,
-            player,
+            playerId,
             move
         });
 
@@ -37,6 +43,9 @@ export class GameService {
     }
 
     getGame(gameId: string): Promise<Game> {
-        return this.http.get(`${this.gameUrl}/games/gameId`).toPromise().then(response => response.json() as Game);
+        return this.http
+            .get(`${this.gameUrl}/games/${gameId}`)
+            .toPromise()
+            .then(response => response.json() as Game);
     }
 }
