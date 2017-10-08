@@ -41,7 +41,7 @@ do
 done
 
 bucketName=(`aws cloudformation describe-stacks --stack-name $stackName \
-    --query "Outputs[?OutputKey == 'WebBucket'].OutputValue" \
+    --query "Stacks[0].Outputs[?OutputKey == 'WebBucketName'].OutputValue" \
     --region $region \
     --output text`)
 
@@ -52,5 +52,9 @@ ng build --prod
 
 aws s3 sync dist/ s3://$bucketName/ --acl public-read
 
+url=(`aws cloudformation describe-stacks --stack-name $stackName \
+    --query "Stacks[0].Outputs[?OutputKey == 'WebsiteURL'].OutputValue" \
+    --region $region \
+    --output text`)
 
-
+echo "Deployed the app at $url"
