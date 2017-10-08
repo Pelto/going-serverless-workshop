@@ -14,7 +14,7 @@ Resources:
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
-          CORS_ORIGIN: !Sub https://${WebBucket.DomainName}
+          CORS_ORIGIN: !GetAtt WebBucket.WebsiteURL
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -41,7 +41,7 @@ Resources:
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
-          CORS_ORIGIN: !Sub https://${WebBucket.DomainName}
+          CORS_ORIGIN: !GetAtt WebBucket.WebsiteURL
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -68,7 +68,7 @@ Resources:
       Environment:
         Variables:
           GAME_TABLE: !Ref GameTable
-          CORS_ORIGIN: !Sub https://${WebBucket.DomainName}
+          CORS_ORIGIN: !GetAtt WebBucket.WebsiteURL
       Policies:
         - Version: '2012-10-17'
           Statement:
@@ -95,7 +95,7 @@ Resources:
       Environment:
         Variables:
           SCORE_TABLE: !Ref ScoreTable
-          CORS_ORIGIN: !Sub https://${WebBucket.DomainName}
+          CORS_ORIGIN: !GetAtt WebBucket.WebsiteURL
       Policies:
         - Version: '2012-10-17'
           Statement:
