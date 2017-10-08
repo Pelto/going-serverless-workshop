@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 
 import 'rxjs/add/operator/toPromise';
 
+import { environment } from './../environments/environment';
+
 import { LeaderboardEntry } from './leaderboard-entry';
 
 @Injectable()
 export class LeaderboardService {
 
-    private url = 'https://vsydwusjt0.execute-api.eu-west-1.amazonaws.com/Prod';
+    private url = environment.apiUrl;
 
     constructor(private http: Http) {}
 

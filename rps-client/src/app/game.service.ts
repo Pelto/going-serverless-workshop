@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
@@ -10,7 +11,7 @@ import { Player } from './game';
 @Injectable()
 export class GameService {
 
-    private gameUrl = 'https://vsydwusjt0.execute-api.eu-west-1.amazonaws.com/Prod';
+    private gameUrl = environment.apiUrl;
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
     constructor(private http: Http) { }
