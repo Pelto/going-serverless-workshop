@@ -25,6 +25,7 @@ Modify the file `rps-client/src/environments/environments.prod.ts` so that setti
 
 ### 4. Deploy the web app
 
+Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
 
 ## REST API
 
