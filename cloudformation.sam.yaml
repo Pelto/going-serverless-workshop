@@ -197,6 +197,11 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
+        RoutingRules:
+          - RoutingRuleCondition:
+              HttpErrorCodeReturnedEquals: '404'
+            RedirectRule:
+              ReplaceKeyPrefixWith: '#!/'
 
 
 Outputs:
