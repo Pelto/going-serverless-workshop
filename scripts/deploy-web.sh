@@ -5,6 +5,7 @@ set -e
 script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
+clientDir="$rootDir/rps-client"
 region="eu-west-1"
 
 usage="usage: $script [-s|--stack-name -r|--region -h|--help]
@@ -40,7 +41,12 @@ do
     shift # past argument or value
 done
 
-cd rps-client/
+if [[ -z $stackName ]]; then
+    echo "You must specify stack name using -s or --stack-name"
+    exit 1
+fi
+
+cd "$clientDir"
 
 # Get the URL to the backend environment and update the production settings.
 apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
