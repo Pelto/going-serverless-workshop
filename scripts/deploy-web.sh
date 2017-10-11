@@ -48,7 +48,7 @@ bucketName=(`aws cloudformation describe-stacks --stack-name $stackName \
 cd rps-client/
 
 npm install
-ng build --prod
+./node_modules/.bin/ng build --prod
 
 aws s3 sync dist/ s3://$bucketName/ --acl public-read
 
