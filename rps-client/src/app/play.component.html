@@ -4,14 +4,18 @@
             <label class="form-control-label" for="formGroupGameIdInput">Game id</label>
             <input type="text" class="form-control" id="formGroupGameIdInput" placeholder="id" #gameIdInput>
         </div>
-        <button class="btn btn-primary" (click)="createNewGame(gameIdInput.value)">Create and join</button>
-        <button class="btn btn-success" (click)="getGame(gameIdInput.value)">Join</button>
+        <button class="btn btn-primary" (click)="createNewGame(gameIdInput.value)">Create Game</button>
+        <button class="btn btn-success" (click)="getGame(gameIdInput.value)">Get Game</button>
     </form>
 </div>
 
 <div *ngIf="game">
 
-    {{game.gameId}} <br> {{game.state}}
+    Game State: {{game.state}}
+
+    <div *ngIf="game.winner">
+        Winner: {{game.winner}}
+    </div>
 
     <table class="table" *ngIf="game.players">
         <tr>

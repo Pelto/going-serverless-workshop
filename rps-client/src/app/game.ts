@@ -7,4 +7,5 @@ export class Game {
     gameId: string;
     players: Player[];
     state: string;
+    winner: string;
 }
