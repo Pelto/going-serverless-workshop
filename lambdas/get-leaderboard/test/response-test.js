@@ -8,7 +8,6 @@ let response;
 describe('Get Leaderboard Responses', () => {
 
     before(() => {
-        process.env.CORS_ORIGIN = 'https://api.example.com';
         response = require('../response');
     });
 
@@ -40,7 +39,7 @@ describe('Get Leaderboard Responses', () => {
         const {headers} = response.ok();
 
         expect(headers).to.eql({
-            'Access-Control-Allow-Origin': 'https://api.example.com',
+            'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': 86400

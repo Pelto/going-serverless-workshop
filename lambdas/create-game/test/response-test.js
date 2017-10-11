@@ -8,7 +8,6 @@ let response;
 describe('Create Game Responses', () => {
 
     before(() => {
-        process.env.CORS_ORIGIN = 'https://api.example.com';
         response = require('../response');
     });
 
@@ -49,7 +48,7 @@ describe('Create Game Responses', () => {
         const {headers} = response.ok();
 
         expect(headers).to.eql({
-            'Access-Control-Allow-Origin': 'https://api.example.com',
+            'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Max-Age': 86400
