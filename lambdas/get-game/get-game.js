@@ -9,7 +9,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 const GAME_TABLE = process.env.GAME_TABLE;
 
 function pruneDate(data) {
-    const {Item: {players, state, winner, expirationTime}} = data;
+    const {Item: {players, state, winner, expirationTime, gameId}} = data;
 
     if (state === 'FIRST_MOVE') {
         // do not reveal first player's move
@@ -17,6 +17,7 @@ function pruneDate(data) {
     }
 
     return {
+        gameId,
         state,
         winner,
         players,
