@@ -54,6 +54,7 @@ sed -i -- "s,API_URL,$apiUrl,g" src/environments/environment.prod.ts
 # Install angular and all dependencies and package the app.
 npm install
 ./node_modules/.bin/ng build --prod
+cp ./src/error.html ./dist
 
 # Retreive the bucket name and upload the packaged app and allow public
 # reads to the objects.
