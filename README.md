@@ -2,6 +2,15 @@
 A workshop on how to construct serverless applications on AWS
 
 
+## Getting started
+
+It is possible to execute the application on localhost by executing the script located at
+
+```
+./scripts/run-localhost.sh 
+```
+
+
 ## Deploy everything
 
 ### 1. Package the backend
