@@ -1,15 +1,17 @@
 # going-serverless-workshop
 A workshop on how to construct serverless applications on AWS
 
+
 ## Deploy everything
 
-### 1. Package the application
+### 1. Package the backend
 
 ```
 ./scripts/package-stack.sh 
 ```
 
-This will upload all of the lamba pacages to S3 and generate an output file.
+This will upload all of the lambda packages to S3 and generate an output file.
+
 
 ### 2. Deploy the backend
 
@@ -23,9 +25,11 @@ Take note of the URL that the script returns. This will be needed in next step.
 
 Modify the file `rps-client/src/environments/environments.prod.ts` so that setting `apiUrl` points to the backend. (The full API Gateway URL including the basepath `/prod` is required).
 
+
 ### 4. Deploy the web app
 
 Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
+
 
 ## REST API
 
@@ -33,7 +37,7 @@ Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
 
 | Moves         |
 |---------------|
-| `ROCK`         |
+| `ROCK`        |
 | `PAPER`       |
 | `SCISSORS`    |
 
