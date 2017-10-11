@@ -63,4 +63,8 @@ typings/
 *.iws
 .idea/
 
+# Ignore packaged SAM template
 cloudformation.sam.output.yaml
+
+# Ignore generated Angular environment configuration files
+/rps-client/src/environments

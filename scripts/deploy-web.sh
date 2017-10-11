@@ -6,6 +6,7 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 clientDir="$rootDir/rps-client"
+clientEnvDir="$clientDir/src/environments"
 region="eu-west-1"
 
 usage="usage: $script [-s|--stack-name -r|--region -h|--help]
@@ -54,6 +55,10 @@ apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
     --region $region \
     --output text`)
 apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
+
+mkdir -p "$clientEnvDir"
+echo "export const environment = { production: true, apiUrl: '$apiUrl' };" > src/environments/environment.prod.ts
+
 sed -i -- "s,API_URL,$apiUrl,g" src/environments/environment.prod.ts
 
 

@@ -7,6 +7,7 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 clientDir="$rootDir/rps-client"
+clientEnvDir="$clientDir/src/environments"
 region="eu-west-1"
 
 usage="usage: $script [-s|--stack-name -r|--region -h|--help]
@@ -53,7 +54,9 @@ if [[ -n $stackName ]]; then
         --region $region \
         --output text`)
     apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
-    sed -i -- "s,API_URL,$apiUrl,g" src/environments/environment.ts
+
+    mkdir -p "$clientEnvDir"
+    echo "export const environment = { production: false, apiUrl: '$apiUrl' };" > src/environments/environment.ts
 
     echo "Using backend deployed at $apiUrl"
 fi
