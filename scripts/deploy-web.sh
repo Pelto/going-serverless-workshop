@@ -40,21 +40,31 @@ do
     shift # past argument or value
 done
 
+cd rps-client/
+
+# Get the URL to the backend environment and update the production settings.
+apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
+    --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
+    --region $region \
+    --output text`)
+apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
+sed -i -- "s,API_URL,$apiUrl,g" src/environments/environment.prod.ts
+
+
+# Install angular and all dependencies and package the app.
+npm install
+./node_modules/.bin/ng build --prod
+
+# Retreive the bucket name and upload the packaged app and allow public
+# reads to the objects.
 bucketName=(`aws cloudformation describe-stacks --stack-name $stackName \
     --query "Stacks[0].Outputs[?OutputKey == 'WebBucketName'].OutputValue" \
     --region $region \
     --output text`)
-
-cd rps-client/
-
-npm install
-./node_modules/.bin/ng build --prod
-
 aws s3 sync dist/ s3://$bucketName/ --acl public-read
 
 url=(`aws cloudformation describe-stacks --stack-name $stackName \
     --query "Stacks[0].Outputs[?OutputKey == 'WebsiteURL'].OutputValue" \
     --region $region \
     --output text`)
-
 echo "Deployed the app at $url"
