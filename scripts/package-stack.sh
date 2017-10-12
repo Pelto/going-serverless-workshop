@@ -8,7 +8,7 @@ scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
 samBucket="going-serverless"
-stackName="Rock-Paper-Scissors"
+stackName=
 
 usage="usage: $script [-b|-h|-r|-s]
     -b| --bucket        the name of the S3 bucket used for SAM resources

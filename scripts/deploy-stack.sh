@@ -7,7 +7,7 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
-stackName="Rock-Paper-Scissors"
+stackName=
 
 usage="usage: $script [-h|-r|-s]
     -h| --help          this help
