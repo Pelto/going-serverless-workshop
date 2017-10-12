@@ -15,11 +15,11 @@ Description of the DynamoDB tables used.
 | winner    | S (String)        | The id of the winning player (if any)     |
 
 
-### Hash Key 
+### Primary Key 
 
-| Index     | Type      |
-| --------- | --------- |
-| gameId    | partition |
+| Index     | Type              |
+| --------- | ----------------- |
+| gameId    | partition (hash)  |
 
 Example:
 
@@ -41,11 +41,11 @@ Example:
 | gameTitle | S (String)    | The title of the game         |
 
 
-### Hash Key
+### Primary Key
 
-| Index     | Type      |
-| --------- | --------- |
-| playerId  | partition |
+| Index     | Type              |
+| --------- | ----------------- |
+| playerId  | partition (hash)  |
 
 
 ### Global Secondary Index

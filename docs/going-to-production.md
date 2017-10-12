@@ -21,7 +21,9 @@ What are the missing pieces?
 
 ## DynamoDB
 
-- Autoscaling
+- Revise provisioned capacity
+- Monitor actual capacity to avoid throttling
+- Autoscaling may be an option
 - Query pagination (last evaluated key / exclusive start key) for leaderboard
 
 
