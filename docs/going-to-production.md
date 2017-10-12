@@ -3,6 +3,14 @@
 What are the missing pieces?
 
 
+## Build Automation
+
+- CodeStar
+- CodeCommit
+- CodePipeline
+- CodeBuild
+
+
 ## CloudWatch
 
 - Measure
@@ -14,7 +22,7 @@ What are the missing pieces?
 ## DynamoDB
 
 - Autoscaling
-- Query pagination (last evalutated key / exclusive start key) for leaderboard
+- Query pagination (last evaluated key / exclusive start key) for leaderboard
 
 
 ## Lambda
@@ -23,11 +31,24 @@ What are the missing pieces?
 - Dead letter queue for update score lambda
 
 
+## API Gateway
+
+- Throttling
+- API Keys
+- Metrics
+
+
+## S3
+
+- Metrics
+- Logging
+
+
 ## DNS
 
 - Route53 for domain names
 - Certificate Manager for HTTPS
-- CloudFront?
+- CloudFront
 
 
 ## Users
