@@ -44,6 +44,10 @@ export class PlayComponent {
     makeMove(playerId: string): void {
         this.error = null;
 
+        if (!playerId) {
+            return;
+        }
+
         const player = new Player();
 
         player.playerId = playerId;
