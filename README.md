@@ -16,7 +16,7 @@ It is possible to execute the application on localhost by executing the script l
 ### 1. Package the backend
 
 ```
-./scripts/package-stack.sh 
+./scripts/package-stack.sh --bucket <bucket-name>
 ```
 
 This will upload all of the lambda packages to S3 and generate an output file.
@@ -25,7 +25,7 @@ This will upload all of the lambda packages to S3 and generate an output file.
 ### 2. Deploy the backend
 
 ```
-./scripts/deploy-stack --stack-name <stack-name>
+./scripts/deploy-stack.sh --stack-name <stack-name>
 ```
 
 Take note of the URL that the script returns. This will be needed in next step.
