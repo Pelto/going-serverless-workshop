@@ -6,25 +6,13 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
-const GAME_TABLE = process.env.GAME_TABLE;
-
-function generateExpirationTime() {
-    const date = new Date();
-    // add one day
-    date.setDate(date.getDate() + 1);
-    const epochMilliSeconds = date.getTime();
-    const epochSeconds = epochMilliSeconds / 1000;
-    return Math.floor(epochSeconds);
-}
 
 function persistGame(gameId) {
-    const expirationTime = generateExpirationTime();
     const params = {
-        TableName : GAME_TABLE,
+        TableName : process.env.GAME_TABLE,
         Item: {
             gameId: gameId,
-            state: 'CREATED',
-            expirationTime: expirationTime
+            state: 'CREATED'
         },
         ConditionExpression: 'attribute_not_exists(GameId)',
     };
