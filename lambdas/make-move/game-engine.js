@@ -6,8 +6,8 @@ const WINNING_COMBINATIONS = {
     SCISSORS:   'PAPER'
 };
 
-function playGame(Players) {
-    const [playerA, playerB] = Players;
+function playGame(players) {
+    const [playerA, playerB] = players;
     if (playerA.move === playerB.move) {
         return {
             state: 'DRAW'

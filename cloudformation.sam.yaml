@@ -78,7 +78,7 @@ Resources:
         MakeMove:
           Type: Api
           Properties:
-            Method: any
+            Method: post
             Path: /moves
 
 
