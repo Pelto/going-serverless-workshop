@@ -40,8 +40,8 @@
 
 - [Core Components](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
 - [Permissions](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/api-permissions-reference.html)
-- [Global Secondatry Indexes](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html)
-- [Provisioned Througput](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html)
+- [Global Secondary Indexes](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html)
+- [Provisioned Throughput](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughput.html)
 - [Throughput Capacity Auto Scaling](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/AutoScaling.html)
 
 
@@ -58,5 +58,6 @@
 
 - [DynamoDB - Document Client](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html)
 - [DynamoDB - Document Client - get](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property)
+- [DynamoDB - Document Client - put](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property)
 - [DynamoDB - Document Client - query](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property)
 - [DynamoDB - Document Client - update](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property)
