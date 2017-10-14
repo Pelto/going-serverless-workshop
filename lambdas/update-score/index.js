@@ -23,12 +23,14 @@ function addScore(winner) {
         Key: {
             playerId: winner,
         },
-        UpdateExpression: 'ADD #score :score',
+        UpdateExpression: 'ADD #score :score SET #gameTitle = :gameTitle',
         ExpressionAttributeNames: {
-            '#score': 'score'
+            '#score': 'score',
+            '#gameTitle': 'gameTitle'
         },
         ExpressionAttributeValues: {
-            ':score': 10
+            ':score': 10,
+            ':gameTitle': 'Rock Paper Scissors'
         }
     };
     return documentClient
