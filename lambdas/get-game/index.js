@@ -44,12 +44,12 @@ exports.handler = function(event, context, callback) {
     return getGame(gameId)
         .then(gameState => {
             const resp = createResponse(200, gameState);
-            return callback(null, resp);
+            callback(null, resp);
         })
         .catch(err => {
             console.error(JSON.stringify(err));
             const resp = createResponse(500);
-            return callback(null, resp);
+            callback(null, resp);
         });
 
 };

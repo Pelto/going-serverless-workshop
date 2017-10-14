@@ -43,11 +43,11 @@ exports.handler = function(event, context, callback) {
     return getLeaderboard()
         .then(leaderboard => {
             const resp = createResponse(200, leaderboard);
-            return callback(null ,resp);
+            callback(null ,resp);
         })
         .catch(err => {
             console.error(JSON.stringify(err));
             const resp = createResponse(500);
-            return callback(null, resp);
+            callback(null, resp);
         });
 };
