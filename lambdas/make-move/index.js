@@ -6,11 +6,13 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
+
 const WINNING_COMBINATIONS = {
     ROCK: 'SCISSORS',
     PAPER: 'ROCK',
     SCISSORS: 'PAPER'
 };
+
 
 function getGame(gameId) {
     const params = {
@@ -25,12 +27,6 @@ function getGame(gameId) {
         .then(data => data.Item);
 }
 
-function canMakeMove(gameState) {
-    if (gameState.state === 'WINNER' || gameState.state === 'DRAW') {
-        throw new Error(`Unable to make move once state equals ${gameState.state}`);
-    }
-    return gameState;
-}
 
 function addPlayer(playerId, move) {
     return function (gameState) {
@@ -43,9 +39,10 @@ function addPlayer(playerId, move) {
     }
 }
 
+
 function updateState(gameState) {
 
-    if (gameState.players.length === 1) {
+    if (gameState.state === 'CREATED') {
         gameState.state = 'FIRST_MOVE';
         return gameState;
     }
@@ -66,10 +63,19 @@ function updateState(gameState) {
     return gameState;
 }
 
+
 function saveGame(gameState) {
     const params = {
         TableName: process.env.GAME_TABLE,
-        Item: gameState
+        Item: gameState,
+        ConditionExpression: '#state IN (:created, :firstMove)',
+        ExpressionAttributeNames: {
+            '#state': 'state'
+        },
+        ExpressionAttributeValues: {
+            ':created': 'CREATED',
+            ':firstMove': 'FIRST_MOVE'
+        }
     };
     return documentClient
         .put(params)
@@ -77,26 +83,30 @@ function saveGame(gameState) {
         .then(() => gameState);
 }
 
+
+function createResponse(httpStatus, responseBody) {
+    return {
+        statusCode: httpStatus,
+        body: responseBody ? JSON.stringify(responseBody) : ""
+    };
+}
+
+
 exports.handler = function (event, context, callback) {
 
     const { gameId, playerId, move } = JSON.parse(event.body);
 
     return getGame(gameId)
-        .then(canMakeMove)
         .then(addPlayer(playerId, move))
         .then(updateState)
         .then(saveGame)
-        .then(gameState => callback(null, {
-            statusCode: 200,
-            body: JSON.stringify(gameState)
-        }))
+        .then(gameState => {
+            const resp = createResponse(200, gameState);
+            callback(null, resp);
+        })
         .catch(error => {
             console.error(error);
-            callback(null, {
-                statusCode: 500,
-                body: JSON.stringify({
-                    message: error.message
-                })
-            })
+            const resp = createResponse(500);
+            callback(null, resp);
         });
 };

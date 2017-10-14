@@ -7,7 +7,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 
 
-
 function getGameId(event) {
     return JSON.parse(event.body).gameId;
 }
@@ -31,7 +30,7 @@ function saveGame(gameId) {
 function createResponse(httpStatus) {
     return {
         statusCode: httpStatus
-    }
+    };
 }
 
 

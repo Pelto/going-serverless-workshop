@@ -7,6 +7,14 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 
 
+function createResponse(httpStatus, responseBody) {
+    return {
+        statusCode: httpStatus,
+        body: responseBody ? JSON.stringify(responseBody) : ""
+    };
+}
+
+
 exports.handler = function (event, context, callback) {
 
     const params = {
@@ -19,25 +27,17 @@ exports.handler = function (event, context, callback) {
     documentClient.get(params)
         .promise()
         .then(data => {
-            const response = {};
-
+            let resp;
             if (data.Item) {
-                response.statusCode = 200;
-                response.body = JSON.stringify(data.Item);
+                resp = createResponse(200, data.Item)
             } else {
-                response.statusCode = 404;
-                response.body = "";
+                resp = createResponse(404);
             }
-
-            return callback(null, response);
+            callback(null, resp);
         })
         .catch(error => {
             console.error(error);
-            return callback(null, {
-                statusCode: 500,
-                body: JSON.stringify({
-                    message: error.message
-                })
-            })
+            const resp = createResponse(500);
+            callback(null, resp);
         });
 };

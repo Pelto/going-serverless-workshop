@@ -28,13 +28,10 @@ function getLeaderboard() {
 
 
 function createResponse(httpStatus, responseBody) {
-    const response = {
-        statusCode: httpStatus
+    return {
+        statusCode: httpStatus,
+        body: responseBody ? JSON.stringify(responseBody) : ""
     };
-    if (responseBody) {
-        response.body = JSON.stringify(responseBody);
-    }
-    return response;
 }
 
 
