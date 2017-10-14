@@ -10,7 +10,9 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 function getWinners(event) {
     return event.Records
-        .filter(record => record.dynamodb.NewImage.winner)
+        .filter(record => {
+            return (record.dynamodb.NewImage || {}).winner;
+        })
         .map(record => record.dynamodb.NewImage.winner.S);
 }
 
