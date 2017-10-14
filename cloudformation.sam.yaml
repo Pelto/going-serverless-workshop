@@ -72,7 +72,7 @@ Resources:
             - Effect: Allow
               Action:
                 - dynamodb:GetItem
-                - dynamodb:UpdateItem
+                - dynamodb:PutItem
               Resource: !GetAtt GameTable.Arn
       Events:
         MakeMove:
@@ -125,7 +125,6 @@ Resources:
               Resource: !GetAtt ScoreTable.Arn
       Environment:
         Variables:
-          GAME_TABLE: !Ref GameTable
           SCORE_TABLE: !Ref ScoreTable
       Events:
         GameEvent:

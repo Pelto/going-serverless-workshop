@@ -22,35 +22,14 @@ function getGame(gameId) {
 }
 
 function saveGame(gameState) {
-    const {gameId, players, state, winner} = gameState;
-
-    let updateExpression = 'SET #state = :state, #players = :players';
-    const attributeNames = {
-        '#state': 'state',
-        '#players': 'players',
-    };
-    const attributeValues = {
-        ':players': players,
-        ':state': state,
-    };
-    if (winner) {
-        updateExpression += ', #winner = :winner';
-        attributeNames['#winner'] = 'winner';
-        attributeValues[':winner'] = winner;
-    }
-
     const params = {
         TableName: GAME_TABLE,
-        Key: {gameId: gameId},
-        UpdateExpression: updateExpression,
-        ExpressionAttributeNames: attributeNames,
-        ExpressionAttributeValues: attributeValues,
-        ReturnValues: 'ALL_NEW'
+        Item: gameState
     };
     return documentClient
-        .update(params)
+        .put(params)
         .promise()
-        .then(data => data.Attributes);
+        .then(() => gameState);
 }
 
 module.exports = {
