@@ -10,9 +10,11 @@ function parseRequestBody(event) {
     return requestBody;
 }
 
+
 exports.handler = function(event, context, callback) {
 
     const {gameId, playerId, move} = parseRequestBody(event);
+
     return gameRepo.getGame(gameId)
         .then(gameState => gameEngine.makeMove(gameState, playerId, move))
         .then(gameRepo.saveGame)

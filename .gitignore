@@ -63,6 +63,9 @@ typings/
 *.iws
 .idea/
 
+# OS X
+.DS_Store
+
 # Ignore packaged SAM template
 cloudformation.sam.output.yaml
 

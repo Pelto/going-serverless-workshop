@@ -30,8 +30,7 @@ POST [server]/games
 ```
 Response
 ```
-HTTP/1.1 201 Created
-Location: [server]/games/42
+HTTP/1.1 200 OK
 ```
 
 

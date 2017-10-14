@@ -6,20 +6,12 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
-const url = require('url');
-const response = require('./response');
 
 
-function parseEvent(event) {
-    const host = event.headers.Host;
-    const path = event.requestContext.path;
-    const gameId = JSON.parse(event.body).gameId;
-    return {
-        host,
-        path,
-        gameId
-    }
+function getGameId(event) {
+    return JSON.parse(event.body).gameId;
 }
+
 
 function saveGame(gameId) {
     const params = {
@@ -35,26 +27,26 @@ function saveGame(gameId) {
         .promise();
 }
 
-function createLocation({gameId, host, path}) {
-    return url.format({
-        protocol: 'https:',
-        host,
-        pathname: `${path}/${gameId}`
-    });
+
+function createResponse(httpStatus) {
+    return {
+        statusCode: httpStatus
+    }
 }
 
 
 exports.handler = function(event, context, callback) {
 
-    const {gameId, host, path} = parseEvent(event);
+    const gameId = getGameId(event);
 
     return saveGame(gameId)
-        .then(() => createLocation({gameId, host, path}))
-        .then(location => response.created(location))
-        .then(resp => callback(null, resp))
+        .then(() => {
+            const resp = createResponse(200);
+            return callback(null, resp);
+        })
         .catch(err => {
             console.error(JSON.stringify(err));
-            const resp = response.internalServerError();
+            const resp = createResponse(500);
             return callback(null, resp);
         });
 };
