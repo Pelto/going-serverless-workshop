@@ -7,22 +7,15 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 
 
-function pruneDate(data) {
-    const {Item: {players, state, winner, expirationTime, gameId}} = data;
-
-    if (state === 'FIRST_MOVE') {
+function pruneData(data) {
+    const game = data.Item;
+    if (game.state === 'FIRST_MOVE') {
         // do not reveal first player's move
-        delete players[0].move;
+        delete game.players[0].move;
     }
-
-    return {
-        gameId,
-        state,
-        winner,
-        players,
-        expirationTime
-    }
+    return game;
 }
+
 
 function getGame(gameId) {
     const params = {
@@ -34,7 +27,7 @@ function getGame(gameId) {
     return documentClient
         .get(params)
         .promise()
-        .then(pruneDate);
+        .then(pruneData);
 }
 
 module.exports = getGame;
