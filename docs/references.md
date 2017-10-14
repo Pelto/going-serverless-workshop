@@ -25,7 +25,7 @@
 - [SAM AWS::Serverless::Function - API event source](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api)
 - [SAM AWS::Serverless::Function - DynamoDB event source](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#dynamodb)
 - [PolicyDocument](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html) (scroll down to PolicyDocument)
-- [Instrinsic Functions](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference.html) (referencing other CloudFormation resources, string concatenation, etc)
+- [Intrinsic Functions](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference.html) (referencing other CloudFormation resources, string concatenation, etc)
 
 
 ## Lambda
