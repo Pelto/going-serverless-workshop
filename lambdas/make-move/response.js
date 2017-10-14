@@ -24,7 +24,7 @@ function ok(body) {
 
 function created(location) {
     const response = createResponse(HTTP_STATUS.CREATED);
-    response.headers.Location = location;
+    response.headers = {Location: location};
     return response;
 }
 

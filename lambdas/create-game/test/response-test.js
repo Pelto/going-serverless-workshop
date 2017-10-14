@@ -43,16 +43,4 @@ describe('Create Game Responses', () => {
         expect(statusCode).to.eql(500);
     });
 
-
-    it('CORS headers', () => {
-        const {headers} = response.ok();
-
-        expect(headers).to.eql({
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': 86400
-        });
-    })
-
 });

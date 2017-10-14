@@ -46,13 +46,12 @@ Resources:
           - Effect: Allow
             Action:
               - dynamodb:PutItem
-              - dynamodb:UpdateItem
             Resource: !GetAtt GameTable.Arn
       Events:
         CreateGame:
           Type: Api
           Properties:
-            Method: any
+            Method: post
             Path: /games
 
 

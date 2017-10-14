@@ -14,7 +14,7 @@ function persistGame(gameId) {
             gameId: gameId,
             state: 'CREATED'
         },
-        ConditionExpression: 'attribute_not_exists(GameId)',
+        ConditionExpression: 'attribute_not_exists(gameId)',
     };
     return documentClient
         .put(params)
