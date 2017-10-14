@@ -6,6 +6,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
+const url = require('url');
 const response = require('./response');
 
 
@@ -41,6 +42,7 @@ function createLocation({gameId, host, path}) {
         pathname: `${path}/${gameId}`
     });
 }
+
 
 exports.handler = function(event, context, callback) {
 
