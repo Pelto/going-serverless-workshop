@@ -1,22 +1,44 @@
 'use strict';
 
+const AWS = require('aws-sdk');
 
-const parseAndFilter = require('./parse-and-filter-event');
-const calculateScore = require('./calculate-score');
-const persistScore = require('./persist-score');
+const documentClient = new AWS.DynamoDB.DocumentClient({
+    apiVersion: '2012-08-10',
+    region: process.env.AWS_REGION
+});
 
 
-function flatten(acc, curr) {
-    return acc.concat(curr);
+function getWinners(event) {
+    return event.Records
+        .filter(record => record.dynamodb.NewImage.winner)
+        .map(record => record.dynamodb.NewImage.winner.S);
+}
+
+
+function addScore(winner) {
+    const params = {
+        TableName: process.env.SCORE_TABLE,
+        Key: {
+            playerId: winner,
+        },
+        UpdateExpression: 'ADD #score :score',
+        ExpressionAttributeNames: {
+            '#score': 'score'
+        },
+        ExpressionAttributeValues: {
+            ':score': 10
+        }
+    };
+    return documentClient
+        .update(params)
+        .promise();
 }
 
 
 exports.handler = function(event, context, callback) {
 
-    const promises = parseAndFilter(event)
-        .map(calculateScore)
-        .reduce(flatten, [])
-        .map(persistScore);
+    const promises = getWinners(event)
+        .map(addScore);
 
     Promise.all(promises)
         .then(res => callback(null, res))
