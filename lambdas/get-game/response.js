@@ -1,13 +1,6 @@
 'use strict';
 
 
-const CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Max-Age': 86400
-};
-
 const HTTP_STATUS = {
     OK: 200,
     CREATED: 201,
@@ -18,7 +11,6 @@ const HTTP_STATUS = {
 function createResponse(httpStatus) {
     return {
         statusCode: httpStatus,
-        headers: Object.assign({}, CORS_HEADERS)
     };
 }
 
@@ -32,7 +24,7 @@ function ok(body) {
 
 function created(location) {
     const response = createResponse(HTTP_STATUS.CREATED);
-    response.headers.Location = location;
+    response.headers = {Location: location};
     return response;
 }
 

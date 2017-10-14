@@ -19,14 +19,13 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - dynamodb:BatchGetItem
                 - dynamodb:GetItem
               Resource: !GetAtt GameTable.Arn
       Events:
         GetGame:
           Type: Api
           Properties:
-            Method: any
+            Method: get
             Path: /games/{gameId}
 
 

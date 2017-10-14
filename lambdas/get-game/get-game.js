@@ -6,7 +6,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
-const GAME_TABLE = process.env.GAME_TABLE;
 
 function pruneDate(data) {
     const {Item: {players, state, winner, expirationTime, gameId}} = data;
@@ -27,7 +26,7 @@ function pruneDate(data) {
 
 function getGame(gameId) {
     const params = {
-        TableName : GAME_TABLE,
+        TableName : process.env.GAME_TABLE,
         Key: {
             gameId: gameId
         }
