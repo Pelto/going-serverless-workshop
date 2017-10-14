@@ -42,8 +42,7 @@ function firstMove({gameId, playerId, move}) {
 function secondMove({gameId, players, playerId, move}) {
     players.push({playerId, move});
     const result = playGame(players);
-    const newGameState = Object.assign({}, {gameId, players}, result);
-    return newGameState;
+    return Object.assign({}, {gameId, players}, result);
 }
 
 

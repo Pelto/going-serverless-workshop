@@ -2,12 +2,21 @@
 
 const gameRepo = require('./game-repo');
 const gameEngine = require('./game-engine');
-const response = require('./response');
 
 
 function parseRequestBody(event) {
-    const requestBody = JSON.parse(event.body);
-    return requestBody;
+    return JSON.parse(event.body);
+}
+
+
+function createResponse(httpStatus, responseBody) {
+    const response = {
+        statusCode: httpStatus
+    };
+    if (responseBody) {
+        response.body = JSON.stringify(body);
+    }
+    return response;
 }
 
 
@@ -18,11 +27,13 @@ exports.handler = function(event, context, callback) {
     return gameRepo.getGame(gameId)
         .then(gameState => gameEngine.makeMove(gameState, playerId, move))
         .then(gameRepo.saveGame)
-        .then(newGameState => response.ok(newGameState))
-        .then(resp => callback(null, resp))
+        .then(newGameState => {
+            const resp = createResponse(200, newGameState);
+            return callback(null, resp);
+        })
         .catch(err => {
             console.error(JSON.stringify(err));
-            const resp = response.internalServerError();
-            callback(null, resp);
+            const resp = createResponse(500);
+            return callback(null, resp);
         });
 };

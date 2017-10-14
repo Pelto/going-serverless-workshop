@@ -6,11 +6,10 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
-const GAME_TABLE = process.env.GAME_TABLE;
 
 function getGame(gameId) {
     const params = {
-        TableName: GAME_TABLE,
+        TableName: process.env.GAME_TABLE,
         Key: {
             gameId: gameId
         }
@@ -23,7 +22,7 @@ function getGame(gameId) {
 
 function saveGame(gameState) {
     const params = {
-        TableName: GAME_TABLE,
+        TableName: process.env.GAME_TABLE,
         Item: gameState
     };
     return documentClient
