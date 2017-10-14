@@ -102,7 +102,7 @@ Resources:
         Leaderboard:
           Type: Api
           Properties:
-            Method: any
+            Method: get
             Path: /leaderboard
 
 
