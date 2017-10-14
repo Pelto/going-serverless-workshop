@@ -6,8 +6,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
-const response = require('./response');
-
 
 function getLeaderboard() {
     const params = {
@@ -29,14 +27,27 @@ function getLeaderboard() {
 }
 
 
+function createResponse(httpStatus, responseBody) {
+    const response = {
+        statusCode: httpStatus
+    };
+    if (responseBody) {
+        response.body = JSON.stringify(body);
+    }
+    return response;
+}
+
+
 exports.handler = function(event, context, callback) {
 
     return getLeaderboard()
-        .then(leaderboard => response.ok(leaderboard))
-        .then(resp => callback(null, resp))
+        .then(leaderboard => {
+            const resp = createResponse(200, leaderboard);
+            return callback(null ,resp);
+        })
         .catch(err => {
             console.error(JSON.stringify(err));
-            const resp = response.internalServerError();
-            callback(null, resp);
+            const resp = createResponse(500);
+            return callback(null, resp);
         });
 };
