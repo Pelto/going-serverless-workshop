@@ -55,20 +55,54 @@ apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
 
 gameId=(`date +%s`)
 
-echo "Creating game $gameId..."
-curl -i --data "{ \"gameId\": \"$gameId\" }" $apiUrl/games
+createGameCommand="curl -f -i --data '{\"gameId\":\"$gameId\"}' $apiUrl/games"
+getGameCommand="curl -f -i $apiUrl/games/$gameId";
+makeMoveACommand="curl -f -i --data '{\"gameId\":\"$gameId\",\"playerId\":\"rocky\",\"move\":\"ROCK\"}' $apiUrl/moves"
+makeMoveBCommand="curl -f -i --data '{\"gameId\":\"$gameId\",\"playerId\":\"freddy\",\"move\":\"SCISSORS\"}' $apiUrl/moves"
+leaderboardCommand="curl -f -i $apiUrl/leaderboard"
 
-echo "Getting game $gameId..."
-curl -i $apiUrl/games/$gameId
 
-echo "Making move..."
-curl -i --data "{ \"gameId\": \"$gameId\", \"playerId\":\"e\", \"move\":\"PAPER\" }" $apiUrl/moves
+echo "#################################################################"
+echo "Creating a new game with gameId $gameId"
+echo "#################################################################"
+echo $createGameCommand
+echo ""
+eval $createGameCommand
+echo ""
+echo ""
 
-echo "Getting game $gameId..."
-curl -i $apiUrl/games/$gameId
+echo "#################################################################"
+echo "Getting the game $gameId"
+echo "#################################################################"
+echo $getGameCommand
+echo ""
+eval $getGameCommand
+echo ""
+echo ""
 
-echo "Making move..."
-curl -i --data "{ \"gameId\": \"$gameId\", \"playerId\":\"s\", \"move\":\"ROCK\" }" $apiUrl/moves
+echo "#################################################################"
+echo "Making Rocky's move"
+echo "#################################################################"
+echo $makeMoveACommand
+echo ""
+eval $makeMoveACommand
+echo ""
+echo ""
 
-echo "Getting game $gameId..."
-curl -i $apiUrl/games/$gameId
+echo "#################################################################"
+echo "Making Freddy's move"
+echo "#################################################################"
+echo $makeMoveBCommand
+echo ""
+eval $makeMoveBCommand
+echo ""
+
+echo ""
+echo "#################################################################"
+echo "Checking the leaderboards"
+echo "#################################################################"
+echo $leaderboardCommand
+echo ""
+eval $leaderboardCommand
+echo ""
+echo ""
