@@ -77,16 +77,6 @@ Let's start with adding a new function. Start with adding the following to the t
         Handler: index.handler
         Runtime: nodejs6.10
         CodeUri: lambdas/get-game/
-        Environment:
-          Variables:
-            GAME_TABLE: !Ref GameTable
-        Policies:
-          - Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                Resource: !GetAtt GameTable.Arn
 ```
 
 This will give you a basic lambda function in your template. However, as of now we don't have a way of interacting with this function. The first thing that we want to do is to connect it to our API. We do this by connecting an event to it and adding it under our Amazon API Gateway. To add a HTTP mapping to the `GetGameFunction` add the following to it's properties:
