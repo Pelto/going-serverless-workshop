@@ -83,3 +83,5 @@ apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
 echo "#################################################################"
 echo "Deployed API to $apiUrl"
 echo "#################################################################"
+
+./scripts/test-stack.sh --stack-name $stackName --region $region
