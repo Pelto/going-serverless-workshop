@@ -32,7 +32,7 @@ function createResponse(httpStatus, responseBody) {
         statusCode: httpStatus
     };
     if (responseBody) {
-        response.body = JSON.stringify(body);
+        response.body = JSON.stringify(responseBody);
     }
     return response;
 }
