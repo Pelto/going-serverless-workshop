@@ -33,6 +33,12 @@ Response
 HTTP/1.1 200 OK
 ```
 
+Curl command:
+
+```
+curl --data '{"gameId": "42"}' [server]/games
+```
+
 
 ## Get Game
 
@@ -62,6 +68,12 @@ HTTP/1.1 200 OK
 }
 ```
 
+Curl command:
+
+```
+curl [server]/games/{gameId}
+```
+
 
 ## Make Move
 
@@ -69,7 +81,7 @@ A player makes a move in an existing game.
 
 Request
 ```
-POST [server]/move
+POST [server]/moves
 {
     "gameId": "13",
     "playerId": "pqr",
@@ -92,6 +104,11 @@ HTTP/1.1 200 OK
 }
 ```
 
+Curl command:
+
+```
+curl --data '{"gameId": "42", "playerId": "Rocky", "move": "ROCK" }' [server]/moves
+```
 
 ## Get Leaderboard
 
@@ -118,4 +135,10 @@ HTTP/1.1 200 OK
         "score": 1,
     }
 ]
+```
+
+Curl command:
+
+```
+curl [server]/leaderboard
 ```
