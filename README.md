@@ -60,8 +60,8 @@ aws cloudformation deploy \
 ```
 
 When you deployed the stack you also might noticed the HTTP commands that was
-done towards the API and tested the stack. To rerun those commands you could
-use the test script:
+done towards the API and tested the stack. You can run the commands without
+deploying your stack by running:
 
 ```
 ./scripts/test-stack.sh --stack-name <your-stack>

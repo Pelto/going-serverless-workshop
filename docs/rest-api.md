@@ -142,3 +142,13 @@ Curl command:
 ```
 curl [server]/leaderboard
 ```
+
+## Full example
+
+```
+curl -f -i --data '{"gameId":"42"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/games
+curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/games/42
+curl -f -i --data '{"gameId":"42","playerId":"rocky","move":"ROCK"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/moves
+curl -f -i --data '{"gameId":"42","playerId":"freddy","move":"SCISSORS"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/moves
+curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/leaderboard
+```
