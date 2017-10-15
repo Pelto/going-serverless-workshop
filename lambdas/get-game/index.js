@@ -7,49 +7,37 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 
 
-function getGameId(event) {
-    return event.pathParameters.gameId;
-}
+exports.handler = function (event, context, callback) {
 
-
-function getGame(gameId) {
     const params = {
-        TableName : process.env.GAME_TABLE,
+        TableName: process.env.GAME_TABLE,
         Key: {
-            gameId: gameId
+            gameId: event.pathParameters.gameId
         }
     };
-    return documentClient
-        .get(params)
+
+    documentClient.get(params)
         .promise()
-        .then(data => data.Item);
-}
+        .then(data => {
+            const response = {};
 
+            if (data.Item) {
+                response.statusCode = 200;
+                response.body = JSON.stringify(data.Item);
+            } else {
+                response.statusCode = 404;
+                response.body = "";
+            }
 
-function createResponse(httpStatus, responseBody) {
-    const response = {
-        statusCode: httpStatus
-    };
-    if (responseBody) {
-        response.body = JSON.stringify(responseBody);
-    }
-    return response;
-}
-
-
-exports.handler = function(event, context, callback) {
-
-    const gameId = getGameId(event);
-
-    return getGame(gameId)
-        .then(gameState => {
-            const resp = createResponse(200, gameState);
-            callback(null, resp);
+            return callback(null, response);
         })
-        .catch(err => {
-            console.error(err);
-            const resp = createResponse(500);
-            callback(null, resp);
+        .catch(error => {
+            console.error(error);
+            return callback(null, {
+                statusCode: 500,
+                body: JSON.stringify({
+                    message: error.message
+                })
+            })
         });
-
 };
