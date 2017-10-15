@@ -124,39 +124,6 @@ By default our lambda does not have any rights at all besides what is defined in
 
 #### Implementation
 
-```
-'use strict';
-
-exports.handler = function (event, context, callback) {
-
-
-        .then(data => {
-            const response = {};
-
-            if (data.Item) {
-                response.statusCode = 200;
-                response.body = JSON.stringify(data.Item);
-            } else {
-                response.statusCode = 404;
-                response.body = "";
-            }
-
-            return callback(null, response);
-        })
-        .catch(error => {
-            console.error(error);
-            return callback(null, {
-                statusCode: 500,
-                body: JSON.stringify({
-                    message: error.message
-                })
-            })
-        });
-};
-
-
-```
-
 Open the file `lambdas/get-game/index.js`. In it you will find an empty handler function. This lambda is the simplest one in this workshop as it is only querying the DynamoDB table `GameTable` for one record and returning it. The first thing that we want to do is to initialize our DynamoDB client. For this we will use the AWS SDK. The AWS SDK is always available in the lambda environment. We want to create a [DynamoDB document client](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html). To do this we will add the following code to our lambda:
 
 ```
