@@ -80,7 +80,6 @@ apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
 
 apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
 
-
 echo "#################################################################"
 echo "Deployed API to $apiUrl"
 echo "#################################################################"
