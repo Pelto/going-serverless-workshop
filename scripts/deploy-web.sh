@@ -80,3 +80,5 @@ url=(`aws cloudformation describe-stacks --stack-name $stackName \
     --region $region \
     --output text`)
 echo "Deployed the app at $url"
+
+./scripts/test-stack --stack-name $stackName --region $region
