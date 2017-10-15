@@ -59,7 +59,7 @@ function updateState(gameState) {
     }
 
     gameState.state = 'WINNER';
-    gameState.winner = (WINNING_COMBINATIONS[playerA.move] === playerB.move)
+    gameState.winner = WINNING_COMBINATIONS[playerA.move] === playerB.move
         ? playerA.playerId
         : playerB.playerId;
 
