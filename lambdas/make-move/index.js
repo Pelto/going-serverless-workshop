@@ -34,7 +34,6 @@ function canMakeMove(gameState) {
 
 function addPlayer(playerId, move) {
     return function (gameState) {
-        console.info(gameState);
         if (!gameState.players) {
             gameState.players = [];
         }
