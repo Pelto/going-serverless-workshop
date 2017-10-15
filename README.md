@@ -1,5 +1,5 @@
 # Going Serverless - workshop
-A workshop on how to construct serverless applications on AWS. 
+A workshop on how to construct serverless applications on AWS.
 
 
 ## Getting started
@@ -30,11 +30,14 @@ Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
 
 To get started with the workshop the first thing that we'll do is to deploy the
 application. To deploy a SAM template there are two necessary steps. The stack
-has to be packaged, i.e. we will upload the code to an Amazon S3 bucket. Once
-the stack has been packaged you will notice a new file named 
-`cloudformation.sam.output.yaml`. That is the file that we will later deploy.
-To simplify the process a script is prepared and can be run by the following
-command:
+has to be packaged, i.e. we will upload the code to an Amazon S3 bucket. This
+will be done with the AWS command `aws cloudformation package`. Once the stack
+has been packaged you will notice a new file named  `cloudformation.sam.output.yaml`.
+That is the file that we will later deploy. This will done with the AWS command
+`aws cloudformation deploy`.
+
+To simplify the above process we have combined those two commands into one
+script:
 
 ```
 ./scripts/deploy-stack.sh --stack-name <your_stack>
