@@ -26,7 +26,7 @@ function getGame(gameId) {
 }
 
 function canMakeMove(gameState) {
-    if (gameState === 'WINNER' || gameState === 'DRAW') {
+    if (gameState.state === 'WINNER' || gameState.state === 'DRAW') {
         throw new Error(`Unable to make move once state equals ${gameState.state}`);
     }
     return gameState;
