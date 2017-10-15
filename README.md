@@ -134,7 +134,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 ```
 
-Once our document client is created it is time to get the record. To do this we will use the `get(params)`(http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property) method in the document client. In the parameters we will specify the name of the table and the value of the hash key that we want to get. The name of the table is the tablename that we injected in our environment variables. The hash key is the gameId. As we specified the path `/games/{gameId}` we have the `gameId` as a path parameter accessible in `event.pathParameters.gameId`. So let's go ahead and create the params and retreive a promise of our dynamodb response:
+Once our document client is created it is time to get the record. To do this we will use the `get(params)` ([link](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property)) method in the document client. In the parameters we will specify the name of the table and the value of the hash key that we want to get. The name of the table is the tablename that we injected in our environment variables. The hash key is the gameId. As we specified the path `/games/{gameId}` we have the `gameId` as a path parameter accessible in `event.pathParameters.gameId`. So let's go ahead and create the params and retreive a promise of our dynamodb response:
 
 ```
 const params = {
