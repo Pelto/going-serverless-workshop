@@ -46,7 +46,7 @@ exports.handler = function(event, context, callback) {
             callback(null ,resp);
         })
         .catch(err => {
-            console.error(JSON.stringify(err));
+            console.error(err);
             const resp = createResponse(500);
             callback(null, resp);
         });
