@@ -10,7 +10,9 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 function createResponse(httpStatus, responseBody) {
     return {
         statusCode: httpStatus,
-        body: responseBody ? JSON.stringify(responseBody) : ""
+        body: responseBody
+            ? JSON.stringify(responseBody)
+            : ""
     };
 }
 
