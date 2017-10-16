@@ -14,7 +14,7 @@ It is possible to execute the application on localhost by executing the script l
 ### 1. Deploy the backend
 
 ```
-./scripts/deploy-stack.sh --stack-name <stack-name> --bucket <bucket-name>
+./scripts/deploy-api.sh --stack-name <stack-name> --bucket <bucket-name>
 ```
 
 Take note of the URL that the script returns. This will be needed in next step.
@@ -34,7 +34,7 @@ To get started with the workshop the first thing that we'll do is to deploy the 
 To simplify the above process we have combined those two commands into one script:
 
 ```
-./scripts/deploy-stack.sh --stack-name <your_stack>
+./scripts/deploy-api.sh --stack-name <your_stack> --bucket <bucket-name>
 ```
 
 This scripts does everything and will also test your stack and give you the url to your api. But if you want to do the deployment totally manual you could do it with just the following two commands:
