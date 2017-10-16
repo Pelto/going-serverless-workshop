@@ -7,11 +7,11 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
-samBucket=
+codeBucket=
 stackName=
 
 usage="usage: $script [-b|-h|-r|-s]
-    -b| --bucket        the name of the S3 bucket used for SAM resources
+    -b| --bucket        the name of the S3 bucket used for the source code of SAM resources
     -h| --help          this help
     -r| --region        AWS region (defaults to '$region')
     -s| --stack-name    stack name"
@@ -26,7 +26,7 @@ do
 
     case $key in
         -b|--bucket)
-        samBucket="$2"
+        codeBucket="$2"
         shift
         ;;
         -h|--help)
@@ -56,7 +56,7 @@ echo "#################################################################"
 aws cloudformation package \
     --template-file ${rootDir}/api.sam.yaml \
     --region ${region} \
-    --s3-bucket ${samBucket} \
+    --s3-bucket ${codeBucket} \
     --output-template-file api.sam.output.yaml
 
 
