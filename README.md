@@ -14,15 +14,15 @@ It is possible to execute the application on localhost by executing the script l
 ### 1. Deploy the backend
 
 ```
-./scripts/deploy-api.sh --stack-name <stack-name> --bucket <bucket-name>
+./scripts/deploy-api.sh --stack-name <api-stack-name> --bucket <bucket-name>
 ```
 
 Take note of the URL that the script returns. This will be needed in next step.
 
 
-### 2. Deploy the web app
+### 2. Deploy the web client
 
-Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
+Deploy the stack by `scripts/deploy-client.sh --stack-name <api-stack-name>`
 
 
 # Instructions
@@ -34,7 +34,7 @@ To get started with the workshop the first thing that we'll do is to deploy the 
 To simplify the above process we have combined those two commands into one script:
 
 ```
-./scripts/deploy-api.sh --stack-name <your_stack> --bucket <bucket-name>
+./scripts/deploy-api.sh --stack-name <api-stack-name> --bucket <bucket-name>
 ```
 
 This scripts does everything and will also test your stack and give you the url to your api. But if you want to do the deployment totally manual you could do it with just the following two commands:
@@ -54,7 +54,7 @@ aws cloudformation deploy \
 When you deployed the stack you also might noticed the HTTP commands that was done towards the API and tested the stack. You can run the commands without deploying your stack by running:
 
 ```
-./scripts/test-stack.sh --stack-name <your-stack>
+./scripts/test-stack.sh --stack-name <api-stack-name>
 ```
 
 For more reference on how to test the stack you could have a look at [API documentation](docs/rest-api.md).

@@ -6,7 +6,6 @@ Parameters:
   APIGatewayOriginDomain:
     Type: String
     Description: The domain that the API gateway is located at
-    Default: yz19149qcd.execute-api.eu-west-1.amazonaws.com
 
   APIGatewayOriginBasePath: 
     Type: String

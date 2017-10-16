@@ -14,7 +14,7 @@ usage="usage: $script [-b|-h|-r|-s]
     -b| --bucket        the name of the S3 bucket used for the source code of SAM resources
     -h| --help          this help
     -r| --region        AWS region (defaults to '$region')
-    -s| --stack-name    stack name"
+    -s| --stack-name    API stack name"
 
 
 #
