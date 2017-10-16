@@ -67,8 +67,17 @@ apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
     --output text`)
 apiGatewayOriginDomain="$apiId.execute-api.$region.amazonaws.com"
 
+# Deploy the web stack
 aws cloudformation deploy \
     --stack-name $stackName \
     --template-file web.cfn.yaml \
     --parameter-overrides APIGatewayOriginDomain=$apiGatewayOriginDomain \
     --region $region
+
+# Fetch CloudFront url
+url=(`aws cloudformation describe-stacks --stack-name $stackName \
+    --query "Stacks[0].Outputs[?OutputKey == 'CloudFrontDistributionUrl'].OutputValue" \
+    --region $region \
+    --output text`)
+
+echo "Deployed to CDN at $url"
