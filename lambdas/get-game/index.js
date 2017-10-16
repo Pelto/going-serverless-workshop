@@ -13,7 +13,6 @@ function extractGameId(event) {
 
 
 function getGame(gameId) {
-
     const params = {
         TableName: process.env.GAME_TABLE,
         Key: {
