@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: A Rock Paper Scissors web stack.
+
+Parameters:
+
+  APIGatewayOriginDomain:
+    Type: String
+    Description: The domain that the API gateway is located at
+    Default: yz19149qcd.execute-api.eu-west-1.amazonaws.com
+
+  APIGatewayOriginBasePath: 
+    Type: String
+    Description: The basepath mapping (i.e. stage) that we want
+    Default: /Prod
+
+Resources:
+
+  CDN:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Sub ${WebBucket}.s3.amazonaws.com
+            Id: WebOrigin
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+          - DomainName: !Ref APIGatewayOriginDomain
+            Id: ApiOrigin
+            OriginPath: !Ref APIGatewayOriginBasePath
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+        DefaultCacheBehavior:
+          AllowedMethods: 
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: WebOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: true
+        Enabled: true
+        CacheBehaviors:
+          - AllowedMethods:
+              - GET
+              - HEAD
+            DefaultTTL: 0
+            PathPattern: /api/*
+            TargetOriginId: ApiOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: true
+          - AllowedMethods:
+              - GET
+              - HEAD
+            PathPattern: "/*"
+            ViewerProtocolPolicy: redirect-to-https
+            TargetOriginId: WebOrigin
+            ForwardedValues:
+              QueryString: true
+
+  WebBucket:
+    Type: AWS::S3::Bucket
