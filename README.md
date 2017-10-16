@@ -7,7 +7,7 @@ A workshop on how to construct serverless applications on AWS.
 It is possible to execute the application on localhost by executing the script located at
 
 ```
-./scripts/run-localhost.sh --stack-name <your_stack_name>
+./scripts/run-localhost.sh --stack-name <stack-name>
 ```
 
 
