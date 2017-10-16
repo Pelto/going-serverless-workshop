@@ -65,7 +65,7 @@ apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
     --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
     --region $region \
     --output text`)
-apiGatewayOriginDomain="https://$apiId.execute-api.$region.amazonaws.com"
+apiGatewayOriginDomain="$apiId.execute-api.$region.amazonaws.com"
 
 aws cloudformation deploy \
     --stack-name $stackName \
