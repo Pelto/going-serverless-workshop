@@ -23,7 +23,7 @@ Creates a new Rock Paper Scissors game.
 
 Request
 ```
-POST [server]/games
+POST [server]/api/games
 {
   "gameId": "42"
 }
@@ -36,7 +36,7 @@ HTTP/1.1 200 OK
 Curl command:
 
 ```
-curl --data '{"gameId": "42"}' [server]/games
+curl --data '{"gameId": "42"}' [server]/api/games
 ```
 
 
@@ -46,7 +46,7 @@ Gets the current state of a specific game.
 
 Request
 ```
-GET [server]/games/{gameId}
+GET [server]/api/games/{gameId}
 ```
 Response
 ```
@@ -71,7 +71,7 @@ HTTP/1.1 200 OK
 Curl command:
 
 ```
-curl [server]/games/{gameId}
+curl [server]/api/games/{gameId}
 ```
 
 
@@ -81,7 +81,7 @@ A player makes a move in an existing game.
 
 Request
 ```
-POST [server]/moves
+POST [server]/api/moves
 {
     "gameId": "13",
     "playerId": "pqr",
@@ -107,7 +107,7 @@ HTTP/1.1 200 OK
 Curl command:
 
 ```
-curl --data '{"gameId": "42", "playerId": "Rocky", "move": "ROCK" }' [server]/moves
+curl --data '{"gameId": "42", "playerId": "Rocky", "move": "ROCK" }' [server]/api/moves
 ```
 
 ## Get Leaderboard
@@ -116,7 +116,7 @@ Returns the leaderboard based on the score of all games.
 
 Request
 ```
-GET [server]/leaderboard
+GET [server]/api/leaderboard
 ```
 Response
 ```
@@ -140,15 +140,15 @@ HTTP/1.1 200 OK
 Curl command:
 
 ```
-curl [server]/leaderboard
+curl [server]/api/leaderboard
 ```
 
 ## Full example
 
 ```
-curl -f -i --data '{"gameId":"42"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/games
-curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/games/42
-curl -f -i --data '{"gameId":"42","playerId":"rocky","move":"ROCK"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/moves
-curl -f -i --data '{"gameId":"42","playerId":"freddy","move":"SCISSORS"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/moves
-curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/leaderboard
+curl -f -i --data '{"gameId":"42"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/games
+curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/games/42
+curl -f -i --data '{"gameId":"42","playerId":"rocky","move":"ROCK"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/moves
+curl -f -i --data '{"gameId":"42","playerId":"freddy","move":"SCISSORS"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/moves
+curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/leaderboard
 ```

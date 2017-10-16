@@ -88,7 +88,7 @@ This will give you a basic lambda function in your template. However, as of now 
       Type: Api
       Properties:
         Method: get
-        Path: /games/{gameId}
+        Path: /api/games/{gameId}
 ```
 
 When we implement the function we will also need a reference to our DynamoDB table named `GameTable`. We need to add two new properties to our lambda function for this. We need to inject the name as a process environment under `Environment` and give the Lambda's IAM role read access by adding a policy under `Policies`. For the environment variables, add the following:
@@ -139,7 +139,7 @@ GetGameFunction:
       Type: Api
       Properties:
         Method: get
-        Path: /games/{gameId}
+        Path: /api/games/{gameId}
 ```
 
 
@@ -155,7 +155,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 ```
 
-As we specified the path `/games/{gameId}` we have the `gameId` as a path parameter available in the event. The event is specified in the [API Gateway proxy integration input](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format). Consequently, we can extract the `gameId` from the path parameters, e.g.
+As we specified the path `/api/games/{gameId}` we have the `gameId` as a path parameter available in the event. The event is specified in the [API Gateway proxy integration input](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format). Consequently, we can extract the `gameId` from the path parameters, e.g.
 
 ```
 function extractGameId(event) {

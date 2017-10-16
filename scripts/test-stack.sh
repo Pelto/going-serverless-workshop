@@ -54,11 +54,11 @@ apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
 
 gameId=(`date +%s`)
 
-createGameCommand="curl -i --data '{\"gameId\":\"$gameId\"}' $apiUrl/games"
-getGameCommand="curl -i $apiUrl/games/$gameId";
-makeMoveACommand="curl -i --data '{\"gameId\":\"$gameId\",\"playerId\":\"rocky\",\"move\":\"ROCK\"}' $apiUrl/moves"
-makeMoveBCommand="curl -i --data '{\"gameId\":\"$gameId\",\"playerId\":\"freddy\",\"move\":\"SCISSORS\"}' $apiUrl/moves"
-leaderboardCommand="curl -i $apiUrl/leaderboard"
+createGameCommand="curl -i --data '{\"gameId\":\"$gameId\"}' $apiUrl/api/games"
+getGameCommand="curl -i $apiUrl/api/games/$gameId";
+makeMoveACommand="curl -i --data '{\"gameId\":\"$gameId\",\"playerId\":\"rocky\",\"move\":\"ROCK\"}' $apiUrl/api/moves"
+makeMoveBCommand="curl -i --data '{\"gameId\":\"$gameId\",\"playerId\":\"freddy\",\"move\":\"SCISSORS\"}' $apiUrl/api/moves"
+leaderboardCommand="curl -i $apiUrl/api/leaderboard"
 
 
 echo "#################################################################"
