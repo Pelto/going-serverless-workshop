@@ -178,7 +178,7 @@ const promise = documentClient.get(params).promise();
 
 Now we have a promise with the result. The result has a key named `Item` that will contain the value from DynamoDB. If no record was found the `Item` will be `undefined`. The next step is to convert the result to a HTTP response. If we have an item we want to create a valid 200 response with the game, if no game was found we want to return a simple 404 response.
 
-To return a response we will use the `callback` in the handler. The callback expects an object matching the [API Gateway proxy integration output format](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-output-format). For this reason, we create a small utility function:
+To return a response we will use the `callback` in the handler. The callback expects an object matching the [API Gateway proxy integration output format](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-output-format).
 
 * `statusCode` that contains a `number`
 * `body` that contains a string of the JSON that we want to send
@@ -201,15 +201,15 @@ documentClient.get(params).promise().then(result => {
 });
 ```
 
-As a last step we also want to handle any errors from DynamoDB. So we create a simple error handler:
+As a last step we also want to handle any errors from DynamoDB. So we create a simple error handler. Errors that we want to present must be sent as a return value to the `callback`. Typically we want to avoid giving the raw server errors to our clients, but to make the this a bit more testable we are composing the error into a readable message:
 
 ```
-.catch(error => {
-    console.error(error);
+.catch(err => {
+    console.error(err);
     return callback(null, {
         statusCode: 500,
         body: JSON.stringify({
-            message: error.message
+            message: err.message
         })
     });
 })
