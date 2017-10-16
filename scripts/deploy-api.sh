@@ -69,7 +69,7 @@ aws cloudformation package \
     --output-template-file api.sam.output.yaml
 
 echo "#################################################################"
-echo "Deploying stack $stackName"
+echo "Deploying API stack $stackName"
 echo "#################################################################"
 
 

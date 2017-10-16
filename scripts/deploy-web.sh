@@ -67,6 +67,10 @@ apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
     --output text`)
 apiGatewayOriginDomain="$apiId.execute-api.$region.amazonaws.com"
 
+echo "#################################################################"
+echo "Deploying web stack $stackName"
+echo "#################################################################"
+
 # Deploy the web stack
 aws cloudformation deploy \
     --stack-name $stackName \
@@ -80,4 +84,6 @@ url=(`aws cloudformation describe-stacks --stack-name $stackName \
     --region $region \
     --output text`)
 
-echo "Deployed to CDN at $url"
+echo "#################################################################"
+echo "Deployed CDN tp $url"
+echo "#################################################################"
