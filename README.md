@@ -166,14 +166,19 @@ function extractGameId(event) {
 Now we can use the DynamoDB document client to get the record. To do this we will use the [get(params)](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property) method in the document client. In the parameters we will specify the name of the table and the value of the hash key that we want to get. The name of the table is the tablename that we injected in our environment variables. The hash key is the `gameId`. 
 
 ```
-const params = {
-    TableName: process.env.GAME_TABLE,
-    Key: {
-        gameId: gameId
-    }
-};
-
-const promise = documentClient.get(params).promise();
+function getGame(gameId) {
+    
+    const params = {
+        TableName: process.env.GAME_TABLE,
+        Key: {
+            gameId: gameId
+        }
+    };
+    
+    return documentClient
+        .get(params)
+        .promise()
+}
 ```
 
 Now we have a promise with the result. The result has a key named `Item` that will contain the value from DynamoDB. If no record was found the `Item` will be `undefined`. The next step is to convert the result to a HTTP response. If we have an item we want to create a valid 200 response with the game, if no game was found we want to return a simple 404 response.
@@ -186,33 +191,34 @@ To return a response we will use the `callback` in the handler. The callback exp
 Based on this we can add the following step to our promise:
 
 ```
-documentClient.get(params).promise().then(result => {
-    const response = {};
-
-    if (data.Item) {
-        response.statusCode = 200;
-        response.body = JSON.stringify(data.Item);
-    } else {
-        response.statusCode = 404;
-        response.body = "";
-    }
-
-    return callback(null, response);
-});
+return getGame(gameId)
+    .then(data => {
+        let response = {};
+    
+        if (data.Item) {
+            response.statusCode = 200;
+            response.body = JSON.stringify(data.Item);
+        } else {
+            response.statusCode = 404;
+            response.body = "";
+        }
+    
+        return callback(null, response);
+    })
 ```
 
 As a last step we also want to handle any errors from DynamoDB. So we create a simple error handler. Errors that we want to present must be sent as a return value to the `callback`. Typically we want to avoid giving the raw server errors to our clients, but to make the this a bit more testable we are composing the error into a readable message:
 
 ```
-.catch(err => {
-    console.error(err);
-    return callback(null, {
-        statusCode: 500,
-        body: JSON.stringify({
-            message: err.message
-        })
-    });
-})
+    .catch(err => {
+        console.error(err);
+        return callback(null, {
+            statusCode: 500,
+            body: JSON.stringify({
+                message: err.message
+            })
+        });
+    })
 ```
 
 Now you should have a fully implemented lambda. A finished version of the lambda is available on [GitHub](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/get-game/index.js)
