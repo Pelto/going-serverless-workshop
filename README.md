@@ -112,6 +112,34 @@ This will inject the name of the table as an environment variable and accessible
 
 By default our lambda does not have any rights at all besides what is defined in the managed IAM policy `AWSLambdaBasicExecution`. So if we want the lambda to access other IAM resources we have to add the proper policies to it. 
 
+Your function should be defined now, if you have followed the steps it should look something like:
+
+```
+GetGameFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    Description: Gets game status
+    Handler: index.handler
+    Runtime: nodejs6.10
+    CodeUri: lambdas/get-game/
+    Environment:
+      Variables:
+        GAME_TABLE: !Ref GameTable
+    Policies:
+      - Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+            Resource: !GetAtt GameTable.Arn
+    Events:
+    GetGame:
+      Type: Api
+      Properties:
+        Method: get
+        Path: /games/{gameId}
+```
+
 #### Implementation
 
 Open the file `lambdas/get-game/index.js`. In it you will find an empty handler function. This lambda is the simplest one in this workshop as it is only querying the DynamoDB table `GameTable` for one record and returning it. The first thing that we want to do is to initialize our DynamoDB client. For this we will use the AWS SDK. The AWS SDK is always available in the lambda environment. We want to create a [DynamoDB document client](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html). To do this we will add the following code to our lambda:
