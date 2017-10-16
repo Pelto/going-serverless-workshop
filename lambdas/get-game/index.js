@@ -32,12 +32,9 @@ exports.handler = function (event, context, callback) {
     documentClient.get(params)
         .promise()
         .then(data => {
-            let resp;
-            if (data.Item) {
-                resp = createResponse(200, data.Item)
-            } else {
-                resp = createResponse(404);
-            }
+            const resp = data.Item
+                ? createResponse(200, data.Item)
+                : createResponse(404);
             callback(null, resp);
         })
         .catch(err => {
