@@ -7,6 +7,26 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 
 
+function extractGameId(event) {
+    return event.pathParameters.gameId;
+}
+
+
+function getGame(gameId) {
+
+    const params = {
+        TableName: process.env.GAME_TABLE,
+        Key: {
+            gameId: gameId
+        }
+    };
+
+    return documentClient
+        .get(params)
+        .promise()
+}
+
+
 function createResponse(httpStatus, responseBody) {
     return {
         statusCode: httpStatus,
@@ -16,23 +36,12 @@ function createResponse(httpStatus, responseBody) {
     };
 }
 
-function extractGameId(event) {
-    return event.pathParameters.gameId;
-}
 
 exports.handler = function (event, context, callback) {
 
     const gameId = extractGameId(event);
 
-    const params = {
-        TableName: process.env.GAME_TABLE,
-        Key: {
-            gameId: gameId
-        }
-    };
-
-    documentClient.get(params)
-        .promise()
+    return getGame(gameId)
         .then(data => {
             const resp = data.Item
                 ? createResponse(200, data.Item)
