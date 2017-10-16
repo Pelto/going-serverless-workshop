@@ -48,6 +48,15 @@ do
     shift # past argument or value
 done
 
+if [[ -z $stackName ]]; then
+    echo "Stackname must be given by either --stack-name or -s"
+    exit 1
+fi
+
+if [[ -z $codeBucket ]]; then
+    echo "Bucket must be given by either --bucket or -b"
+    exit 1
+fi
 
 echo "#################################################################"
 echo "Packaging CloudFormation template"
@@ -58,7 +67,6 @@ aws cloudformation package \
     --region ${region} \
     --s3-bucket ${codeBucket} \
     --output-template-file api.sam.output.yaml
-
 
 echo "#################################################################"
 echo "Deploying stack $stackName"
