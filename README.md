@@ -24,6 +24,7 @@ Take note of the URL that the script returns. This will be needed in next step.
 
 Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
 
+
 # Instructions
 
 ## Deploy and test the initial stack
@@ -112,6 +113,7 @@ This will inject the name of the table as an environment variable and accessible
 
 By default our lambda does not have any rights at all besides what is defined in the managed IAM policy `AWSLambdaBasicExecution`. So if we want the lambda to access other IAM resources we have to add the proper policies to it. 
 
+
 Your function should be defined now, if you have followed the steps it should look something like:
 
 ```
@@ -140,6 +142,7 @@ GetGameFunction:
         Path: /games/{gameId}
 ```
 
+
 ### Implementation
 
 Open the file `lambdas/get-game/index.js`. In it you will find an empty handler function. This lambda is the simplest one in this workshop as it is only querying the DynamoDB table `GameTable` for one record and returning it. The first thing that we want to do is to initialize our DynamoDB client. For this we will use the AWS SDK. The AWS SDK is always available in the lambda environment. We want to create a [DynamoDB document client](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html). To do this we will add the following code to our lambda:
@@ -152,13 +155,21 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 ```
 
-Once our document client is created it is time to get the record. To do this we will use the `get(params)` ([link](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property)) method in the document client. In the parameters we will specify the name of the table and the value of the hash key that we want to get. The name of the table is the tablename that we injected in our environment variables. The hash key is the gameId. As we specified the path `/games/{gameId}` we have the `gameId` as a path parameter accessible in `event.pathParameters.gameId`. So let's go ahead and create the params and retreive a promise of our dynamodb response:
+As we specified the path `/games/{gameId}` we have the `gameId` as a path parameter available in the event. The event is specified in the [API Gateway proxy integration input](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format). Consequently, we can extract the `gameId` from the path parameters, e.g.
+
+```
+function extractGameId(event) {
+    return event.pathParameters.gameId;
+}
+```
+
+Now we can use the DynamoDB document client to get the record. To do this we will use the [get(params)](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property) method in the document client. In the parameters we will specify the name of the table and the value of the hash key that we want to get. The name of the table is the tablename that we injected in our environment variables. The hash key is the `gameId`. 
 
 ```
 const params = {
     TableName: process.env.GAME_TABLE,
     Key: {
-        gameId: event.pathParameters.gameId
+        gameId: gameId
     }
 };
 
@@ -167,7 +178,7 @@ const promise = documentClient.get(params).promise()
 
 Now we have a promise with the result. The result has a key named `Item` that will contain the value from DynamoDB. If no record was found the `Item` will be `undefined`. The next step is to convert the result to a HTTP response. If we have an item we want to create a valid 200 response with the game, if no game was found we want to return a simple 404 response.
 
-To return a response we will use the `callback` in the handler. The callback expects an object with the following keys:
+To return a response we will use the `callback` in the handler. The callback expects an object matching the [API Gateway proxy integration output format](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-output-format). For this reason, we create a small utility function:
 
 * `statusCode` that contains a `number`
 * `body` that contains a string of the JSON that we want to send

@@ -104,9 +104,9 @@ exports.handler = function (event, context, callback) {
             const resp = createResponse(200, gameState);
             callback(null, resp);
         })
-        .catch(error => {
-            console.error(error);
-            const resp = createResponse(500);
+        .catch(err => {
+            console.error(err);
+            const resp = createResponse(500, {message: err.message});
             callback(null, resp);
         });
 };

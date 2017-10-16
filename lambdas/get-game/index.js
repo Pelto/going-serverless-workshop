@@ -14,13 +14,18 @@ function createResponse(httpStatus, responseBody) {
     };
 }
 
+function extractGameId(event) {
+    return event.pathParameters.gameId;
+}
 
 exports.handler = function (event, context, callback) {
+
+    const gameId = extractGameId(event);
 
     const params = {
         TableName: process.env.GAME_TABLE,
         Key: {
-            gameId: event.pathParameters.gameId
+            gameId: gameId
         }
     };
 
@@ -35,9 +40,9 @@ exports.handler = function (event, context, callback) {
             }
             callback(null, resp);
         })
-        .catch(error => {
-            console.error(error);
-            const resp = createResponse(500);
+        .catch(err => {
+            console.error(err);
+            const resp = createResponse(500, {message: err.message});
             callback(null, resp);
         });
 };

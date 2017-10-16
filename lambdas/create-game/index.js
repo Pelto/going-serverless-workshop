@@ -45,7 +45,7 @@ exports.handler = function(event, context, callback) {
         })
         .catch(err => {
             console.error(err);
-            const resp = createResponse(500);
+            const resp = createResponse(500, {message: err.message});
             callback(null, resp);
         });
 };
