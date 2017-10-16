@@ -29,7 +29,7 @@ Deploy the stack by `scripts/deploy-web.sh --stack-name <stack-name>`
 
 ## Deploy and test the initial stack
 
-To get started with the workshop the first thing that we'll do is to deploy the application. To deploy a SAM template there are two necessary steps. The stack has to be packaged, i.e. we will upload the code to an Amazon S3 bucket. This will be done with the AWS command `aws cloudformation package`. Once the stack has been packaged you will notice a new file named  `cloudformation.sam.output.yaml`. That is the file that we will later deploy. This will done with the AWS command `aws cloudformation deploy`.
+To get started with the workshop the first thing that we'll do is to deploy the application. To deploy a SAM template there are two necessary steps. The stack has to be packaged, i.e. we will upload the code to an Amazon S3 bucket. This will be done with the AWS command `aws cloudformation package`. Once the stack has been packaged you will notice a new file named  `api.sam.output.yaml`. That is the file that we will later deploy. This will done with the AWS command `aws cloudformation deploy`.
 
 To simplify the above process we have combined those two commands into one script:
 
@@ -37,17 +37,17 @@ To simplify the above process we have combined those two commands into one scrip
 ./scripts/deploy-stack.sh --stack-name <your_stack>
 ```
 
-This scripts does everything and will also test your stack and give you the url to your api. But if you want to do the deployement totally manual you could do it with just the following two commands:
+This scripts does everything and will also test your stack and give you the url to your api. But if you want to do the deployment totally manual you could do it with just the following two commands:
 
 ```
 aws cloudformation package \
-    --template-file cloudformation.sam.yaml \
+    --template-file api.sam.yaml \
     --s3-bucket going-serverless \
-    --output-template-file cloudformation.sam.output.yaml
+    --output-template-file api.sam.output.yaml
 
 aws cloudformation deploy \
     --stack-name <your-stack> \
-    --template-file cloudformation.sam.output.yaml \
+    --template-file api.sam.output.yaml \
     --capabilities CAPABILITY_NAMED_IAM
 ```
 
@@ -63,7 +63,7 @@ For more reference on how to test the stack you could have a look at [API docume
 
 To implement the get-game function there are two things that we have to do:
 
-1. Add the function to `cloudformation.sam.yaml`
+1. Add the function to `api.sam.yaml`
 2. Implement the function
 
 ### Infrastructure

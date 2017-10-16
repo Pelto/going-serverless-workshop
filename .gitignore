@@ -67,7 +67,7 @@ typings/
 .DS_Store
 
 # Ignore packaged SAM template
-cloudformation.sam.output.yaml
+api.sam.output.yaml
 
 # Ignore generated Angular environment configuration files
 /rps-client/src/environments

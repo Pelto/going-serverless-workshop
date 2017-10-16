@@ -54,10 +54,10 @@ echo "Packaging CloudFormation template"
 echo "#################################################################"
 
 aws cloudformation package \
-    --template-file ${rootDir}/cloudformation.sam.yaml \
+    --template-file ${rootDir}/api.sam.yaml \
     --region ${region} \
     --s3-bucket ${samBucket} \
-    --output-template-file cloudformation.sam.output.yaml
+    --output-template-file api.sam.output.yaml
 
 
 echo "#################################################################"
@@ -66,7 +66,7 @@ echo "#################################################################"
 
 
 aws cloudformation deploy \
-    --template-file ${rootDir}/cloudformation.sam.output.yaml \
+    --template-file ${rootDir}/api.sam.output.yaml \
     --region ${region} \
     --stack-name ${stackName} \
     --capabilities CAPABILITY_NAMED_IAM
