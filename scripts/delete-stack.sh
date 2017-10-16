@@ -53,4 +53,4 @@ aws s3 rb s3://$bucketName --force
 
 echo "Deleting the stack..."
 
-aws cloudformation delete-stack --stack-name $stackName
+aws cloudformation delete-stack --stack-name $stackName --region $region
