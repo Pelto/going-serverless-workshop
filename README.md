@@ -14,7 +14,7 @@ It is possible to execute the application on localhost by executing the script l
 ### 1. Deploy the backend
 
 ```
-./scripts/deploy-stack.sh --stack-name <stack-name>
+./scripts/deploy-stack.sh --stack-name <stack-name> --bucket <bucket-name>
 ```
 
 Take note of the URL that the script returns. This will be needed in next step.
@@ -173,7 +173,7 @@ const params = {
     }
 };
 
-const promise = documentClient.get(params).promise()
+const promise = documentClient.get(params).promise();
 ```
 
 Now we have a promise with the result. The result has a key named `Item` that will contain the value from DynamoDB. If no record was found the `Item` will be `undefined`. The next step is to convert the result to a HTTP response. If we have an item we want to create a valid 200 response with the game, if no game was found we want to return a simple 404 response.
@@ -211,7 +211,7 @@ As a last step we also want to handle any errors from DynamoDB. So we create a s
         body: JSON.stringify({
             message: error.message
         })
-    })
+    });
 })
 ```
 
