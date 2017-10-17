@@ -85,5 +85,5 @@ url=(`aws cloudformation describe-stacks --stack-name $stackName \
     --output text`)
 
 echo "#################################################################"
-echo "Deployed CDN tp $url"
+echo "Deployed CDN to $url"
 echo "#################################################################"
