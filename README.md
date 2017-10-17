@@ -135,11 +135,11 @@ GetGameFunction:
               - dynamodb:GetItem
             Resource: !GetAtt GameTable.Arn
     Events:
-    GetGame:
-      Type: Api
-      Properties:
-        Method: get
-        Path: /api/games/{gameId}
+      GetGame:
+        Type: Api
+        Properties:
+          Method: get
+          Path: /api/games/{gameId}
 ```
 
 
