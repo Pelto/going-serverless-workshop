@@ -6,10 +6,7 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 clientDir="$rootDir/rps-client"
-clientEnvDir="$clientDir/src/environments"
 region="eu-west-1"
-stackName=
-apiStackName=
 
 usage="usage: $script [-s|--stack-name -r|--region -a | --api-stack-name -h|--help]
     -h| --help              this help
@@ -77,6 +74,21 @@ aws cloudformation deploy \
     --template-file web.cfn.yaml \
     --parameter-overrides APIGatewayOriginDomain=$apiGatewayOriginDomain \
     --region $region
+
+# Install angular and all dependencies and package the app.
+cd $clientDir
+npm install
+./node_modules/.bin/ng build --prod
+cp ./src/error.html ./dist
+
+# Retrieve the bucket name and upload the packaged app and allow public
+# reads to the objects.
+bucketName=(`aws cloudformation describe-stacks --stack-name $stackName \
+    --query "Stacks[0].Outputs[?OutputKey == 'WebBucketName'].OutputValue" \
+    --region $region \
+    --output text`)
+
+aws s3 sync dist/ s3://$bucketName/ --acl public-read
 
 # Fetch CloudFront url
 url=(`aws cloudformation describe-stacks --stack-name $stackName \

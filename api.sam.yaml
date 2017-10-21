@@ -178,29 +178,3 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
-
-
-  WebBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicRead
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
-        RoutingRules:
-          - RoutingRuleCondition:
-              HttpErrorCodeReturnedEquals: '404'
-            RedirectRule:
-              ReplaceKeyPrefixWith: '#!/'
-
-
-Outputs:
-  WebBucketName:
-    Value: !Ref WebBucket
-    Description: The name of the S3 bucket where the static webiste is hosted
-  WebsiteURL:
-    Value: !GetAtt WebBucket.WebsiteURL
-    Description: URL for website hosted on S3
-  WebsiteSecureURL:
-    Value: !Sub https://${WebBucket.DomainName}
-    Description: Secure URL for the website

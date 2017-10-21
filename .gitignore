@@ -69,5 +69,3 @@ typings/
 # Ignore packaged SAM template
 api.sam.output.yaml
 
-# Ignore generated Angular environment configuration files
-/rps-client/src/environments

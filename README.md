@@ -59,6 +59,16 @@ When you deployed the stack you also might noticed the HTTP commands that was do
 
 For more reference on how to test the stack you could have a look at [API documentation](docs/rest-api.md).
 
+To get a jumpstart on a later chapter we will also deploy the web now. Since we want to avoid messing with CORS in this lab we will put both the web and the API behind a cloudfront distribution. A cloudfront distribution can take anywhere between 10 to 30 minutes to provision, so we might as well do it now.
+
+```
+./scripts/deploy-web \
+  --api-stack-name <api-stack-name> \
+  --stack-name <web-stack-name>
+```
+
+This script will provosion a cloudfront distribution, set up one origin with pathmapping `/api/*` towards our API gateway while all other requests will be directed to our S3 bucket where we will upload our Web app.
+
 ## Implement the get game function
 
 To implement the get-game function there are two things that we have to do:

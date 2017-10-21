@@ -19,7 +19,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: !Sub ${WebBucket}.s3.amazonaws.com
+          - DomainName: !GetAtt WebBucket.DomainName
             Id: WebOrigin
             S3OriginConfig:
               OriginAccessIdentity: ""
@@ -28,42 +28,57 @@ Resources:
             OriginPath: !Ref APIGatewayOriginBasePath
             CustomOriginConfig:
               OriginProtocolPolicy: https-only
+        DefaultRootObject: index.html
         DefaultCacheBehavior:
           AllowedMethods: 
             - GET
             - HEAD
+            - OPTIONS
+            - PUT
+            - POST
+            - PATCH
+            - DELETE
           CachedMethods:
             - GET
             - HEAD
+          DefaultTTL: 0
           TargetOriginId: WebOrigin
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: true
         Enabled: true
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
         CacheBehaviors:
-          - AllowedMethods:
-              - GET
-              - HEAD
+          - PathPattern: /api/*
             DefaultTTL: 0
-            PathPattern: /api/*
             TargetOriginId: ApiOrigin
             ViewerProtocolPolicy: redirect-to-https
-            ForwardedValues:
-              QueryString: true
-          - AllowedMethods:
+            AllowedMethods:
               - GET
               - HEAD
-            PathPattern: "/*"
-            ViewerProtocolPolicy: redirect-to-https
-            TargetOriginId: WebOrigin
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
             ForwardedValues:
               QueryString: true
 
   WebBucket:
     Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
 
 
 Outputs:
+
+  WebBucketName:
+    Value: !Ref WebBucket
+    Description: The web bucket
+
   CloudFrontDistributionUrl:
     Value: !Sub https://${CDN.DomainName}
     Description: URL for the website
