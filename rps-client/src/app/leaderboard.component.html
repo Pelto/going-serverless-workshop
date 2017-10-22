@@ -1,6 +1,14 @@
 <table class="table">
-    <tr *ngFor="let entry of entries">
-        <td>{{entry.playerId}}</td>
-        <td>{{entry.score}}</td>
-    </tr>
+    <thead>
+        <tr>
+            <td>playerId</td>
+            <td>score</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let entry of entries">
+            <td>{{entry.playerId}}</td>
+            <td>{{entry.score}}</td>
+        </tr>
+    </tbody>
 </table>
