@@ -69,7 +69,8 @@ To get a jumpstart on a later chapter we will also deploy the web now. Since we 
 
 This script will provosion a cloudfront distribution, set up one origin with pathmapping `/api/*` towards our API gateway while all other requests will be directed to our S3 bucket where we will upload our Web app.
 
-## Implement the get game function
+
+## Get Game
 
 To implement the get-game function there are two things that we have to do:
 
@@ -153,7 +154,7 @@ GetGameFunction:
 ```
 
 
-### Implementation
+### Application code
 
 Open the file `lambdas/get-game/index.js`. In it you will find an empty handler function. This lambda is the simplest one in this workshop as it is only querying the DynamoDB table `GameTable` for one record and returning it. The first thing that we want to do is to initialize our DynamoDB client. For this we will use the AWS SDK. The AWS SDK is always available in the lambda environment. We want to create a [DynamoDB document client](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html). To do this we will add the following code to our lambda:
 
@@ -232,3 +233,136 @@ As a last step we also want to handle any errors from DynamoDB. So we create a s
 ```
 
 Now you should have a fully implemented lambda. A finished version of the lambda is available on [GitHub](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/get-game/index.js)
+
+
+## Update Score
+
+To implement the update score function there a few things required:
+
+Three changes to the infrastructure in the `api.sam.yaml`:
+1. Attach a DynamoDB Stream to the `GameTable` so that we can listen to game events.
+2. Create a new DynamoDB `ScoreTable` in which we will update the score for game winners.
+3. Create a new `UpdateScore` function that listen to the events from the DynamoDB Stream from the `GameTable`, checks if there is a winner in the game, and if so adds 10 points to the winner in the `ScoreTable`.
+
+And of course, we need to write the implementation of the `UpdateScore` function.
+
+
+### Infrastructure
+
+Start by locating the `GameTable`. It's configuration needs to be updated so that there is a stream to which table changes are published. Add the following [StreamSpecification](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-streamspecification)
+```
+StreamSpecification:
+    StreamViewType: NEW_AND_OLD_IMAGES
+```
+
+We also need somewhere to store the score for the players. Create a new DynamoDB table called `ScoreTable` similar to `GameTable`, but this time use `playerId` as hash key:
+
+```
+ScoreTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    AttributeDefinitions:
+      - AttributeName: playerId
+        AttributeType: S
+    KeySchema:
+      - AttributeName: playerId
+        KeyType: HASH
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+```
+
+Last piece of the infrastructure updates in this part is to create a `UpdateScore` Lambda. It is similar to the Lambdas we have created previously, but there is one significant difference. All previous functions have been triggered by the a HTTP request through the API Gateway, but this on the other hand will be triggered by the events in a [DynamoDB Event Stream](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#dynamodb), namely the `GameTable` event stream that we just created. It should also be noted that the Lambda needs a policy that allows it to update the items in the `ScoreTable` so that the score can be recorded. 
+
+```
+UpdateScoreFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    Description: Updates the score
+    Handler: index.handler
+    Runtime: nodejs6.10
+    CodeUri: lambdas/update-score/
+    Policies:
+      - Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:UpdateItem
+            Resource: !GetAtt ScoreTable.Arn
+    Environment:
+      Variables:
+        SCORE_TABLE: !Ref ScoreTable
+    Events:
+      GameEvent:
+        Type: DynamoDB
+        Properties:
+          Stream: !GetAtt GameTable.StreamArn
+          StartingPosition: LATEST
+```
+
+
+### Application
+
+The `UpdateScore` function will be triggered whenever there is a change in the `GameTable` table since we are listen to all events from that table. Those events may be when a new game is created, when a player has made a move, a game is finished (either there is a winner or it is a draw) but there is also an event if a game has been deleted from the table. For this reason, we create a small utility functions that filters the events to see whether or not there is a winner. If there is no winner, we can simply ignore the event since there is no need to update the score. Also note that a single event may contain updates of multiple DynamoDB records.
+
+```
+function getWinners(event) {
+    return event.Records
+        .filter(record => {
+            return (record.dynamodb.NewImage || {}).winner;
+        })
+        .map(record => record.dynamodb.NewImage.winner.S);
+}
+```  
+
+Next, we need to update the `ScoreTable`. We use the [DynamoDB DocumentClient](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) like before:
+
+```
+const AWS = require('aws-sdk');
+const documentClient = new AWS.DynamoDB.DocumentClient({
+    apiVersion: '2012-08-10',
+    region: process.env.AWS_REGION
+});
+```
+
+For each winner, we must add 10 points for that player id. [DynamoDB's update function](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property) can be used. Specifically, in the documentation of the `ADD` expression in the [UpdateExpression](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html#updateItem-property) it is stated that:
+
+> `ADD` - Adds the specified value to the item, if the attribute does not already exist. [...] If the existing attribute is a number, and if Value is also a number, then Value is mathematically added to the existing attribute.
+
+```
+function addScore(winner) {
+    const params = {
+        TableName: process.env.SCORE_TABLE,
+        Key: {
+            playerId: winner,
+        },
+        UpdateExpression: 'ADD #score :score',
+        ExpressionAttributeNames: {
+            '#score': 'score'
+        },
+        ExpressionAttributeValues: {
+            ':score': 10
+        }
+    };
+    return documentClient
+        .update(params)
+        .promise();
+}
+``` 
+
+The last thing is the glue code between the event handler, the `getWinners()` function and the `addScore()` function:
+
+```
+exports.handler = function(event, context, callback) {
+
+    const promises = getWinners(event)
+        .map(addScore);
+
+    Promise.all(promises)
+        .then(res => callback(null, res))
+        .catch(err => {
+            console.error(err);
+            callback(err);
+        });
+};
+```
