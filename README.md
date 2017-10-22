@@ -62,7 +62,7 @@ For more reference on how to test the stack you could have a look at [API docume
 To get a jumpstart on a later chapter we will also deploy the web now. Since we want to avoid messing with CORS in this lab we will put both the web and the API behind a cloudfront distribution. A cloudfront distribution can take anywhere between 10 to 30 minutes to provision, so we might as well do it now.
 
 ```
-./scripts/deploy-web \
+./scripts/deploy-web.sh \
   --api-stack-name <api-stack-name> \
   --stack-name <web-stack-name>
 ```
