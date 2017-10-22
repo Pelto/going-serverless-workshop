@@ -80,6 +80,31 @@ Resources:
             Path: /api/moves
 
 
+  UpdateScoreFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Updates the score
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: lambdas/update-score/
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:UpdateItem
+              Resource: !GetAtt ScoreTable.Arn
+      Environment:
+        Variables:
+          SCORE_TABLE: !Ref ScoreTable
+      Events:
+        GameEvent:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt GameTable.StreamArn
+            StartingPosition: LATEST
+
+
   GetLeaderboardFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -104,32 +129,6 @@ Resources:
           Properties:
             Method: get
             Path: /api/leaderboard
-
-
-  UpdateScoreFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: Updates the score
-      Handler: index.handler
-      Runtime: nodejs6.10
-      CodeUri: lambdas/update-score/
-      Policies:
-        - Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:PutItem
-                - dynamodb:UpdateItem
-              Resource: !GetAtt ScoreTable.Arn
-      Environment:
-        Variables:
-          SCORE_TABLE: !Ref ScoreTable
-      Events:
-        GameEvent:
-          Type: DynamoDB
-          Properties:
-            Stream: !GetAtt GameTable.StreamArn
-            StartingPosition: LATEST
 
 
   GameTable:
