@@ -14,15 +14,16 @@ Parameters:
 
 Resources:
 
-  CDN:
+  RockPaperScissorsCDN:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Comment: Rock Paper Scissors CDN
         Origins:
           - DomainName: !GetAtt WebBucket.DomainName
             Id: WebOrigin
             S3OriginConfig:
-              OriginAccessIdentity: ""
+              OriginAccessIdentity: ''
           - DomainName: !Ref APIGatewayOriginDomain
             Id: ApiOrigin
             OriginPath: !Ref APIGatewayOriginBasePath
@@ -30,7 +31,8 @@ Resources:
               OriginProtocolPolicy: https-only
         DefaultRootObject: index.html
         DefaultCacheBehavior:
-          AllowedMethods: 
+          TargetOriginId: WebOrigin
+          AllowedMethods:
             - GET
             - HEAD
             - OPTIONS
@@ -42,19 +44,21 @@ Resources:
             - GET
             - HEAD
           DefaultTTL: 0
-          TargetOriginId: WebOrigin
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: true
         Enabled: true
         CustomErrorResponses:
           - ErrorCode: 404
-            ResponseCode: 200
-            ResponsePagePath: /index.html
+            ResponseCode: 404
+            ResponsePagePath: /error.html
+          - ErrorCode: 500
+            ResponseCode: 500
+            ResponsePagePath: /error.html
         CacheBehaviors:
-          - PathPattern: /api/*
+          - TargetOriginId: ApiOrigin
+            PathPattern: /api/*
             DefaultTTL: 0
-            TargetOriginId: ApiOrigin
             ViewerProtocolPolicy: redirect-to-https
             AllowedMethods:
               - GET
@@ -65,7 +69,7 @@ Resources:
               - PATCH
               - DELETE
             ForwardedValues:
-              QueryString: true
+              QueryString: false
 
   WebBucket:
     Type: AWS::S3::Bucket
@@ -80,5 +84,5 @@ Outputs:
     Description: The web bucket
 
   CloudFrontDistributionUrl:
-    Value: !Sub https://${CDN.DomainName}
+    Value: !Sub https://${RockPaperScissorsCDN.DomainName}
     Description: URL for the website
