@@ -7,11 +7,51 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 
 
-const WINNING_COMBINATIONS = {
-    ROCK: 'SCISSORS',
-    PAPER: 'ROCK',
-    SCISSORS: 'PAPER'
-};
+function updateGame(game, playerId, move) {
+
+    const WINNING_COMBINATIONS = {
+        ROCK: 'SCISSORS',
+        PAPER: 'ROCK',
+        SCISSORS: 'PAPER'
+    };
+
+    function addPlayer(game, playerId, move) {
+        if (!game.players) {
+            game.players = [];
+        }
+        const player = { playerId, move };
+        game.players.push(player);
+        return game;
+    }
+
+    function updateState(game) {
+
+        if (game.state === 'CREATED') {
+            game.state = 'FIRST_MOVE';
+            return game;
+        }
+
+        const playerA = game.players[0];
+        const playerB = game.players[1];
+
+        if (playerA.move === playerB.move) {
+            game.state = 'DRAW';
+            return game;
+        }
+
+        game.state = 'WINNER';
+        game.winner = WINNING_COMBINATIONS[playerA.move] === playerB.move
+            ? playerA.playerId
+            : playerB.playerId;
+
+        return game;
+    }
+
+    addPlayer(game, playerId, move);
+    updateState(game);
+
+    return game;
+}
 
 
 function getGame(gameId) {
@@ -28,46 +68,10 @@ function getGame(gameId) {
 }
 
 
-function addPlayer(playerId, move) {
-    return function (gameState) {
-        if (!gameState.players) {
-            gameState.players = [];
-        }
-        const player = { playerId, move };
-        gameState.players.push(player);
-        return gameState;
-    }
-}
-
-
-function updateState(gameState) {
-
-    if (gameState.state === 'CREATED') {
-        gameState.state = 'FIRST_MOVE';
-        return gameState;
-    }
-
-    const playerA = gameState.players[0];
-    const playerB = gameState.players[1];
-
-    if (playerA.move === playerB.move) {
-        gameState.state = 'DRAW';
-        return gameState;
-    }
-
-    gameState.state = 'WINNER';
-    gameState.winner = WINNING_COMBINATIONS[playerA.move] === playerB.move
-        ? playerA.playerId
-        : playerB.playerId;
-
-    return gameState;
-}
-
-
-function saveGame(gameState) {
+function saveGame(game) {
     const params = {
         TableName: process.env.GAME_TABLE,
-        Item: gameState,
+        Item: game,
         ConditionExpression: '#state IN (:created, :firstMove)',
         ExpressionAttributeNames: {
             '#state': 'state'
@@ -80,7 +84,7 @@ function saveGame(gameState) {
     return documentClient
         .put(params)
         .promise()
-        .then(() => gameState);
+        .then(() => game);
 }
 
 
@@ -99,11 +103,10 @@ exports.handler = function (event, context, callback) {
     const { gameId, playerId, move } = JSON.parse(event.body);
 
     return getGame(gameId)
-        .then(addPlayer(playerId, move))
-        .then(updateState)
+        .then(game => updateGame(game, playerId, move))
         .then(saveGame)
-        .then(gameState => {
-            const resp = createResponse(200, gameState);
+        .then(game => {
+            const resp = createResponse(200, game);
             callback(null, resp);
         })
         .catch(err => {
