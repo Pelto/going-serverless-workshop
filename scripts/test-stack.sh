@@ -6,12 +6,12 @@ script=$(basename $0)
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
-stackName=
+apiStackName=
 
 usage="usage: $script [-h|-r|-s]
     -h| --help          this help
     -r| --region        AWS region (defaults to '$region')
-    -s| --stack-name    stack name"
+    -a| --api-stack-name    stack name"
 
 #
 # For Bash parsing explanation, please see https://stackoverflow.com/a/14203146
@@ -29,8 +29,8 @@ do
         region="$2"
         shift
         ;;
-        -s|--stack-name)
-        stackName="$2"
+        -a|--api-stack-name)
+        apiStackName="$2"
         shift
         ;;
         *)
@@ -40,12 +40,12 @@ do
     shift # past argument or value
 done
 
-apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
+apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
     --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
     --region $region \
     --output text`)
 
-gameTable=(`aws cloudformation describe-stacks --stack-name $stackName \
+gameTable=(`aws cloudformation describe-stacks --stack-name $apiStackName \
     --query "Stacks[0].Outputs[?OutputKey == 'GameTable'].OutputValue" \
     --region $region \
     --output text`)

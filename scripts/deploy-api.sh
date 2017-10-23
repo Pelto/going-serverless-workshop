@@ -8,13 +8,13 @@ scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
 codeBucket=
-stackName=
+apiStackName=
 
-usage="usage: $script [-b|-h|-r|-s]
-    -b| --bucket        the name of the S3 bucket used for the source code of SAM resources
-    -h| --help          this help
-    -r| --region        AWS region (defaults to '$region')
-    -s| --stack-name    API stack name"
+usage="usage: $script [-b|-h|-r|-a]
+    -b| --bucket            the name of the S3 bucket used for the source code of SAM resources
+    -h| --help              this help
+    -r| --region            AWS region (defaults to '$region')
+    -a| --api-stack-name    API stack name"
 
 
 #
@@ -37,8 +37,8 @@ do
         region="$2"
         shift
         ;;
-        -s|--stack-name)
-        stackName="$2"
+        -a|--api-stack-name)
+        apiStackName="$2"
         shift
         ;;
         *)
@@ -48,8 +48,8 @@ do
     shift # past argument or value
 done
 
-if [[ -z $stackName ]]; then
-    echo "Stackname must be given by either --stack-name or -s"
+if [[ -z $apiStackName ]]; then
+    echo "API stack name must be given by either --api-stack-name or -a"
     exit 1
 fi
 
@@ -69,18 +69,18 @@ aws cloudformation package \
     --output-template-file api.sam.output.yaml
 
 echo "#################################################################"
-echo "Deploying API stack $stackName"
+echo "Deploying API stack $apiStackName"
 echo "#################################################################"
 
 
 aws cloudformation deploy \
     --template-file ${rootDir}/api.sam.output.yaml \
     --region ${region} \
-    --stack-name ${stackName} \
+    --stack-name ${apiStackName} \
     --capabilities CAPABILITY_NAMED_IAM
 
 
-apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
+apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
     --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
     --region $region \
     --output text`)
@@ -92,4 +92,4 @@ echo "#################################################################"
 echo "Deployed API to $apiUrl"
 echo "#################################################################"
 
-./scripts/test-stack.sh --stack-name $stackName --region $region
+./scripts/test-stack.sh --api-stack-name $apiStackName --region $region

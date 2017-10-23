@@ -8,10 +8,10 @@ rootDir="$( cd "$scriptDir/.." && pwd )"
 clientDir="$rootDir/rps-client"
 region="eu-west-1"
 
-usage="usage: $script [-s|--stack-name -r|--region -a | --api-stack-name -h|--help]
+usage="usage: $script [-w|--webstack-name -r|--region -a | --api-stack-name -h|--help]
     -h| --help              this help
     -r| --region            AWS region (defaults to '$region')
-    -s| --stack-name        web stack name
+    -w| --web-stack-name        web stack name
     -a| --api-stack-name    API stack name"
 
 
@@ -31,8 +31,8 @@ do
         region="$2"
         shift
         ;;
-        -s|--stack-name)
-        stackName="$2"
+        -w|--web-stack-name)
+        webStackName="$2"
         shift
         ;;
         -a|--api-stack-name)
@@ -46,8 +46,8 @@ do
     shift # past argument or value
 done
 
-if [[ -z $stackName ]]; then
-    echo "You must specify stack name using -s or --stack-name"
+if [[ -z $webStackName ]]; then
+    echo "You must specify web stack name using -w or --web-stack-name"
     exit 1
 fi
 
@@ -65,12 +65,12 @@ apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
 apiGatewayOriginDomain="$apiId.execute-api.$region.amazonaws.com"
 
 echo "#################################################################"
-echo "Deploying web stack $stackName"
+echo "Deploying web stack $webStackName"
 echo "#################################################################"
 
 # Deploy the web stack
 aws cloudformation deploy \
-    --stack-name $stackName \
+    --stack-name $webStackName \
     --template-file web.cfn.yaml \
     --parameter-overrides APIGatewayOriginDomain=$apiGatewayOriginDomain \
     --region $region
@@ -83,7 +83,7 @@ cp ./src/error.html ./dist
 
 # Retrieve the bucket name and upload the packaged app and allow public
 # reads to the objects.
-bucketName=(`aws cloudformation describe-stacks --stack-name $stackName \
+bucketName=(`aws cloudformation describe-stacks --stack-name $webStackName \
     --query "Stacks[0].Outputs[?OutputKey == 'WebBucketName'].OutputValue" \
     --region $region \
     --output text`)
@@ -91,7 +91,7 @@ bucketName=(`aws cloudformation describe-stacks --stack-name $stackName \
 aws s3 sync dist/ s3://$bucketName/ --acl public-read
 
 # Fetch CloudFront url
-url=(`aws cloudformation describe-stacks --stack-name $stackName \
+url=(`aws cloudformation describe-stacks --stack-name $webStackName \
     --query "Stacks[0].Outputs[?OutputKey == 'CloudFrontDistributionUrl'].OutputValue" \
     --region $region \
     --output text`)
