@@ -329,7 +329,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 ```
 
-For each winner, we must add 10 points for that player id. [DynamoDB's update function](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property) can be used. Specifically, in the documentation of the `ADD` expression in the [UpdateExpression](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html#updateItem-property) it is stated that:
+For each winner, we should add 10 points for that player id. [DynamoDB's update function](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#update-property) can be used. Specifically, in the documentation of the `ADD` expression in the [UpdateExpression](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html#updateItem-property) it is stated that:
 
 > `ADD` - Adds the specified value to the item, if the attribute does not already exist. [...] If the existing attribute is a number, and if Value is also a number, then Value is mathematically added to the existing attribute.
 
@@ -367,6 +367,89 @@ exports.handler = function(event, context, callback) {
         .catch(err => {
             console.error(err);
             callback(err);
+        });
+};
+```
+
+
+## Get Leaderboard
+
+The last function that we will develop is the `GetLeaderboardFunction` that will return the scores for all players.
+
+
+### Infrastructure
+
+The only thing to add is a `GetLeaderboardFunction`, add a policy document that allows the function to `Query` and `Scan` (depending on Lambda implementation) the `ScoreTable` and map the Lambda execution to an event triggered by a request to the `/api/leaderboard` API Gateway resource:
+
+```
+GetLeaderboardFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    Description: Gets leaderboard
+    Handler: index.handler
+    Runtime: nodejs6.10
+    CodeUri: lambdas/get-leaderboard/
+    Environment:
+      Variables:
+        SCORE_TABLE: !Ref ScoreTable
+    Policies:
+      - Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+            Resource: !Sub ${ScoreTable.Arn}
+    Events:
+      Leaderboard:
+        Type: Api
+        Properties:
+          Method: get
+          Path: /api/leaderboard
+```
+
+### Lambda Implementation
+
+With the `GetLeaderboardFunction`, there is no request body, query params nor path params to take into consideration. In other words, we can call the `ScoreTable` directly:
+
+```
+function getLeaderboard() {
+    const params = {
+        TableName: process.env.SCORE_TABLE,
+    };
+    return documentClient
+        .scan(params)
+        .promise()
+        .then(data => data.Items);
+}
+```
+
+Since we now deal with a API Gateway Lambda proxy integration, we need to create a [proxy response](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-output-format) as we have done previously:
+
+```
+function createResponse(httpStatus, responseBody) {
+    return {
+        statusCode: httpStatus,
+        body: responseBody
+            ? JSON.stringify(responseBody)
+            : ""
+    };
+}
+```  
+
+Lastly, we chain the two functions in the Lambda function handler:
+```
+exports.handler = function(event, context, callback) {
+
+    return getLeaderboard()
+        .then(leaderboard => {
+            const resp = createResponse(200, leaderboard);
+            callback(null ,resp);
+        })
+        .catch(err => {
+            console.error(err);
+            const resp = createResponse(500, {message: err.message});
+            callback(null, resp);
         });
 };
 ```
