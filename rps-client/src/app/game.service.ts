@@ -1,4 +1,4 @@
-import { environment } from './../environments/environment';
+import { environment } from '../environments/environment';
 
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
@@ -16,7 +16,7 @@ export class GameService {
 
     constructor(private http: Http) { }
 
-    newGame(id: string): Promise<Game> {
+    newGame(id: string): Promise<void> {
 
         const body = JSON.stringify({
             gameId: id
@@ -25,7 +25,7 @@ export class GameService {
         return this.http
             .post(`${this.gameUrl}/games`, body, { headers: this.headers })
             .toPromise()
-            .then(result => this.getGame(id));
+            .then(() => undefined);
     }
 
     makeMove(game: Game, player: Player): Promise<Game> {
@@ -41,7 +41,7 @@ export class GameService {
         return this.http
             .post(url, payload, { headers: this.headers })
             .toPromise()
-            .then(response => this.getGame(game.gameId));
+            .then(response => response.json() as Game);
     }
 
     getGame(gameId: string): Promise<Game> {
