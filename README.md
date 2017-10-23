@@ -154,7 +154,7 @@ GetGameFunction:
 ```
 
 
-### Application code
+### Lambda Implementation
 
 Open the file `lambdas/get-game/index.js`. In it you will find an empty handler function. This lambda is the simplest one in this workshop as it is only querying the DynamoDB table `GameTable` for one record and returning it. The first thing that we want to do is to initialize our DynamoDB client. For this we will use the AWS SDK. The AWS SDK is always available in the lambda environment. We want to create a [DynamoDB document client](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html). To do this we will add the following code to our lambda:
 
@@ -242,7 +242,7 @@ To implement the update score function there a few things required:
 Three changes to the infrastructure in the `api.sam.yaml`:
 1. Attach a DynamoDB Stream to the `GameTable` so that we can listen to game events.
 2. Create a new DynamoDB `ScoreTable` in which we will update the score for game winners.
-3. Create a new `UpdateScore` function that listen to the events from the DynamoDB Stream from the `GameTable`, checks if there is a winner in the game, and if so adds 10 points to the winner in the `ScoreTable`.
+3. Create a new `UpdateScoreFunction` function that listen to the events from the DynamoDB Stream from the `GameTable`, checks if there is a winner in the game, and if so adds 10 points to the winner in the `ScoreTable`.
 
 And of course, we need to write the implementation of the `UpdateScore` function.
 
@@ -272,7 +272,7 @@ ScoreTable:
       WriteCapacityUnits: 1
 ```
 
-Last piece of the infrastructure updates in this part is to create a `UpdateScore` Lambda. It is similar to the Lambdas we have created previously, but there is one significant difference. All previous functions have been triggered by the a HTTP request through the API Gateway, but this on the other hand will be triggered by the events in a [DynamoDB Event Stream](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#dynamodb), namely the `GameTable` event stream that we just created. It should also be noted that the Lambda needs a policy that allows it to update the items in the `ScoreTable` so that the score can be recorded. 
+Last piece of the infrastructure updates in this part is to create a `UpdateScoreFunction` Lambda. It needs a policy that allows it to update the items in the `ScoreTable` so that the score can be recorded. 
 
 ```
 UpdateScoreFunction:
@@ -292,6 +292,10 @@ UpdateScoreFunction:
     Environment:
       Variables:
         SCORE_TABLE: !Ref ScoreTable
+```
+
+So far, the `UpdateScoreFunction` is similar to the Lambdas we have created previously, but there is one significant difference. All previous functions have been triggered by the a HTTP request through the API Gateway, but this on the other hand will be triggered by the events in a [DynamoDB Event Stream](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#dynamodb), namely the `GameTable` event stream that we just created. 
+```
     Events:
       GameEvent:
         Type: DynamoDB
@@ -301,9 +305,9 @@ UpdateScoreFunction:
 ```
 
 
-### Application
+### Lambda Implementation
 
-The `UpdateScore` function will be triggered whenever there is a change in the `GameTable` table since we are listen to all events from that table. Those events may be when a new game is created, when a player has made a move, a game is finished (either there is a winner or it is a draw) but there is also an event if a game has been deleted from the table. For this reason, we create a small utility functions that filters the events to see whether or not there is a winner. If there is no winner, we can simply ignore the event since there is no need to update the score. Also note that a single event may contain updates of multiple DynamoDB records.
+The `UpdateScoreFunction` will be triggered whenever there is a change in the `GameTable` table since we are listen to all events from that table. Those events may be when a new game is created, when a player has made a move, a game is finished (either there is a winner or it is a draw) but there is also an event if a game has been deleted from the table. For this reason, we create a small utility functions that filters the events to see whether or not there is a winner. If there is no winner, we can simply ignore the event since there is no need to update the score. Also note that a single event may contain updates of multiple DynamoDB records.
 
 ```
 function getWinners(event) {
@@ -350,7 +354,7 @@ function addScore(winner) {
 }
 ``` 
 
-The last thing is the glue code between the event handler, the `getWinners()` function and the `addScore()` function:
+The last thing is the glue code between the event handler, the `getWinners()` function and the `addScore()` function. Since the `UpdateScoreFunction` is not triggered by the API Gateway, we do not need return neither a HTTP status code, nor a response body. We simply just execute the `callback` function that was passed in as the function handler argument:
 
 ```
 exports.handler = function(event, context, callback) {
