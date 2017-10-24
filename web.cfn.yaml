@@ -44,6 +44,7 @@ Resources:
             - GET
             - HEAD
           DefaultTTL: 0
+          Compress: true
           ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: true
