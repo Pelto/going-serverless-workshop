@@ -11,7 +11,7 @@ region="eu-west-1"
 usage="usage: $script [-w|--webstack-name -r|--region -a | --api-stack-name -h|--help]
     -h| --help              this help
     -r| --region            AWS region (defaults to '$region')
-    -w| --web-stack-name        web stack name
+    -w| --web-stack-name    web stack name
     -a| --api-stack-name    API stack name"
 
 

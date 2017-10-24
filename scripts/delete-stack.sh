@@ -7,11 +7,13 @@ scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
 apiStackName=
+webStackName=
 
-usage="usage: $script [-h|-r|-a]
+usage="usage: $script [-h|-r|-a|-w]
     -h| --help              this help
     -r| --region            AWS region (defaults to '$region')
-    -a| --api-stack-name    API stack name"
+    -a| --api-stack-name    API stack name
+    -w| --web-stack-name    web stack name"
 
 
 #
@@ -34,6 +36,10 @@ do
         apiStackName="$2"
         shift
         ;;
+        -w|--web-stack-name)
+        webStackName="$2"
+        shift
+        ;;
         *)
         # Unknown option
         ;;
@@ -41,21 +47,29 @@ do
     shift # past argument or value
 done
 
-if [[ -z $apiStackName ]]; then
-    echo "API stack name must be given by either --api-stack-name or -a"
-    exit 1
+
+if [[ -n $apiStackName ]]; then
+
+    echo "Deleting the API stack $apiStackName"
+
+    aws cloudformation delete-stack --stack-name $apiStackName --region $region
 fi
 
-echo "Emptying bucket before terminating stack..."
 
-# We can only delete buckets that are empty, so before terminating the stack
-# we will manually remove the bucket and all objects in it.
-bucketName=(`aws cloudformation describe-stacks --stack-name $apiStackName \
-    --query "Stacks[0].Outputs[?OutputKey == 'WebBucketName'].OutputValue" \
-    --region $region \
-    --output text`)
-aws s3 rb s3://$bucketName --force
+if [[ -n $webStackName ]]; then
 
-echo "Deleting the stack..."
+    # We can only delete buckets that are empty, so before terminating the web stack
+    # we will manually remove the bucket and all objects in it.
+    bucketName=(`aws cloudformation describe-stacks --stack-name $webStackName \
+        --query "Stacks[0].Outputs[?OutputKey == 'WebBucketName'].OutputValue" \
+        --region $region \
+        --output text`)
 
-aws cloudformation delete-stack --stack-name $apiStackName --region $region
+    echo "Emptying WebBucket $bucketName before terminating stack..."
+
+    aws s3 rb s3://$bucketName --force
+
+    echo "Deleting the web stack $webStackName"
+
+    aws cloudformation delete-stack --stack-name $webStackName --region $region
+fi
