@@ -68,3 +68,18 @@ To get a jumpstart on a later chapter we will also deploy the web now. Since we 
 ```
 
 This script will provision a CloudFront distribution, set up one origin with path mapping `/api/*` towards our API Gateway while all other requests will be directed to our S3 bucket where we will upload our Web app.
+
+## Get Game
+
+To get started in with the first lambda, head to the instructions at in [lambdas/get-game/instructions.md](lambdas/get-game/instructions.md).
+
+## Make move
+
+
+## Update Score
+
+To get started with calculating the score we will create a lambda that works on a dynamodb stream from our gametable. To get started, follow the instructions at [lambdas/update-score/instructions.md](lambdas/update-score/instructions.md)
+
+## Leaderboard
+
+Once we have calculated our score we are going to have to build an API for the client. To continue with this, follow the instructions at [lambdas/get-leaderboard/instructions.md](lambdas/update-score/instructions.md)
