@@ -4,6 +4,13 @@ A workshop on how to implement a serverless application on AWS.
 
 ## Getting started
 
+First step is to create an S3 bucket. It will be used to store your Serverless infrastructure and resources as part of the deployment. You can use either the AWS Console or the AWS CLI to create the bucket:
+
+```
+./scripts/create-bucket.sh --bucket <bucket-name> 
+```
+
+
 It is possible to execute the application on localhost by executing the script located at
 
 ```
@@ -42,7 +49,7 @@ This scripts does everything and will also test your stack and give you the url 
 ```
 aws cloudformation package \
     --template-file api.sam.yaml \
-    --s3-bucket going-serverless \
+    --s3-bucket <bucket-name> \
     --output-template-file api.sam.output.yaml
 
 aws cloudformation deploy \

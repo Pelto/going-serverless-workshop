@@ -8,10 +8,12 @@ rootDir="$( cd "$scriptDir/.." && pwd )"
 region="eu-west-1"
 apiStackName=
 webStackName=
+codeBucket=
 
 usage="usage: $script [-h|-r|-a|-w]
     -h| --help              this help
     -r| --region            AWS region (defaults to '$region')
+    -b| --bucket            bucket name
     -a| --api-stack-name    API stack name
     -w| --web-stack-name    web stack name"
 
@@ -27,6 +29,10 @@ do
         -h|--help)
         echo "$usage"
         exit 0
+        ;;
+        -b|--bucket)
+        codeBucket="$2"
+        shift
         ;;
         -r|--region)
         region="$2"
@@ -48,14 +54,6 @@ do
 done
 
 
-if [[ -n $apiStackName ]]; then
-
-    echo "Deleting the API stack $apiStackName"
-
-    aws cloudformation delete-stack --stack-name $apiStackName --region $region
-fi
-
-
 if [[ -n $webStackName ]]; then
 
     # We can only delete buckets that are empty, so before terminating the web stack
@@ -72,4 +70,20 @@ if [[ -n $webStackName ]]; then
     echo "Deleting the web stack $webStackName"
 
     aws cloudformation delete-stack --stack-name $webStackName --region $region
+fi
+
+
+if [[ -n $apiStackName ]]; then
+
+    echo "Deleting the API stack $apiStackName"
+
+    aws cloudformation delete-stack --stack-name $apiStackName --region $region
+fi
+
+
+if [[ -n $codeBucket ]]; then
+
+    echo "Deleting code bucket $codeBucket"
+
+    aws s3 rb s3://$codeBucket --force
 fi
