@@ -10,10 +10,10 @@ clientDir="$rootDir/rps-client"
 clientEnvDir="$clientDir/src/environments"
 region="eu-west-1"
 
-usage="usage: $script [-s|--stack-name -r|--region -h|--help]
-    -h| --help          this help
-    -r| --region        AWS region (defaults to '$region')
-    -s| --stack-name    stack name"
+usage="usage: $script [-a|--api-stack-name -r|--region -h|--help]
+    -h| --help              this help
+    -r| --region            AWS region (defaults to '$region')
+    -a| --api-stack-name    API stack name"
 
 #
 # For Bash parsing explanation, please see https://stackoverflow.com/a/14203146
@@ -31,8 +31,8 @@ do
         region="$2"
         shift
         ;;
-        -s|--stack-name)
-        stackName="$2"
+        -a|--api-stack-name)
+        apiStackName="$2"
         shift
         ;;
         *)
@@ -46,19 +46,22 @@ done
 cd "$clientDir"
 npm install
 
+if [[ -z $apiStackName ]]; then
+    echo "API stack name must be provided by either --api-stack-name or -a"
+    exit 1
+fi;
 
-if [[ -n $stackName ]]; then
-    # Get the URL to the backend environment and update the application settings.
-    apiId=(`aws cloudformation describe-stack-resources --stack-name $stackName \
-        --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
-        --region $region \
-        --output text`)
-    apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
+# Get the URL to the backend environment and update the application settings.
+apiId=(`aws cloudformation describe-stack-resources --stack-name $apiStackName \
+    --query "StackResources[?ResourceType == 'AWS::ApiGateway::RestApi'].PhysicalResourceId" \
+    --region $region \
+    --output text`)
+apiUrl="https://$apiId.execute-api.$region.amazonaws.com/Prod"
 
-    mkdir -p "$clientEnvDir"
-    echo "export const environment = { production: false, apiUrl: '$apiUrl' };" > src/environments/environment.ts
+mkdir -p "$clientEnvDir"
+echo "export const environment = { production: false, apiUrl: '$apiUrl' };" > src/environments/environment.ts
 
-    echo "Using backend deployed at $apiUrl"
-fi
+echo "Using backend deployed at $apiUrl"
+
 
 ./node_modules/.bin/ng serve --open
