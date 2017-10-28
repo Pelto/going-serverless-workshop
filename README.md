@@ -1,38 +1,29 @@
 # Going Serverless - workshop
 A workshop on how to implement a serverless application on AWS.
 
+# Requirements
 
-## Getting started
+Make sure that the followig software is installed and configured:
 
-First step is to create an S3 bucket. It will be used to store your Serverless infrastructure and resources as part of the deployment. You can use either the AWS Console or the AWS CLI to create the bucket:
-
-```
-./scripts/create-bucket.sh --bucket <bucket-name> 
-```
-
-
-It is possible to execute the application on localhost by executing the script located at
-
-```
-./scripts/run-localhost.sh --api-stack-name <api-stack-name>
-```
-
-
-### 1. Deploy the backend
-
-```
-./scripts/deploy-api.sh --api-stack-name <api-stack-name> --bucket <bucket-name>
-```
-
-Take note of the URL that the script returns. This will be needed in next step.
-
-
-### 2. Deploy the web client
-
-Deploy the stack by `scripts/deploy-client.sh --api-stack-name <api-stack-name>`
-
+* A posix compatible terminal
+* node.js
+* [AWS CLI](https://aws.amazon.com/cli/)
 
 # Instructions
+
+## Configuring your Amazon Account
+
+We will work a lot with Cloudformation in this lab, as the templates that you will be deploying will create and update [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) resources you will need to make sure that you have a user that has IAM access rights.
+
+The scripts that we will be using need to be able to use the [AWS CLI](https://aws.amazon.com/cli/), so please make sure you have it installed and configured. If you are running on mac you can install in with homebrew (`brew install awscli`)
+
+Once the [AWS CLI](https://aws.amazon.com/cli/) is installed the next step is to make sure the [AWS CLI](https://aws.amazon.com/cli/) is configured. To configure the CLI have a look at the [AWS documentation](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
+
+When we have our user the second step is to create an S3 bucket. It will be used to store your Serverless infrastructure and resources as part of the deployment. You can use either the AWS Console or the AWS CLI to create the bucket:
+
+```
+./scripts/create-bucket.sh --bucket <bucket-name>
+```
 
 ## Deploy and test the initial stack
 
