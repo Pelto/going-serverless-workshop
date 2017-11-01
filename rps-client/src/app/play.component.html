@@ -1,23 +1,36 @@
+<br/><br/><br/>
+
 <div>
+    <h2>Which Game?</h2>
     <form>
         <div class="form-group">
-            <label class="form-control-label" for="formGroupGameIdInput">Game id</label>
-            <input type="text" class="form-control" id="formGroupGameIdInput" placeholder="id" #gameIdInput>
+            <label class="form-control-label" for="formGroupGameIdInput">Game id</label><input type="text" class="form-control" id="formGroupGameIdInput" placeholder="id" #gameIdInput>
         </div>
         <button class="btn btn-primary" (click)="createNewGame(gameIdInput.value)">Create Game</button>
         <button class="btn btn-success" (click)="getGame(gameIdInput.value)">Get Game</button>
     </form>
 </div>
 
-<div *ngIf="game">
 
+<div *ngIf="game">
+    <br/><br/><br/>
+
+    <h2>Game State</h2>
     Game State: {{game.state}}
 
     <div *ngIf="game.winner">
         Winner: {{game.winner}}
+        <img alt="Medal" src="assets/medal.png" />
     </div>
+</div>
+
+
+<div *ngIf="game">
+    <br/><br/><br/>
+
 
     <table class="table" *ngIf="game.players">
+        <h2>Moves Made</h2>
         <tr>
             <th>Player</th>
             <th>Move</th>
@@ -30,6 +43,10 @@
     </table>
 
     <form *ngIf="canMakeMove()">
+        <br/><br/><br/>
+
+        <h2>Make Move</h2>
+
         <div class="form-group">
             <label class="form-control-label" for="formGroupPlayerInput">Player</label>
             <input type="text" class="form-control" id="formGroupPlayerInput" placeHolder="player" #player>
