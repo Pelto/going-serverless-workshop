@@ -26,21 +26,6 @@
 
 
 <div *ngIf="game">
-    <br/><br/><br/>
-
-
-    <table class="table" *ngIf="game.players">
-        <h2>Moves Made</h2>
-        <tr>
-            <th>Player</th>
-            <th>Move</th>
-        </tr>
-
-        <tr *ngFor="let player of game.players">
-            <td>{{player.playerId}}</td>
-            <td>{{player.move}}</td>
-        </tr>
-    </table>
 
     <form *ngIf="canMakeMove()">
         <br/><br/><br/>
@@ -84,4 +69,20 @@
 
         <button class="btn btn-primary" (click)="makeMove(player.value)">Make Move</button>
     </form>
+
+    <br/><br/><br/>
+
+
+    <table class="table" *ngIf="game.players">
+        <h2>Moves Made</h2>
+        <tr>
+            <th>Player</th>
+            <th>Move</th>
+        </tr>
+
+        <tr *ngFor="let player of game.players">
+            <td>{{player.playerId}}</td>
+            <td>{{player.move}}</td>
+        </tr>
+    </table>
 </div>
