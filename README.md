@@ -65,7 +65,13 @@ To get a jumpstart on a later chapter we will also deploy the web now. Since we 
   --web-stack-name <web-stack-name>
 ```
 
-This script will provision a CloudFront distribution, set up one origin with path mapping `/api/*` towards our API Gateway while all other requests will be directed to our S3 bucket where we will upload our Web app.
+This script will provision a CloudFront distribution, set up one origin with path mapping `/api/*` towards our API Gateway while all other requests will be directed to our S3 bucket where we will upload our Web app. When finished, you can visit the web site if you copy / paste the URL presented in the terminal to a browser. 
+
+```
+#################################################################
+Deployed CDN to https://[cloud front distribution].cloudfront.net
+#################################################################
+```
 
 ## Get Game
 
