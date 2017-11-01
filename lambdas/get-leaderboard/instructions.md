@@ -39,6 +39,12 @@ GetLeaderboardFunction:
 With the `GetLeaderboardFunction`, there is no request body, query params nor path params to take into consideration. In other words, we can [scan](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#scan-property) the `ScoreTable` directly:
 
 ```
+const AWS = require('aws-sdk');
+const documentClient = new AWS.DynamoDB.DocumentClient({
+    apiVersion: '2012-08-10',
+    region: process.env.AWS_REGION
+});
+
 function getLeaderboard() {
     const params = {
         TableName: process.env.SCORE_TABLE,
