@@ -12,11 +12,11 @@ Let's start with adding a new function. Start with adding the following to the t
 ```
   GetGameFunction:
     Type: AWS::Serverless::Function
-      Properties:
-        Description: Gets game status
-        Handler: index.handler
-        Runtime: nodejs6.10
-        CodeUri: lambdas/get-game/
+    Properties:
+      Description: Gets game status
+      Handler: index.handler
+      Runtime: nodejs6.10
+      CodeUri: lambdas/get-game/
 ```
 
 This will give you a basic lambda function in your template. However, as of now we don't have a way of interacting with this function. The first thing that we want to do is to connect it to our API. We do this by connecting an event to it and adding it under our Amazon API Gateway as a `GET` request for the `/api/games/{gameId}` endpoint. To add a HTTP mapping to the `GetGameFunction` add the following to it's properties:
@@ -38,15 +38,14 @@ When we implement the function we will also need a reference to our DynamoDB tab
       GAME_TABLE: !Ref GameTable
 ```
 
-This will inject the name of the table as an environment variable and accessible from node in `process.env.GAME_TABLE`. For the policy add the following statement:
+This will inject the name of the table as an environment variable and accessible from node in `process.env.GAME_TABLE`. However, this only give us the name of the table. We also need to give the lambda function read access for it. To give it access, we will add the following under `Properties` in the `GetGameFunction`:
 
 ```
   Policies:
     - Version: '2012-10-17'
       Statement:
         - Effect: Allow
-          Action:
-            - dynamodb:GetItem
+          Action: 'dynamodb:GetItem'
           Resource: !GetAtt GameTable.Arn
 ```
 
@@ -70,8 +69,7 @@ GetGameFunction:
       - Version: '2012-10-17'
         Statement:
           - Effect: Allow
-            Action:
-              - dynamodb:GetItem
+            Action: 'dynamodb:GetItem'
             Resource: !GetAtt GameTable.Arn
     Events:
       GetGame:
@@ -127,38 +125,50 @@ To return a response we will use the `callback` in the handler. The callback exp
 * `statusCode` that contains a `number`
 * `body` that contains a string of the JSON that we want to send
 
-Based on this we can add the following step to our promise:
+Based on this we can create the following function that maps a game to a response:
 
 ```
-return getGame(gameId)
-    .then(data => {
-        let response = {};
-    
-        if (data.Item) {
-            response.statusCode = 200;
-            response.body = JSON.stringify(data.Item);
-        } else {
-            response.statusCode = 404;
-            response.body = "";
-        }
-    
-        return callback(null, response);
-    })
+function toResponse(data) {
+    let response = {};
+
+    if (data.Item) {
+        response.statusCode = 200;
+        response.body = JSON.stringify(data.Item);
+    } else {
+        response.statusCode = 404;
+        response.body = "";
+    }
+
+    return response;
+}
 ```
 
 As a last step we also want to handle any errors from DynamoDB. So we create a simple error handler. Errors that we want to present must be sent as a return value to the `callback`. Typically we want to avoid giving the raw server errors to our clients, but to make the this a bit more testable we are composing the error into a readable message:
 
 ```
-    .catch(err => {
+function returnError(callback) {
+    return function(err) {
         console.error(err);
-        return callback(null, {
+        callback(null, {
             statusCode: 500,
             body: JSON.stringify({
                 message: err.message
             })
         });
-    })
+    };
+}
 ```
+
+Now we can combine these functions in our handler to the following:
+
+```
+exports.handler = function(event, context, callback) {
+    const gameId = extractGameId(event);
+    return getGame(gameId)
+        .then(toResponse)
+        .then(response => callback(null, response))
+        .catch(returnError(callback));
+}
 
 Now you should have a fully implemented lambda. A finished version of the lambda is available on [GitHub](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/get-game/index.js)
 
