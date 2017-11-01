@@ -46,7 +46,9 @@ UpdateScoreFunction:
     Runtime: nodejs6.10
     CodeUri: lambdas/update-score/
 ```
+
 It needs a policy that allows it to update the items in the `ScoreTable` so that the score can be recorded:
+
 ```
     Policies:
       - Version: '2012-10-17'
@@ -56,7 +58,9 @@ It needs a policy that allows it to update the items in the `ScoreTable` so that
               - dynamodb:UpdateItem
             Resource: !GetAtt ScoreTable.Arn
 ```
+
 It also needs a refence to the `ScoreTable` so that we can pass the table name to the DynamoDB DocumentClient later when we implement the Lambda function logic. 
+
 ```
     Environment:
       Variables:
