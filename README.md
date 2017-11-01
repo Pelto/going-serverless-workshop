@@ -1,17 +1,18 @@
 # Going Serverless - workshop
 A workshop on how to implement a serverless application on AWS.
 
-# Requirements
 
+## Prerequisites
+
+### Tools
 Make sure that the followig software is installed and configured:
 
 * A posix compatible terminal
 * node.js
 * [AWS CLI](https://aws.amazon.com/cli/)
 
-# Instructions
 
-## Configuring your Amazon Account
+### Configuring your Amazon Account
 
 We will work a lot with Cloudformation in this lab, as the templates that you will be deploying will create and update [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) resources you will need to make sure that you have a user that has IAM access rights.
 
@@ -25,9 +26,11 @@ When we have our user the second step is to create an S3 bucket. It will be used
 ./scripts/create-bucket.sh --bucket <bucket-name>
 ```
 
-## Deploy and test the initial stack
+## Deployments
 
-To get started with the workshop the first thing that we'll do is to deploy the application. To deploy a SAM template there are two necessary steps. The stack has to be packaged, i.e. we will upload the code to an Amazon S3 bucket. This will be done with the AWS command `aws cloudformation package`. Once the stack has been packaged you will notice a new file named  `api.sam.output.yaml`. That is the file that we will later deploy. This will done with the AWS command `aws cloudformation deploy`.
+### API Stack
+
+Now that we have the tool configuration in place, it is time to start the workshop. The first thing that we'll do is to deploy the application. To deploy a SAM template there are two necessary steps. The stack has to be packaged, i.e. we will upload the code to an Amazon S3 bucket. This will be done with the AWS command [aws cloudformation package](http://docs.aws.amazon.com/cli/latest/reference/cloudformation/package.html). Once the stack has been packaged you will notice a new file named  `api.sam.output.yaml`. That is the file that we will later deploy. This will done with the AWS command [aws cloudformation deploy](http://docs.aws.amazon.com/cli/latest/reference/cloudformation/deploy/index.html).
 
 To simplify the above process we have combined those two commands into one script:
 
@@ -57,7 +60,10 @@ When you deployed the stack you also might noticed the HTTP commands that was do
 
 For more reference on how to test the stack you could have a look at [Rock Paper Scissors API documentation](docs/rest-api.md).
 
-To get a jumpstart on a later chapter we will also deploy the web now. Since we want to avoid messing with CORS in this lab we will put both the web and the API behind a cloudfront distribution. A cloudfront distribution can take anywhere between 10 to 30 minutes to provision, so we might as well do it now.
+
+### Web Stack
+
+We will also deploy the static web application now. Since we want to avoid messing with CORS in this lab we will put both the web and the API behind a CloudFront distribution, i.e. CDN hosted by AWS. The CloudFront distribution can take anywhere between 10 to 30 minutes to provision, so we might as well do it now:
 
 ```
 ./scripts/deploy-web.sh \
@@ -65,7 +71,7 @@ To get a jumpstart on a later chapter we will also deploy the web now. Since we 
   --web-stack-name <web-stack-name>
 ```
 
-This script will provision a CloudFront distribution, set up one origin with path mapping `/api/*` towards our API Gateway while all other requests will be directed to our S3 bucket where we will upload our Web app. When finished, you can visit the web site if you copy / paste the URL presented in the terminal to a browser. 
+This script will provision a CloudFront distribution, set up one origin with path mapping `/api/*` towards our API Gateway while all other requests will be directed to our S3 bucket where we will upload our Web app. When finished, you can visit the web site if you copy / paste the URL presented in the terminal to a browser:
 
 ```
 #################################################################
@@ -73,17 +79,39 @@ Deployed CDN to https://[cloud front distribution].cloudfront.net
 #################################################################
 ```
 
-## Get Game
-
-To get started in with the first lambda, head to the instructions at in [lambdas/get-game/instructions.md](lambdas/get-game/instructions.md).
-
-## Make move
 
 
-## Update Score
+## Implementation Instructions 
 
-To get started with calculating the score we will create a lambda that works on a dynamodb stream from our gametable. To get started, follow the instructions at [lambdas/update-score/instructions.md](lambdas/update-score/instructions.md)
+### Documentation
 
-## Leaderboard
+| Document                                              | Description                           |
+| ----------------------------------------------------- | ------------------------------------- | 
+| [docs/rest-api.md](docs/rest-api.md)                  | Rock Paper Scissors REST API          |
+| [docs/dynamodb-tables.md](docs/dynamodb-tables.md)    | Rock Paper Scissors DynamoDB schema   |
+| [docs/references.md](docs/references.md)              | Links to the AWS developer guides     |
+
+
+### Create Game
+
+To get started in with the first lambda, head to the instructions at in [lambdas/create-game/instructions.md](lambdas/create-game/instructions.md).
+
+
+### Get Game
+
+After creating a game, we need some way of querying its current state. For this reason, follow the steps in [lambdas/get-game/instructions.md](lambdas/get-game/instructions.md).
+
+
+### Make Move
+
+To take part in a game, the players need to make a move. Head to the instructions at in [lambdas/make-move/instructions.md](lambdas/make-move/instructions.md) to see what you need to do.
+
+
+### Update Score
+
+To get started with calculating the score we will create a lambda that works on a DynamoDB stream from our `GameTable`. To get started, follow the instructions at [lambdas/update-score/instructions.md](lambdas/update-score/instructions.md)
+
+
+### Get Leaderboard
 
 Once we have calculated our score we are going to have to build an API for the client. To continue with this, follow the instructions at [lambdas/get-leaderboard/instructions.md](lambdas/update-score/instructions.md)
