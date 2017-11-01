@@ -2,7 +2,6 @@
 
 Making a move is the most complex Lambda function in terms of application logic, but apart from that it is not very different from the other. 
 
-
 ### Infrastructure 
 
 A new `MakeMoveFunction` needs to be added to the existing infrastructure in the `api.sam.yml` file.
@@ -58,6 +57,18 @@ The request payload is sent in the request body, e.g.
     "move": "ROCK"
 }
 ```
+
+The first thing that we want to do is to import the AWS sdk for working with DynamoDB.
+
+```
+const AWS = require('aws-sdk');
+const documentClient = new AWS.DynamoDB.DocumentClient({
+    apiVersion: '2012-08-10',
+    region: process.env.AWS_REGION
+});
+```
+
+
 The request body is forwarded to the Lambda function through the [API Gateway Proxy integration](http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-input-format), to be more precise it is available as a JSON string in the `event.body` attribute.
 
 ```
