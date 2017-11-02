@@ -114,7 +114,8 @@ function getGame(gameId) {
     
     return documentClient
         .get(params)
-        .promise(data => data.Item)
+        .promise()
+        .then(data => data.Item)
 }
 ```
 
