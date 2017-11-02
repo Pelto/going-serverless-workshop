@@ -23,14 +23,22 @@ function saveGame(gameId) {
     };
     return documentClient
         .put(params)
-        .promise();
+        .promise(() => params.Item);
 }
 
 
-function createResponse(httpStatus) {
-    return {
-        statusCode: httpStatus
-    };
+function toResponse(data) {
+    let response = {};
+
+    if (data) {
+        response.statusCode = 200;
+        response.body = JSON.stringify(data);
+    } else {
+        response.statusCode = 404;
+        response.body = "";
+    }
+
+    return response;
 }
 
 
@@ -39,10 +47,8 @@ exports.handler = function(event, context, callback) {
     const gameId = getGameId(event);
 
     return saveGame(gameId)
-        .then(() => {
-            const resp = createResponse(200);
-            callback(null, resp);
-        })
+        .then(toResponse)
+        .then(response => callback(null, response))
         .catch(err => {
             console.error(err);
             const resp = createResponse(500, {message: err.message});
