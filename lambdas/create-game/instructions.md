@@ -143,7 +143,8 @@ function saveGame(gameId) {
     };
     return documentClient
         .put(params)
-        .promise();
+        .promise()
+        .then(() => params.Item);
 }
 ```
 

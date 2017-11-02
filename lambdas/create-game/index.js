@@ -17,7 +17,8 @@ function saveGame(gameId) {
     };
     return documentClient
         .put(params)
-        .promise(data => data.Item);
+        .promise()
+        .then(() => params.Item);
 }
 
 function getGameId(event) {
@@ -33,6 +34,7 @@ function createResponse(statusCode, body) {
 
 function successfulResponse(callback) {
     return game => {
+        console.info(game);
         callback(null, createResponse(200, game));
     }
 }
