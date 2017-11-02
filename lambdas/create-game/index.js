@@ -6,12 +6,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
-
-function getGameId(event) {
-    return JSON.parse(event.body).gameId;
-}
-
-
 function saveGame(gameId) {
     const params = {
         TableName : process.env.GAME_TABLE,
@@ -23,35 +17,38 @@ function saveGame(gameId) {
     };
     return documentClient
         .put(params)
-        .promise(() => params.Item);
+        .promise(data => data.Item);
 }
 
+function getGameId(event) {
+    return JSON.parse(event.body).gameId;
+}
 
-function toResponse(data) {
-    let response = {};
-
-    if (data) {
-        response.statusCode = 200;
-        response.body = JSON.stringify(data);
-    } else {
-        response.statusCode = 404;
-        response.body = "";
+function createResponse(statusCode, body) {
+    return {
+        statusCode: statusCode,
+        body: JSON.stringify(body)
     }
-
-    return response;
 }
 
+function successfulResponse(callback) {
+    return game => {
+        callback(null, createResponse(200, game));
+    }
+}
+
+function failedResponse(callback) {
+    return err => {
+        console.error(err);
+        return callback(null, createResponse(500, { message: err.message }));
+    }
+}
 
 exports.handler = function(event, context, callback) {
 
     const gameId = getGameId(event);
 
     return saveGame(gameId)
-        .then(toResponse)
-        .then(response => callback(null, response))
-        .catch(err => {
-            console.error(err);
-            const resp = createResponse(500, {message: err.message});
-            callback(null, resp);
-        });
+        .then(successfullResponse(callback))
+        .catch(failedResponse(callback));
 };
