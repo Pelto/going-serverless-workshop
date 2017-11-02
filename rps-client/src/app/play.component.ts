@@ -28,6 +28,7 @@ export class PlayComponent {
         }
 
         this.gameService.newGame(gameId)
+            .then(game => this.game = game)
             .catch(error => this.error = error);
     }
 

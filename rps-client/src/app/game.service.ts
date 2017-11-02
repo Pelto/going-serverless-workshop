@@ -16,7 +16,7 @@ export class GameService {
 
     constructor(private http: Http) { }
 
-    newGame(id: string): Promise<void> {
+    newGame(id: string): Promise<Game> {
 
         const body = JSON.stringify({
             gameId: id
@@ -25,7 +25,7 @@ export class GameService {
         return this.http
             .post(`${this.gameUrl}/games`, body, { headers: this.headers })
             .toPromise()
-            .then(() => undefined);
+            .then(response => response.json() as Game);
     }
 
     makeMove(game: Game, player: Player): Promise<Game> {
