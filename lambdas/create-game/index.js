@@ -49,6 +49,6 @@ exports.handler = function(event, context, callback) {
     const gameId = getGameId(event);
 
     return saveGame(gameId)
-        .then(successfullResponse(callback))
+        .then(successfulResponse(callback))
         .catch(failedResponse(callback));
 };
