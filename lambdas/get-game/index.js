@@ -21,15 +21,15 @@ function getGame(gameId) {
     
     return documentClient
         .get(params)
-        .promise()
+        .promise(data => data.Item)
 }
 
 function toResponse(data) {
     let response = {};
 
-    if (data.Item) {
+    if (data) {
         response.statusCode = 200;
-        response.body = JSON.stringify(data.Item);
+        response.body = JSON.stringify(data);
     } else {
         response.statusCode = 404;
         response.body = "";
@@ -56,4 +56,4 @@ exports.handler = function(event, context, callback) {
         .then(toResponse)
         .then(response => callback(null, response))
         .catch(returnError(callback));
-}
+};

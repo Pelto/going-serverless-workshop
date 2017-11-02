@@ -38,6 +38,13 @@ Curl command:
 ```
 curl --data '{"gameId": "42"}' [server]/api/games
 ```
+```
+HTTP/1.1 200 OK
+{
+    "gameId": "42",
+    "state": "CREATED",
+}
+```
 
 
 ## Get Game
@@ -62,6 +69,7 @@ HTTP/1.1 200 OK
             "move": "PAPER",
         }
     ],
+    "gameId": "42",
     "state": "WINNER",
     "winner": "xyz",
     "expirationTime": 1506195639

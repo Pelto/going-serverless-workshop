@@ -114,7 +114,7 @@ function getGame(gameId) {
     
     return documentClient
         .get(params)
-        .promise()
+        .promise(data => data.Item)
 }
 ```
 
@@ -131,9 +131,9 @@ Based on this we can create the following function that maps a game to a respons
 function toResponse(data) {
     let response = {};
 
-    if (data.Item) {
+    if (data) {
         response.statusCode = 200;
-        response.body = JSON.stringify(data.Item);
+        response.body = JSON.stringify(data);
     } else {
         response.statusCode = 404;
         response.body = "";
