@@ -6,6 +6,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.AWS_REGION
 });
 
+
 function saveGame(gameId) {
     const params = {
         TableName : process.env.GAME_TABLE,
@@ -21,9 +22,11 @@ function saveGame(gameId) {
         .then(() => params.Item);
 }
 
+
 function getGameId(event) {
     return JSON.parse(event.body).gameId;
 }
+
 
 function createResponse(statusCode, body) {
     return {
@@ -32,6 +35,7 @@ function createResponse(statusCode, body) {
     }
 }
 
+
 function successfulResponse(callback) {
     return game => {
         console.info(game);
@@ -39,12 +43,14 @@ function successfulResponse(callback) {
     }
 }
 
+
 function failedResponse(callback) {
     return err => {
         console.error(err);
         return callback(null, createResponse(500, { message: err.message }));
     }
 }
+
 
 exports.handler = function(event, context, callback) {
 
