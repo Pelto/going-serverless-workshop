@@ -170,6 +170,8 @@ exports.handler = function(event, context, callback) {
         .then(response => callback(null, response))
         .catch(returnError(callback));
 }
+```
+
 
 Now you should have a fully implemented lambda. A finished version of the lambda is available on [GitHub](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/get-game/index.js)
 
