@@ -144,4 +144,4 @@ exports.handler = function(event, context, callback) {
 };
 ```
 
-One implementation of the update score Lambda is available on [GitHub](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/get-leaderboard/index.js)
+You can view the finished lambda function at the [Github repository](https://github.com/jayway/going-serverless-workshop/blob/solution/lambdas/update-score/index.js).

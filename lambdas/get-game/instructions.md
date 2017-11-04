@@ -230,3 +230,5 @@ function saveGame(gameId) {
         .promise();
 }
 ```
+
+You can view the finished lambda function at the [Github repository](https://github.com/jayway/going-serverless-workshop/blob/solution/lambdas/get-game/index.js).
