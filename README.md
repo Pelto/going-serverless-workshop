@@ -6,7 +6,13 @@ A workshop on how to implement a serverless application on AWS. In this workshop
 * Developing [AWS Lamda](https://aws.amazon.com/lambda/details/)
 * Working with [Amazon DynamoDB](https://aws.amazon.com/dynamodb/)
 
+
+## Goal
+
+To implement a Rock Paper Scissors game with the following resources:
+
 ![Architecture](docs/architecture.png)
+
 
 ## Prerequisites
 
@@ -19,9 +25,9 @@ Make sure that the followig software is installed and configured:
 * [AWS CLI](https://aws.amazon.com/cli/)
 
 
-### Configuring your Amazon Account
+### Configuring your AWS Account
 
-We will work a lot with Cloudformation in this lab, as the templates that you will be deploying will create and update [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) resources you will need to make sure that you have a user that has IAM access rights.
+We will work a lot with CloudFormation in this lab, as the templates that you will be deploying will create and update [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) resources you will need to make sure that you have a user that has IAM access rights.
 
 The scripts that we will be using need to be able to use the [AWS CLI](https://aws.amazon.com/cli/), so please make sure you have it installed and configured. If you are running on mac you can install in with homebrew (`brew install awscli`)
 
@@ -86,6 +92,20 @@ Deployed CDN to https://[cloud front distribution].cloudfront.net
 #################################################################
 ```
 
+
+## Game Rules
+
+- Each game needs to be created with a unique `gameId`. As a result, the game state will be `CREATED`.
+- A player can make a move by specifying: 
+    - A `playerId`
+    - A `gameId`
+    - A `move` (i.e. `ROCK`, `PAPER` or `SCISSORS`)
+- After the first move, the game state will be `FIRST_MOVE`.
+- The game is finished after two moves have been made. Either the game state is `WINNER` or `DRAW`.
+- The winner of a game will receive a score of `10`. There is no points in case the game was a draw.
+- A game only consists of one round. If you would like to play the same opponents again, you need to create a new game.
+- The leaderboard will present the accumulated score of all players that have a a score.
+ 
 
 
 ## Implementation Instructions 

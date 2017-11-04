@@ -1,21 +1,5 @@
 # REST API
 
-## Constants
-
-| Moves         |
-|---------------|
-| `ROCK`        |
-| `PAPER`       |
-| `SCISSORS`    |
-
-
-| Game State    | Description                                       |
-|---------------|-------------------------------------------------- |
-| `CREATED`     | Game has been created, no moves yet               |
-| `FIRST_MOVE`  | The first player has made a move                  |
-| `WINNER`      | Both players have played, there is a winner       |
-| `DRAW`        | Both players have played and made the same move   |
-
 
 ## Create Game
 
@@ -160,3 +144,20 @@ curl -f -i --data '{"gameId":"42","playerId":"rocky","move":"ROCK"}' https://yz1
 curl -f -i --data '{"gameId":"42","playerId":"freddy","move":"SCISSORS"}' https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/moves
 curl -f -i https://yz19149qcd.execute-api.eu-west-1.amazonaws.com/Prod/api/leaderboard
 ```
+
+
+## Constants
+
+| Moves         |
+|---------------|
+| `ROCK`        |
+| `PAPER`       |
+| `SCISSORS`    |
+
+
+| Game State    | Description                                       |
+|---------------|-------------------------------------------------- |
+| `CREATED`     | Game has been created, no moves yet               |
+| `FIRST_MOVE`  | The first player has made a move                  |
+| `WINNER`      | Both players have played, there is a winner       |
+| `DRAW`        | Both players have played and made the same move   |
