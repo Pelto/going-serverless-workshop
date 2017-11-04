@@ -198,3 +198,5 @@ function getLeaderboard() {
 ```
 
 Redeploy and check the leaderboard. Is the result not what you expected? It is because all scores that have been added so far did not have the `gameTitle` attribute. Check the `ScoreTable` in DynamoDB using the AWS Console. Try adding the `gameTitle` attribute with the key `Rock Paper Scissors` to all score manually and reload the leaderboard.
+
+You can view the finished lambda function at the [Github repository](https://github.com/jayway/going-serverless-workshop/blob/solution/lambdas/get-leaderboard/index.js).

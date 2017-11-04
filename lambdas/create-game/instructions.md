@@ -62,7 +62,7 @@ Once we have our DynamoDB setup we also need to add an API Gateway that can hand
             Path: /api/games
 ```
 
-When you have gotten this far you should have a function the following in your resources:
+When you have gotten this far you should have the following resources in your template:
 
 ```
   CreateGameFunction:
@@ -212,7 +212,7 @@ exports.handler = function(event, context, callback) {
 };
 ```
 
-You can view the finished lambda function at the [Github repository](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/create-game/index.js).
+You can view the finished lambda function at the [Github repository](https://github.com/jayway/going-serverless-workshop/blob/solution/lambdas/create-game/index.js).
 
 ## Bonus chapter
 

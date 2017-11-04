@@ -207,4 +207,4 @@ exports.handler = function (event, context, callback) {
 };
 ```
 
-See [GitHub](https://github.com/jayway/going-serverless-workshop/blob/master/lambdas/make-move/index.js) for a reference implementation.
+You can view the finished lambda function at the [Github repository](https://github.com/jayway/going-serverless-workshop/blob/solution/lambdas/make-move/index.js).
