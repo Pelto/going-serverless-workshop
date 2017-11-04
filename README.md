@@ -1,10 +1,17 @@
 # Going Serverless - workshop
-A workshop on how to implement a serverless application on AWS.
 
+A workshop on how to implement a serverless application on AWS. In this workshop you will learn how to implement the following:
+
+* Managing infrastructure as code with [AWS Cloudformation](https://aws.amazon.com/cloudformation/) together with [AWS SAM](https://github.com/awslabs/serverless-application-model)
+* Developing [AWS Lamda](https://aws.amazon.com/lambda/details/)
+* Working with [Amazon DynamoDB](https://aws.amazon.com/dynamodb/)
+
+![Architecture](docs/architecture.png)
 
 ## Prerequisites
 
 ### Tools
+
 Make sure that the followig software is installed and configured:
 
 * A posix compatible terminal
