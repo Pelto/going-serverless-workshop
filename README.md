@@ -108,9 +108,7 @@ Deployed CDN to https://[cloud front distribution].cloudfront.net
  
 
 
-## Implementation Instructions 
-
-### Documentation
+## Lab Instructions
 
 | Document                                              | Description                           |
 | ----------------------------------------------------- | ------------------------------------- | 
