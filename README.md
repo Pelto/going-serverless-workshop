@@ -142,3 +142,13 @@ To get started with calculating the score we will create a lambda that works on 
 ### Get Leaderboard
 
 Once we have calculated our score we are going to have to build an API for the client. To continue with this, follow the instructions at [lambdas/get-leaderboard/instructions.md](lambdas/update-score/instructions.md)
+
+
+
+## Clean up
+
+If you would like to delete all your AWS resources after you have finished the workshop, you can use the `delete-stack.sh` script, e.g.
+
+```
+./scripts/delete-stack.sh --web-stack-name <web-stack-name> --api-stack-name <api-stack-name> --bucket <bucket-name>
+```
