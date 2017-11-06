@@ -110,6 +110,8 @@ Deployed CDN to https://[cloud front distribution].cloudfront.net
 
 ## Lab Instructions
 
+When following the instructions you are going to implement the API for the rock paper scissors game. Below you can see reference documentation for the api and dynamodb structures that we will be using.
+
 | Document                                              | Description                           |
 | ----------------------------------------------------- | ------------------------------------- | 
 | [docs/rest-api.md](docs/rest-api.md)                  | Rock Paper Scissors REST API          |
