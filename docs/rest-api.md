@@ -26,7 +26,7 @@ curl --data '{"gameId": "42"}' [server]/api/games
 HTTP/1.1 200 OK
 {
     "gameId": "42",
-    "state": "CREATED",
+    "state": "CREATED"
 }
 ```
 
@@ -45,12 +45,12 @@ HTTP/1.1 200 OK
 {
     "players": [
         {
-            "playerId": "abc"
-            "move": "ROCK",
+            "playerId": "abc",
+            "move": "ROCK"
         },
         {
-            "playerId": "xyz"
-            "move": "PAPER",
+            "playerId": "xyz",
+            "move": "PAPER"
         }
     ],
     "gameId": "42",
@@ -86,13 +86,13 @@ HTTP/1.1 200 OK
 {
     "players": [
         {
-            "playerId": "pqr"
-            "move": "ROCK",
+            "playerId": "pqr",
+            "move": "ROCK"
         }
     ],
     "gameId": "3",
-    "state": "FIRST_MOVE"
-    "expirationTime": 1506197262,
+    "state": "FIRST_MOVE",
+    "expirationTime": 1506197262
 }
 ```
 
@@ -115,16 +115,16 @@ Response
 HTTP/1.1 200 OK
 [
     {
-        "playerId": "abc"
-        "score": 10,
+        "playerId": "abc",
+        "score": 10
     },
     {
-        "playerId": "qpr"
-        "score": 5,
+        "playerId": "qpr",
+        "score": 5
     },
     {
-        "playerId": "xyz"
-        "score": 1,
+        "playerId": "xyz",
+        "score": 1
     }
 ]
 ```
