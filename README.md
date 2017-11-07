@@ -141,7 +141,7 @@ To get started with calculating the score we will create a lambda that works on 
 
 ### Get Leaderboard
 
-Once we have calculated our score we are going to have to build an API for the client. To continue with this, follow the instructions at [lambdas/get-leaderboard/instructions.md](lambdas/update-score/instructions.md)
+Once we have calculated our score we are going to have to build an API for the client. To continue with this, follow the instructions at [lambdas/get-leaderboard/instructions.md](lambdas/get-leaderboard/instructions.md)
 
 
 
